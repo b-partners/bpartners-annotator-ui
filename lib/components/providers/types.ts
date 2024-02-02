@@ -6,3 +6,4 @@ export interface Children {
 }
 
 export interface ElementProviderProps extends Children, ElementContextType {}
+export interface SizesProviderProps extends Children {}
