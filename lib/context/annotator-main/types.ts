@@ -1,9 +1,9 @@
-import { Polygone } from "../../types";
+import { Polygon } from "../../types";
 
 export interface AnnotationMainContextType {
   image: string;
-  polygones?: Polygone[];
+  polygones?: Polygon[];
   height?: number;
   width?: number;
-  addPolygone?: (polygone: Polygone) => void;
+  addPolygone?: (polygone: Polygon) => void;
 }
