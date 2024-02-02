@@ -3,7 +3,7 @@ export interface Point {
   y: number;
 }
 
-export interface Polygone {
+export interface Polygon {
   fillColor: string;
   strokeColor: string;
   points: Point[];
