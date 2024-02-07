@@ -2,7 +2,8 @@ import { useCallback, useContext } from "react";
 import { SizesContext } from "..";
 
 export const useSizesContext = () => {
-  const { setScale, ...others } = useContext(SizesContext);
+  const { setScale, canvasHeight, canvasWidth, ...others } =
+    useContext(SizesContext);
 
   const scale = useCallback(
     (toAdd: number) => {
@@ -13,9 +14,19 @@ export const useSizesContext = () => {
     [others.scale, setScale],
   );
 
+  const ch = Math.max(canvasHeight, others.containerHeight);
+  const cw = Math.max(canvasWidth, others.containerWidth);
+
   const scaleUp = () => scale(0.2);
   const scaleDown = () => scale(-0.2);
   const scaleReste = () => scale(1 - others.scale);
 
-  return { ...others, scaleUp, scaleDown, scaleReste };
+  return {
+    ...others,
+    scaleUp,
+    scaleDown,
+    scaleReste,
+    canvasHeight: ch,
+    canvasWidth: cw,
+  };
 };

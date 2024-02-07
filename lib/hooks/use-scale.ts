@@ -3,7 +3,7 @@ import { useElementContext } from ".";
 import { IMAGE_PADDING } from "../constant";
 
 export const useScale = () => {
-  const elements = useElementContext();
+  const { image, containerRef } = useElementContext();
   const [defaultScale, setDefaultScale] = useState(1);
   const [containerSize, setContainerSize] = useState({
     containerWidth: 0,
@@ -11,30 +11,38 @@ export const useScale = () => {
   });
 
   useEffect(() => {
-    if (elements) {
-      const { containerRef, image } = elements;
-      if (containerRef && containerRef.current && image) {
-        const { offsetHeight, offsetWidth } = containerRef.current;
-        setContainerSize({
-          containerHeight: offsetHeight,
-          containerWidth: offsetWidth,
-        });
-      }
+    if (containerRef.current) {
+      const { offsetHeight, offsetWidth } = containerRef.current;
+      setContainerSize({
+        containerHeight: offsetHeight,
+        containerWidth: offsetWidth,
+      });
     }
-  }, [elements]);
+  }, [containerRef]);
 
   useEffect(() => {
     const { containerHeight, containerWidth } = containerSize;
-    if (containerHeight !== 0 && containerWidth !== 0 && elements?.image) {
-      const yScale = (elements.image.width + IMAGE_PADDING) / containerWidth;
-      const xScale = (elements.image.height + IMAGE_PADDING) / containerHeight;
-      if (yScale < xScale) {
-        setDefaultScale(xScale);
-        return () => {};
-      }
-      setDefaultScale(yScale);
+    const iwp = image.width + IMAGE_PADDING;
+    const ihp = image.height + IMAGE_PADDING;
+
+    const iwpDiff = Math.abs(containerWidth - iwp);
+    const ihpDiff = Math.abs(containerHeight - ihp);
+
+    if (
+      containerHeight === 0 ||
+      (containerWidth === 0 && image.src.length === 0)
+    ) {
+      return () => {};
     }
-  }, [containerSize, elements?.image]);
+
+    if (iwpDiff > ihpDiff) {
+      setDefaultScale(+(containerWidth / iwp).toFixed(2));
+      return () => {};
+    }
+
+    setDefaultScale(+(containerHeight / ihp).toFixed(2));
+    return () => {};
+  }, [containerSize, image]);
 
   return {
     ...containerSize,
