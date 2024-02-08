@@ -1,10 +1,5 @@
-import { CSSProperties, ReactNode } from "react";
-import { AnnotationMainContextType } from "../../context";
+import { CSSProperties } from "react";
 import { Polygon } from "../../types";
-
-export interface AnnotationMainProviderProps extends AnnotationMainContextType {
-  children: ReactNode;
-}
 
 export interface AnnotatorCanvasProps {
   width: CSSProperties["width"];
