@@ -1,5 +1,5 @@
 import { AnnotatorCanvas } from "../lib";
-import image from "../src/assets/image-2.png";
+import image from "../src/assets/image.png";
 
 function App() {
   return (

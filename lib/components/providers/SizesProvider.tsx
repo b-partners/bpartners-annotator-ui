@@ -6,7 +6,7 @@ import { IMAGE_PADDING } from "../../constant";
 export const SizesProvider: FC<SizesProviderProps> = (props) => {
   const { children } = props;
   const { containerHeight, containerWidth, defaultScale } = useScale();
-  const { image } = useElementContext();
+  const { image, containerRef } = useElementContext();
   const [scale, setScale] = useState(0);
 
   const canvasHeight = useMemo(
@@ -20,8 +20,21 @@ export const SizesProvider: FC<SizesProviderProps> = (props) => {
   );
 
   useEffect(() => {
-    UrlParams.set("scale", `${defaultScale + scale}`);
-  }, [defaultScale, scale]);
+    UrlParams.set("scale", (defaultScale + scale).toFixed(2));
+
+    if (containerRef.current) {
+      const currentContainer = containerRef.current;
+      const middleY =
+        (currentContainer.scrollHeight - currentContainer.clientHeight) / 2;
+      const middleX =
+        (currentContainer.scrollWidth - currentContainer.clientWidth) / 2;
+      containerRef.current.scrollTo({
+        left: middleX,
+        top: middleY,
+        behavior: "auto",
+      });
+    }
+  }, [defaultScale, scale, containerRef]);
 
   return (
     <SizesContext.Provider

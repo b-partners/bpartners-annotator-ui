@@ -36,11 +36,11 @@ export const useScale = () => {
     }
 
     if (iwpDiff > ihpDiff) {
-      setDefaultScale(+(containerWidth / iwp).toFixed(2));
+      setDefaultScale(+(containerWidth / iwp).toFixed(2) - 0.1);
       return () => {};
     }
 
-    setDefaultScale(+(containerHeight / ihp).toFixed(2));
+    setDefaultScale(+(containerHeight / ihp).toFixed(2) - 0.1);
     return () => {};
   }, [containerSize, image]);
 
