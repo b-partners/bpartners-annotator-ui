@@ -1,4 +1,4 @@
-import { RefObject } from "react";
+import { RefObject } from 'react';
 
 export interface ElementContextType {
   image: HTMLImageElement;

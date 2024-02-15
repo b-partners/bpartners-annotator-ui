@@ -1,2 +1,2 @@
-export * from "./get-window-size";
-export * from "./url-params";
+export * from './get-window-size';
+export * from './url-params';

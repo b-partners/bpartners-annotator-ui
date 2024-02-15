@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useElementContext } from ".";
-import { IMAGE_PADDING } from "../constant";
+import { useEffect, useState } from 'react';
+import { useElementContext } from '.';
+import { IMAGE_PADDING } from '../constant';
 
 export const useScale = () => {
   const { image, containerRef } = useElementContext();
@@ -28,10 +28,7 @@ export const useScale = () => {
     const iwpDiff = Math.abs(containerWidth - iwp);
     const ihpDiff = Math.abs(containerHeight - ihp);
 
-    if (
-      containerHeight === 0 ||
-      (containerWidth === 0 && image.src.length === 0)
-    ) {
+    if (containerHeight === 0 || (containerWidth === 0 && image.src.length === 0)) {
       return () => {};
     }
 

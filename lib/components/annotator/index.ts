@@ -1,3 +1,3 @@
-export * from "./types";
+export * from './types';
 
-export * from "./AnnotatorCanvas";
+export * from './AnnotatorCanvas';

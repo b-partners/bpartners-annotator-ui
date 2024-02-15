@@ -1,5 +1,5 @@
-import { useSizesContext } from "../..";
-import style from "./style.module.css";
+import { useSizesContext } from '../..';
+import style from './style.module.css';
 
 export const TopBar = () => {
   const { scaleDown, scaleUp, scaleReste } = useSizesContext();

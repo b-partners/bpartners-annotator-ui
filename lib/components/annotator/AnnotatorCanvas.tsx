@@ -1,12 +1,12 @@
-import { FC, useRef } from "react";
-import { AnnotatorCanvasProps } from ".";
-import { TopBar, useImageCreation } from "../..";
-import { Canvas } from "../canvas";
-import { ElementProvider } from "../providers";
-import { SizesProvider } from "../providers/SizesProvider";
-import style from "./style.module.css";
+import { FC, useRef } from 'react';
+import { AnnotatorCanvasProps } from '.';
+import { TopBar, useImageCreation } from '../..';
+import { Canvas } from '../canvas';
+import { ElementProvider } from '../providers';
+import { SizesProvider } from '../providers/SizesProvider';
+import style from './style.module.css';
 
-export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = (props) => {
+export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { height, width } = props;
   const image = useImageCreation(props.image);
@@ -17,11 +17,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = (props) => {
         <SizesProvider>
           <div style={{ width }}>
             <TopBar />
-            <div
-              style={{ height, width }}
-              className={style.container}
-              ref={containerRef}
-            >
+            <div style={{ height, width }} className={style.container} ref={containerRef}>
               <Canvas />
             </div>
           </div>

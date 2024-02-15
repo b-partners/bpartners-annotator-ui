@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export const useImageCreation = (src: string) => {
   const [image, setImage] = useState<HTMLImageElement>(new Image());

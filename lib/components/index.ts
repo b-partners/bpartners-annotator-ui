@@ -1,2 +1,2 @@
-export * from "./annotator";
-export * from "./top-bar";
+export * from './annotator';
+export * from './top-bar';

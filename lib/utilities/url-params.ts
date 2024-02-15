@@ -12,6 +12,6 @@ export class UrlParams {
   public static set(name: string, value: string) {
     const url = this.getUrl();
     url.searchParams.set(name, value);
-    window.history.pushState({}, "", url);
+    window.history.pushState({}, '', url);
   }
 }

@@ -1,6 +1,4 @@
-import { createContext } from "react";
-import { ElementContextType } from ".";
+import { createContext } from 'react';
+import { ElementContextType } from '.';
 
-export const ElementContext = createContext<ElementContextType>(
-  {} as ElementContextType,
-);
+export const ElementContext = createContext<ElementContextType>({} as ElementContextType);

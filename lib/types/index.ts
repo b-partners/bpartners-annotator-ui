@@ -1,1 +1,1 @@
-export * from "./polygone";
+export * from './polygone';

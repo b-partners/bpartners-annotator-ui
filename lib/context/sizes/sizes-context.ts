@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { SizesContextType } from ".";
+import { createContext } from 'react';
+import { SizesContextType } from '.';
 
 export const SizesContext = createContext<SizesContextType>({
   canvasHeight: 0,
