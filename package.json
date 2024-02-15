@@ -15,19 +15,22 @@
     "preview": "vite preview",
     "prettier:write": "prettier --write \"lib/**/*{.ts,.tsx}\" \"./**/*{.json,.yml}\" --config \".prettierrc.json\"",
     "prettier:check": "prettier --check \"lib/**/*{.ts,.tsx}\" \"./**/*{.json,.yml}\" --config \".prettierrc.json\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "cy:open:component": "cypress open --component",
+    "test:component": "cypress run --component"
   },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^20.11.13",
+    "@types/node": "^20.11.17",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@typescript-eslint/eslint-plugin": "^6.14.0",
     "@typescript-eslint/parser": "^6.14.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "cypress": "^13.6.4",
     "eslint": "^8.56.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
