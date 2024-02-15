@@ -1,0 +1,39 @@
+name: CI
+
+env:
+  AWS_REGION: eu-west-3
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  workflow_dispatch:
+
+jobs:
+  quality-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Run component testing
+        uses: cypress-io/github-action@v6
+        with:
+          component: true
+
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 17.x
+
+      - run: npm install --location=global prettier
+      - run: prettier --check "src/**/*.{js,ts,tsx}" "./**/*.{json,yml,yaml}"
