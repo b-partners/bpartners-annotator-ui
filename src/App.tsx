@@ -4,7 +4,7 @@ import image from '../src/assets/image.png';
 function App() {
   return (
     <div>
-      <AnnotatorCanvas height='70vh' width='70vh' addPolygone={() => {}} polygoneList={[]} image={image} />
+      <AnnotatorCanvas height='70vh' width='60vw' addPolygone={() => {}} polygoneList={[]} image={image} />
     </div>
   );
 }
