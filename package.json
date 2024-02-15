@@ -1,5 +1,5 @@
 {
-  "name": "bp-annotation-ui",
+  "name": "bp-annotator-ui",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,8 +13,8 @@
     "build": "tsc --p ./tsconfig-build.json && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "prettier:write": "prettier --write \"lib/**/*{.ts,.tsx}\" \"./**/*{.json,.yml}\" --config \".prettierrc.json\"",
-    "prettier:check": "prettier --check \"lib/**/*{.ts,.tsx}\" \"./**/*{.json,.yml}\" --config \".prettierrc.json\"",
+    "prettier:write": "prettier --write './**/*.{js,ts,tsx,json,yml,yaml}'",
+    "prettier:check": "prettier --check './**/*.{js,ts,tsx,json,yml,yaml}'",
     "prepare": "husky",
     "cy:open:component": "cypress open --component",
     "test:component": "cypress run --component"

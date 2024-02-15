@@ -1,4 +1,4 @@
-import { defineConfig } from "cypress";
+import { defineConfig } from 'cypress';
 
 export default defineConfig({
   video: false,
@@ -11,9 +11,9 @@ export default defineConfig({
   defaultCommandTimeout: 30000,
   component: {
     devServer: {
-      framework: "react",
-      bundler: "vite",
+      framework: 'react',
+      bundler: 'vite',
     },
-    specPattern: "./lib/__tests__/**/*.{ts,tsx}",
+    specPattern: './lib/__tests__/**/*.{ts,tsx}',
   },
 });
