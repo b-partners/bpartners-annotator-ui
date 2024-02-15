@@ -1,7 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { CanvasHandler, ScaleHandler, useElementContext, useSizesContext } from '../..';
-import { useDrawStaticImage } from '../../hooks/use-draw-static-image';
-import { usePositionsContext } from '../../hooks/use-positions-context';
+import { CanvasHandler, ScaleHandler, useDrawStaticImage, useElementContext, usePositionsContext, useSizesContext } from '../..';
 import style from './style.module.css';
 
 export const Canvas = () => {
