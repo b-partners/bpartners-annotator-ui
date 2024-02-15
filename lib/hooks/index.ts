@@ -1,3 +1,4 @@
+export * from './use-cursor-polygon';
 export * from './use-draw-static-image';
 export * from './use-element-context';
 export * from './use-image-creation';
