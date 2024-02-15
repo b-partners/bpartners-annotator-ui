@@ -8,3 +8,5 @@ export interface Polygon {
   strokeColor: string;
   points: Point[];
 }
+
+export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT';

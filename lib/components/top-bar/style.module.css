@@ -7,3 +7,18 @@
   gap: 2px;
   margin-bottom: 5px;
 }
+
+.positionContainer {
+  flex: 1;
+  display: flex;
+}
+.positionContainer > div {
+  min-width: 4rem;
+  height: 100%;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding-left: 0.5rem;
+  background: rgba(0, 0, 0, 0.1);
+  margin-right: 0.5rem;
+}

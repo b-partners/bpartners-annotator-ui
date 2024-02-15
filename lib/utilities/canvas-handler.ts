@@ -1,4 +1,4 @@
-import { Point } from '../types';
+import { MouseType, Point } from '../types';
 
 export class CanvasHandler {
   private ctx: CanvasRenderingContext2D;
@@ -26,5 +26,33 @@ export class CanvasHandler {
   public clearAll() {
     const { width, height } = this.canvas;
     this.ctx.clearRect(0, 0, width, height);
+  }
+
+  public drawMouseCursor({ x, y }: Point, type: MouseType) {
+    this.clearAll();
+    const ctx = this.ctx;
+
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    if (type === 'DEFAULT') {
+      ctx.arc(x, y, 3, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (type === 'END') {
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (type === 'ADD_POINT') {
+      const size = 3;
+      ctx.moveTo(x, y);
+      ctx.lineTo(x, y - size);
+      ctx.lineTo(x, y + size);
+      ctx.lineTo(x, y);
+      ctx.lineTo(x - size, y);
+      ctx.lineTo(x + size, y);
+      ctx.stroke();
+    } else {
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.closePath();
   }
 }
