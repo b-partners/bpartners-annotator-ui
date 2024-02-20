@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useElementContext, usePositionsContext } from '.';
-import { CanvasHandler, ScaleHandler } from '..';
+import { CanvasHandler, EventHandler, ScaleHandler } from '..';
 import { Polygon } from '../types';
 
 export const useCursorPolygon = () => {
@@ -17,32 +17,22 @@ export const useCursorPolygon = () => {
       const cursorCanvas = cursorCanvasRef.current;
       const polygonCanvas = polygonCanvasRef.current;
 
-      const cursorCanvasHandler = new CanvasHandler(cursorCanvas);
-      const polygonCanvasHandler = new CanvasHandler(polygonCanvas);
-      const sc = new ScaleHandler(cursorCanvas, image);
+      const scaleHandler = new ScaleHandler(cursorCanvas, image);
+      const canvasCursorHandler = new CanvasHandler(cursorCanvas, scaleHandler);
+      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler);
 
-      cursorCanvas.addEventListener('mousemove', event => {
-        cursorCanvasHandler.drawMouseCursor(sc.getPhysicalPositionByEvent(event), 'DEFAULT');
-        setCursorPosition(sc.getRestrictedPhysicalPositionByEvent(event));
+      const eventHandler = new EventHandler({
+        canvas: cursorCanvas,
+        canvasCursorHandler,
+        canvasPolygonHandler,
+        image,
+        isAnnotating: isAnnotating.current,
+        polygon: polygon.current,
+        polygons: [],
+        scaleHandler,
       });
 
-      cursorCanvas.addEventListener('mousedown', event => {
-        const { x, y } = sc.getRestrictedPhysicalPositionByEvent(event);
-        const { x: physicalX, y: physicalY } = sc.getPhysicalPositionByEvent(event);
-
-        if (!isAnnotating.current && x !== 0 && y !== 0) {
-          isAnnotating.current = true;
-          polygon.current = {
-            fillColor: '#100f2e',
-            strokeColor: '#000',
-            points: [{ x: physicalX, y: physicalY }],
-          };
-        } else {
-          polygon.current.points.push({ x: physicalX, y: physicalY });
-        }
-
-        polygon.current.points.forEach(polygonCanvasHandler.drawPoint.bind(polygonCanvasHandler));
-      });
+      return eventHandler.initEvent(cursorCanvas, () => {});
     }
   }, [image, setCursorPosition]);
 
