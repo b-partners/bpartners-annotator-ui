@@ -60,12 +60,7 @@ export class ScaleHandler {
    * @returns
    */
   private getImageOffset() {
-    const scale = this.getScale();
-    const { x, y } = this.imageInfoHandler.getScaledPosition();
-    return {
-      x: x / scale,
-      y: y / scale,
-    };
+    return this.imageInfoHandler.getScaledPosition();
   }
 
   /**
@@ -106,8 +101,7 @@ export class ScaleHandler {
    */
   public getLogicalPosition(event: MouseEvent) {
     const currentPhysicalRestrictedPosition = this.getRestrictedPhysicalPositionByEvent(event);
-    const currentLogicalPosition = this.getScaledDownPosition(currentPhysicalRestrictedPosition);
-    return currentLogicalPosition;
+    return this.getScaledDownPosition(currentPhysicalRestrictedPosition);
   }
 
   /**
