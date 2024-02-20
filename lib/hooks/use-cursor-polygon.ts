@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { useElementContext, usePositionsContext } from '.';
+import { useCursorPosition, useElementContext, usePositionsContext } from '.';
 import { CanvasHandler, EventHandler, ScaleHandler } from '..';
 import { Polygon } from '../types';
 
@@ -16,7 +16,6 @@ export const useCursorPolygon = () => {
     if (cursorCanvasRef.current && polygonCanvasRef.current) {
       const cursorCanvas = cursorCanvasRef.current;
       const polygonCanvas = polygonCanvasRef.current;
-
       const scaleHandler = new ScaleHandler(cursorCanvas, image);
       const canvasCursorHandler = new CanvasHandler(cursorCanvas, scaleHandler);
       const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler);
@@ -36,5 +35,6 @@ export const useCursorPolygon = () => {
     }
   }, [image, setCursorPosition]);
 
+  useCursorPosition(cursorCanvasRef);
   return { cursorCanvasRef, polygonCanvasRef };
 };

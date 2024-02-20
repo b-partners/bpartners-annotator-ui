@@ -7,3 +7,4 @@ export * from './use-polygon-context';
 export * from './use-positions-context';
 export * from './use-scale';
 export * from './use-sizes-context';
+export * from './use-cursor-position';
