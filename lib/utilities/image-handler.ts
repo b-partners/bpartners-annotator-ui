@@ -21,6 +21,12 @@ export class ImageInfoHandler {
     return { width, height };
   }
 
+  getNoScaledSize() {
+    const width = this.image.width;
+    const height = this.image.height;
+    return { width, height };
+  }
+
   getScaledPosition() {
     const { height, width } = this.getScaledSize();
     const x = Math.floor(Math.abs(this.canvas.width - width) / 2);
