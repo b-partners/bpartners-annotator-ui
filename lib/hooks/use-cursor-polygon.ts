@@ -1,13 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { useCursorPosition, useElementContext, usePositionsContext } from '.';
+import { useCursorPosition, useElementContext, useMouseDown, usePolygonContext, usePositionsContext } from '.';
 import { CanvasHandler, EventHandler, ScaleHandler } from '..';
-import { Polygon } from '../types';
 
 export const useCursorPolygon = () => {
   const cursorCanvasRef = useRef<HTMLCanvasElement>(null);
   const polygonCanvasRef = useRef<HTMLCanvasElement>(null);
-  const polygon = useRef<Polygon>({ fillColor: '', points: [], strokeColor: '' });
-  const isAnnotating = useRef<boolean>(false);
+  const { addPolygon, isDrawing, polygons, polygon } = usePolygonContext();
 
   const { setCursorPosition } = usePositionsContext();
   const { image } = useElementContext();
@@ -25,16 +23,17 @@ export const useCursorPolygon = () => {
         canvasCursorHandler,
         canvasPolygonHandler,
         image,
-        isAnnotating: isAnnotating.current,
-        polygon: polygon.current,
-        polygons: [],
+        isAnnotating: isDrawing,
+        polygon,
+        polygons,
         scaleHandler,
       });
 
-      return eventHandler.initEvent(cursorCanvas, () => {});
+      return eventHandler.initEvent(cursorCanvas, addPolygon);
     }
-  }, [image, setCursorPosition]);
+  }, [addPolygon, image, isDrawing, polygon, polygons, setCursorPosition]);
 
   useCursorPosition(cursorCanvasRef);
+  useMouseDown(cursorCanvasRef);
   return { cursorCanvasRef, polygonCanvasRef };
 };

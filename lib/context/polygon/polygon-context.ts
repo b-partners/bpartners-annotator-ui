@@ -2,6 +2,8 @@ import { createContext } from 'react';
 import { PolygonContextType } from '.';
 
 export const PolygonContext = createContext<PolygonContextType>({
-  addPolygons: () => {},
+  addPolygon: () => {},
   polygons: [],
+  isDrawing: false,
+  polygon: null,
 });

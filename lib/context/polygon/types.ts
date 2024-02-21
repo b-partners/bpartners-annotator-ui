@@ -2,5 +2,7 @@ import { Polygon } from '../../types';
 
 export interface PolygonContextType {
   polygons: Polygon[];
-  addPolygons: (polygon: Polygon) => void;
+  addPolygon: (polygon: Polygon) => void;
+  polygon: Polygon;
+  isDrawing: boolean;
 }

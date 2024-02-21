@@ -1,4 +1,5 @@
 import { CanvasHandler, EventHandlerParams, PointInfo, ScaleHandler, areOverlappingPoints, findMidpoint, getColorFromMain, pointBelongsToOrIsClose } from '.';
+import { defaultPolygon } from '../constant';
 import { Point, Polygon } from '../types';
 import { getPolygonLastColors } from './polygon-tools';
 
@@ -27,6 +28,7 @@ export class EventHandler {
   }
 
   public initEvent = (canvas: HTMLCanvasElement, addPolygon: (polygon: Polygon) => void) => {
+    this.draw();
     const mouseLeave = this.mouseLeave.bind(this);
     const escapeKeyDown = this.escapeKeyDown.bind(this);
     const mouseMove = this.mouseMove.bind(this);
@@ -146,6 +148,8 @@ export class EventHandler {
         polygon.fillColor = colors.fillColor;
         polygon.strokeColor = colors.strokeColor;
       }
+      this.isAnnotating = false;
+      this.polygon = defaultPolygon;
       end(polygon);
       this.draw();
     } else if (this.isAnnotating) {
