@@ -13,14 +13,12 @@ jobs:
       semver: ${{ steps.output-semver.outputs.semver }}
 
     steps:
-
       - name: Checkout
         uses: actions/checkout@v4.1.1
         with:
           # secrets.GITHUB_TOKEN is not enough for releasing on protected branch
           # Use a Personal Access Token from someone who has sufficient privileges
           token: ${{ secrets.GH_TOKEN_FOR_CONVENTIONAL_CHANGELOG }}
-
 
       #############################################################################
       ####### DETERMINE NEXT VERSION AND BUILD WITH APPROPRIATE VERSION ###########
