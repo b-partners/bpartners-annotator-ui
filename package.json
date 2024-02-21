@@ -1,12 +1,14 @@
 {
-  "name": "bp-annotator-ui",
+  "name": "@bpatners/annotator-component",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "main": "dist/index.js",
-  "types": "dist/index.d.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "package.json"
   ],
   "scripts": {
     "dev": "vite",
@@ -19,7 +21,7 @@
     "cy:open:component": "cypress open --component",
     "test:component": "cypress run --component"
   },
-  "dependencies": {
+  "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
