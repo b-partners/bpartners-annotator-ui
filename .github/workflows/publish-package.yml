@@ -1,0 +1,122 @@
+name: Release version and Publish package to Codeartifact
+
+on:
+  workflow_dispatch:
+
+  workflow_call:
+
+jobs:
+  release-version:
+    runs-on: ubuntu-latest
+
+    outputs:
+      semver: ${{ steps.output-semver.outputs.semver }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+        with:
+          # secrets.GITHUB_TOKEN is not enough for releasing on protected branch
+          # Use a Personal Access Token from someone who has sufficient privileges
+          token: ${{ secrets.GH_TOKEN_FOR_CONVENTIONAL_CHANGELOG }}
+
+      #############################################################################
+      ####### DETERMINE NEXT VERSION AND BUILD WITH APPROPRIATE VERSION ###########
+      #############################################################################
+
+      # We will use conventional-changelog which only supports yaml, yml and toml version file
+
+      # conventional-ch increments the patch version even when
+      # it skipped commiting due to empty changelog. In such a case,
+      # we have to retrieve the old (unchanged) version using our own means.
+      # https://github.com/conventional-changelog/standard-version/issues/730
+
+      - name: Read old version file
+        id: read-old-version
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
+        with:
+          file: version.yml
+          version: version
+
+      - name: Conventional changelog
+        id: conventional-ch
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GH_TOKEN_FOR_CONVENTIONAL_CHANGELOG }}
+          git-message: 'release: {version}'
+          release-count: '10'
+          version-file: './version.yml'
+          version-path: 'version'
+          skip-on-empty: 'true'
+          skip-version-file: 'false'
+          skip-commit: 'false'
+
+      - name: Read new version file
+        id: read-new-version
+        uses: CumulusDS/get-yaml-paths-action@v0.1.0
+        with:
+          file: version.yml
+          version: version
+
+      - name: Put correct version into GITHUB_ENV
+        run: |
+          if ${{ steps.conventional-ch.outputs.skipped == 'false' }}; then
+            echo "semver=${{ steps.read-new-version.outputs.version }}" >> $GITHUB_ENV
+          else
+            echo "semver=${{ steps.read-old-version.outputs.version }}" >> $GITHUB_ENV
+          fi
+
+      - name: If version incremented then update package.json version
+        run: sh ./.shell/update-version.sh ${{ env.semver }}
+
+      - name: If version incremented then commit
+        if: ${{ steps.conventional-ch.outputs.skipped == 'false' }}
+        run: |
+          git add version.yml package.json
+          git commit --amend --no-edit
+          git push -f
+          # Also update tag since commit was amended
+          git tag -d v${{ env.semver }}
+          git tag v${{ env.semver }}
+          git push --delete origin v${{ env.semver }}
+          git push --tags
+
+  publish-package:
+    runs-on: ubuntu-latest
+
+    needs: release-version
+
+    env:
+      AWS_REGION: eu-west-3
+
+    steps:
+      ###############################################################
+      ########## GENERATE AND PUBLISH TYPESCRIPT CLIENT #############
+      ###############################################################
+
+      - uses: actions/checkout@v4.1.1
+
+      - name: install-aws-cli
+        uses: unfor19/install-aws-cli-action@v1.0.3
+        with:
+          version: 2
+          verbose: false
+          arch: amd64
+          rootdir: ''
+          workdir: ''
+
+      - name: Connect to private CodeArtifact repository
+        run: |
+          sh ./.shell/initAWS.sh bpartners ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_SECRET_KEY }} ${{ env.AWS_REGION }}
+          sh ./.shell/initNpmrc.sh bpartners annotator-imagery-store npm-bpartners-imagery-app 205205101409
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20.x
+
+      - name: Publish package
+        run: |
+          echo -e "\n*.ts\nnode_module\n!*.d.ts\n.idea\n.vscode\n.openapi-generator\n.openapi-generator-ignore\ngit_push.sh" >> .npmignore
+          npm install
+          npm publish
