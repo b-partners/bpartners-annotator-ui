@@ -1,3 +1,12 @@
+## [0.2.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.1...v0.2.2) (2024-02-22)
+
+
+### Bug Fixes
+
+* package json export ([6df52c5](https://github.com/b-partners/bpartners-annotator-ui/commit/6df52c575db423a1787ff735ee43e7968fcfdd5b))
+
+
+
 ## [0.2.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.0...v0.2.1) (2024-02-22)
 
 
