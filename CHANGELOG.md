@@ -1,4 +1,13 @@
-# 0.2.0 (2024-02-21)
+## [0.2.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.0...v0.2.1) (2024-02-22)
+
+
+### Bug Fixes
+
+* index exports ([b49bafb](https://github.com/b-partners/bpartners-annotator-ui/commit/b49bafb0defd5e6cd732bd8466da22570a8b3034))
+
+
+
+# [0.2.0](https://github.com/b-partners/bpartners-annotator-ui/compare/6256da8539f1de6f8742f3f22d8f02bb8c9c3f2a...v0.2.0) (2024-02-21)
 
 
 ### Bug Fixes
