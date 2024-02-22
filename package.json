@@ -2,13 +2,13 @@
   "name": "@bpartners/annotator-component",
   "version": "0.2.1",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
-    "dist",
-    "README.md",
-    "package.json"
+    "./dist",
+    "./README.md",
+    "./package.json"
   ],
   "scripts": {
     "dev": "vite",
