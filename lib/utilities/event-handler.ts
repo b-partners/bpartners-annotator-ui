@@ -18,7 +18,7 @@ export class EventHandler {
   constructor(params: EventHandlerParams) {
     const { canvasCursorHandler, canvasPolygonHandler, isAnnotating, polygon, polygons, scaleHandler, allowAnnotation } = params;
     this.scaleHandler = scaleHandler;
-    this.allowAnnotation = allowAnnotation || true;
+    this.allowAnnotation = allowAnnotation || false;
     this.isAnnotating = isAnnotating;
     this.polygons = polygons;
     this.canvasCursorHandler = canvasCursorHandler;
@@ -37,6 +37,7 @@ export class EventHandler {
 
     canvas.addEventListener('mousemove', mouseMove);
     canvas.addEventListener('mouseleave', mouseLeave);
+
     if (this.allowAnnotation) {
       canvas.addEventListener('mousedown', mouseDownEventHandler);
       canvas.addEventListener('mouseup', mouseUp);
@@ -46,7 +47,7 @@ export class EventHandler {
     return () => {
       canvas.removeEventListener('mousemove', mouseMove);
       canvas.removeEventListener('mouseleave', mouseLeave);
-      if (!this.allowAnnotation) {
+      if (this.allowAnnotation) {
         canvas.removeEventListener('mousedown', mouseDownEventHandler);
         canvas.removeEventListener('mouseup', mouseUp);
         window.removeEventListener('keydown', escapeKeyDown);
