@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useRef } from 'react';
-import { useCursorPosition, useElementContext, useMouseDown, usePolygonContext, usePositionsContext } from '.';
+import { useCursorPosition, useElementContext, useMouseDown, usePolygonContext } from '.';
 import { CanvasHandler, EventHandler, ScaleHandler } from '..';
 
 export const useCursorPolygon = () => {
@@ -7,10 +8,11 @@ export const useCursorPolygon = () => {
   const polygonCanvasRef = useRef<HTMLCanvasElement>(null);
   const { addPolygon, isDrawing, polygons, polygon, allowAnnotation } = usePolygonContext();
 
-  const { setCursorPosition } = usePositionsContext();
   const { image } = useElementContext();
 
   useEffect(() => {
+    console.log(polygons);
+
     if (cursorCanvasRef.current && polygonCanvasRef.current) {
       const cursorCanvas = cursorCanvasRef.current;
       const polygonCanvas = polygonCanvasRef.current;
@@ -32,7 +34,7 @@ export const useCursorPolygon = () => {
 
       return eventHandler.initEvent(cursorCanvas, addPolygon);
     }
-  }, [addPolygon, allowAnnotation, image, isDrawing, polygon, polygons, setCursorPosition]);
+  }, [allowAnnotation, image, polygons]);
 
   useCursorPosition(cursorCanvasRef);
   useMouseDown(cursorCanvasRef);
