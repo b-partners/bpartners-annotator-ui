@@ -12,8 +12,7 @@ export const useMouseDown = (canvasRef: RefObject<HTMLCanvasElement>) => {
       const scaleHandler = new ScaleHandler(canvas, image);
 
       const eventHandler = (event: MouseEvent) => {
-        const currentLogicalPosition = scaleHandler.getLogicalPosition(event);
-        console.log(currentLogicalPosition);
+        scaleHandler.getLogicalPosition(event);
       };
 
       canvas.addEventListener('mousedown', eventHandler);

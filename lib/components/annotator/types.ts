@@ -7,4 +7,5 @@ export interface AnnotatorCanvasProps {
   image: string;
   addPolygone: (polygone: Polygon) => void;
   polygoneList: Polygon[];
+  allowAnnotation?: boolean;
 }

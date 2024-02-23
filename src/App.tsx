@@ -8,7 +8,14 @@ function App() {
 
   return (
     <div>
-      <AnnotatorCanvas height='70vh' width='60vw' addPolygone={polygon => setPolygons(prev => [...prev, polygon])} polygoneList={polygons} image={image} />
+      <AnnotatorCanvas
+        height='70vh'
+        width='60vw'
+        addPolygone={polygon => setPolygons(prev => [...prev, polygon])}
+        polygoneList={polygons}
+        image={image}
+        allowAnnotation
+      />
     </div>
   );
 }

@@ -11,4 +11,5 @@ export interface SizesProviderProps extends Children {}
 export interface PolygonProviderProps extends Children {
   addPolygons: (polygon: Polygon) => void;
   polygons: Polygon[];
+  allowAnnotation?: boolean;
 }

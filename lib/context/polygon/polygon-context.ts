@@ -7,4 +7,5 @@ export const PolygonContext = createContext<PolygonContextType>({
   polygons: [],
   isDrawing: false,
   polygon: defaultPolygon,
+  allowAnnotation: false,
 });

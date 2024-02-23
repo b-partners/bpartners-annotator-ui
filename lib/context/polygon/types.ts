@@ -5,4 +5,5 @@ export interface PolygonContextType {
   addPolygon: (polygon: Polygon) => void;
   polygon: Polygon;
   isDrawing: boolean;
+  allowAnnotation?: boolean;
 }
