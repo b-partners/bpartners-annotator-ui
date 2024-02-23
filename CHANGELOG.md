@@ -1,4 +1,4 @@
-## [0.2.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.1...v0.2.2) (2024-02-22)
+## [0.2.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.1...v0.2.3) (2024-02-23)
 
 
 ### Bug Fixes
