@@ -1,3 +1,17 @@
+# [0.3.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.3...v0.3.0) (2024-02-23)
+
+
+### Bug Fixes
+
+* polygon render ([cd65a06](https://github.com/b-partners/bpartners-annotator-ui/commit/cd65a0662ddbe4ab3cfeeabeeae4a7540df04854))
+
+
+### Features
+
+* conditional annotation  ([a78e9e0](https://github.com/b-partners/bpartners-annotator-ui/commit/a78e9e08b713c294d8929d5634ff9d43b51bc1fd))
+
+
+
 ## [0.2.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.1...v0.2.3) (2024-02-23)
 
 
