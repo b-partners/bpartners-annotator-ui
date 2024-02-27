@@ -10,22 +10,13 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, 'lib/index.ts'),
+      formats: ['cjs', 'es', 'umd'],
+      fileName: 'index',
+      name: 'index',
     },
     copyPublicDir: false,
     rollupOptions: {
       external: ['react', 'react/jsx-runtime'],
-      output: [
-        {
-          dir: 'dist',
-          entryFileNames: 'index.cjs',
-          format: 'cjs',
-        },
-        {
-          dir: 'dist',
-          entryFileNames: 'index.mjs',
-          format: 'esm',
-        },
-      ],
     },
   },
 });
