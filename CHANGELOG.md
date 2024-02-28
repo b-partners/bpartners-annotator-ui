@@ -1,3 +1,13 @@
+## [0.3.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.0...v0.3.1) (2024-02-28)
+
+
+### Bug Fixes
+
+* build config ([c892375](https://github.com/b-partners/bpartners-annotator-ui/commit/c8923750f2663fd5ea97a4493a77c2981cee612f))
+* top-bar css ([8afba02](https://github.com/b-partners/bpartners-annotator-ui/commit/8afba02900ed144104096370d48b1e3a8e7a971e))
+
+
+
 # [0.3.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.3...v0.3.0) (2024-02-23)
 
 
