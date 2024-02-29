@@ -46,6 +46,8 @@ function App() {
 
 # Types
 
+**Polygon**
+
 ```ts
 interface Polygon {
   id: string; // default uuid
@@ -53,6 +55,15 @@ interface Polygon {
   strokeColor: string;
   points: Point[]; // default []
   isInvisible?: boolean; // default false
+}
+```
+
+**Point**
+
+```ts
+interface Point {
+  x: number;
+  y: number;
 }
 ```
 
