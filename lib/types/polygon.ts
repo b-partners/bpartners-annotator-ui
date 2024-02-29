@@ -4,6 +4,7 @@ export interface Point {
 }
 
 export interface Polygon {
+  id: string;
   fillColor: string;
   strokeColor: string;
   points: Point[];

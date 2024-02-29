@@ -3,6 +3,7 @@ import { CanvasHandler, EventHandlerParams, PointInfo, ScaleHandler, areOverlapp
 import { defaultPolygon } from '../constant';
 import { Point, Polygon } from '../types';
 import { getPolygonLastColors } from './polygon-tools';
+import { v4 as uuidV4 } from 'uuid';
 
 export class EventHandler {
   private isDrawing: MutableRefObject<boolean>;
@@ -151,7 +152,7 @@ export class EventHandler {
         polygon.strokeColor = colors.strokeColor;
       }
       this.isDrawing.current = false;
-      this.polygon.current = defaultPolygon;
+      this.polygon.current = { ...defaultPolygon, id: uuidV4() };
       this.draw();
       end(polygon);
       return;
@@ -164,7 +165,7 @@ export class EventHandler {
 
     if (!this.currentMiddlePosition && !this.isDrawing.current && !this.currentPointInfo && !sc.isPointOutsideOrImage(currentLogicalPosition)) {
       this.isDrawing.current = true;
-      this.polygon.current = { ...getColorFromMain('#00ff00'), points: [currentLogicalPosition] };
+      this.polygon.current = { ...getColorFromMain('#00ff00'), points: [currentLogicalPosition], id: uuidV4() };
       this.draw();
     }
 
