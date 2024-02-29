@@ -69,10 +69,10 @@ interface Point {
 
 # Props
 
-| Name        | Type                           | Default | Description                               |
-| ----------- | ------------------------------ | ------- | ----------------------------------------- |
-| height      | `string`                       |         | The height of the canvas                  |
-| width       | `string`                       |         | The width of the canvas                   |
-| setPolygons | `(polygons: Polygon[])=> void` |         | Function to update the polygon list state |
-| polygonList | `Polygon`                      | []      | List of polygons to show                  |
-| image       | `string`,`file`                |         | Image to show and to annotate             |
+| Name        | Type                           | Description                               |
+| ----------- | ------------------------------ | ----------------------------------------- |
+| height      | `string`                       | The height of the canvas                  |
+| width       | `string`                       | The width of the canvas                   |
+| setPolygons | `(polygons: Polygon[])=> void` | Function to update the polygon list state |
+| polygonList | `Polygon`                      | List of polygons to show                  |
+| image       | `string`,`file`                | Image to show and to annotate             |
