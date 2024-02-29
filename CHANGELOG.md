@@ -1,3 +1,14 @@
+## [0.3.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.1...v0.3.2) (2024-02-29)
+
+
+### Bug Fixes
+
+* polygon draw ending handler ([741325b](https://github.com/b-partners/bpartners-annotator-ui/commit/741325bb6183a47d3285e3ac2c488064a5a4c84d))
+* show polygon from polygon list render ([109e281](https://github.com/b-partners/bpartners-annotator-ui/commit/109e281a74d22bf598ba178cd5e8e01b4269a444))
+* store polygon state on every render ([2f87f25](https://github.com/b-partners/bpartners-annotator-ui/commit/2f87f252ed102bba236cf5b5820a4d322c5632d5))
+
+
+
 ## [0.3.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.0...v0.3.1) (2024-02-28)
 
 
