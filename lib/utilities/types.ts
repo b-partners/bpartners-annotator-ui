@@ -10,6 +10,7 @@ export interface ImageInfo {
 }
 
 export interface PointInfo {
+  polygonId: string;
   index: number;
   point: Point;
 }

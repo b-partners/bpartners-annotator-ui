@@ -9,7 +9,7 @@ export interface Children {
 export interface ElementProviderProps extends Children, ElementContextType {}
 export interface SizesProviderProps extends Children {}
 export interface PolygonProviderProps extends Children {
-  addPolygons: (polygon: Polygon) => void;
+  setPolygons: (polygon: Polygon[]) => void;
   polygons: Polygon[];
   allowAnnotation?: boolean;
 }

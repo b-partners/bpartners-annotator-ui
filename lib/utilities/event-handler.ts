@@ -12,10 +12,14 @@ export class EventHandler {
   private polygons: Polygon[];
   private canvasCursorHandler: CanvasHandler;
   private canvasPolygonHandler: CanvasHandler;
-  private pointsInfo: PointInfo[] = [];
-  private currentPointInfo: PointInfo | null = null;
   private scaleHandler: ScaleHandler;
   private currentMiddlePosition: (PointInfo & { annotationIndex: number }) | null = null;
+
+  // Points info is a list of all points in the polygon list with the polygon's id and the
+  // index of the point in the polygon points
+  private pointsInfo: PointInfo[] = [];
+  // The current selected point on edit one polygon
+  private currentPointInfo: PointInfo | null = null;
 
   constructor(params: EventHandlerParams) {
     const { canvasCursorHandler, canvasPolygonHandler, isDrawing, polygon, polygons, scaleHandler, allowAnnotation } = params;
@@ -29,13 +33,15 @@ export class EventHandler {
     this.createPointInfo();
   }
 
-  public initEvent = (canvas: HTMLCanvasElement, addPolygon: (polygon: Polygon) => void) => {
+  public initEvent = (canvas: HTMLCanvasElement, setPolygons: (polygons: Polygon[]) => void) => {
     this.draw();
+    const addPolygon = (polygon: Polygon) => setPolygons([...this.polygons, polygon]);
+
     const mouseLeave = this.mouseLeave.bind(this);
     const escapeKeyDown = this.escapeKeyDown.bind(this);
     const mouseMove = this.mouseMove.bind(this);
-    const mouseUp = this.mouseUp.bind(this);
-    const mouseDownEventHandler = this.mouseDown(polygon => addPolygon(polygon));
+    const mouseUp = this.mouseUp(setPolygons).bind(this);
+    const mouseDownEventHandler = this.mouseDown(addPolygon.bind(this));
 
     canvas.addEventListener('mousemove', mouseMove);
     canvas.addEventListener('mouseleave', mouseLeave);
@@ -57,10 +63,11 @@ export class EventHandler {
     };
   };
 
-  private mouseUp() {
+  private mouseUp = (setPolygons: (polygons: Polygon[]) => void) => () => {
     this.currentPointInfo = null;
     this.createPointInfo();
-  }
+    setPolygons(this.polygons);
+  };
 
   private mouseLeave() {
     this.canvasCursorHandler.clearAll();
@@ -99,8 +106,9 @@ export class EventHandler {
     }
 
     if (!this.isDrawing.current && this.currentPointInfo !== null) {
-      const { index } = this.currentPointInfo;
-      const points = this.polygons[index].points;
+      const { index, polygonId } = this.currentPointInfo;
+      const polygonIndex = this.polygons.findIndex(polygon => (polygon.id = polygonId));
+      const points = this.polygons[polygonIndex].points;
       const lastIndex = points.length - 1;
 
       if (index === 0 || index === lastIndex) {
@@ -121,6 +129,7 @@ export class EventHandler {
             const areTooClose = pointBelongsToOrIsClose(currentLogicalPosition, segment);
             if (areTooClose) {
               this.currentMiddlePosition = {
+                polygonId: currentPolygon.id,
                 annotationIndex: index,
                 index: a,
                 point: findMidpoint(segment),
@@ -170,6 +179,8 @@ export class EventHandler {
     }
 
     if (this.currentMiddlePosition && !this.currentPointInfo && !this.isDrawing.current) {
+      console.log('here');
+
       const annotationIndex = this.currentMiddlePosition.annotationIndex;
       const pointIndex = this.currentMiddlePosition.index;
       const point = this.currentMiddlePosition.point;
@@ -192,7 +203,7 @@ export class EventHandler {
       .filter(polygon => !polygon.isInvisible)
       .forEach(polygon => {
         polygon.points.forEach((point, index) => {
-          this.pointsInfo.push({ index, point });
+          this.pointsInfo.push({ index, point, polygonId: polygon.id });
         });
       });
   }

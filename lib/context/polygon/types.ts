@@ -3,7 +3,7 @@ import { Polygon } from '../../types';
 
 export interface PolygonContextType {
   polygons: Polygon[];
-  addPolygon: (polygon: Polygon) => void;
+  setPolygons: (polygon: Polygon[]) => void;
   polygon: MutableRefObject<Polygon>;
   isDrawing: MutableRefObject<boolean>;
   allowAnnotation?: boolean;

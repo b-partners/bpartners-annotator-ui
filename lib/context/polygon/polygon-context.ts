@@ -3,7 +3,7 @@ import { PolygonContextType } from '.';
 import { defaultPolygon } from '../../constant';
 
 export const PolygonContext = createContext<PolygonContextType>({
-  addPolygon: () => {},
+  setPolygons: () => {},
   polygons: [],
   isDrawing: { current: false },
   polygon: { current: defaultPolygon },
