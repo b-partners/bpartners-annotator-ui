@@ -152,8 +152,9 @@ export class EventHandler {
       }
       this.isDrawing.current = false;
       this.polygon.current = defaultPolygon;
-      end(polygon);
       this.draw();
+      end(polygon);
+      return;
     } else if (this.isDrawing.current) {
       points.push(currentLogicalPosition);
       this.draw();
