@@ -1,4 +1,17 @@
-## [0.3.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.1...v0.3.3) (2024-02-29)
+# [0.4.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.3...v0.4.0) (2024-02-29)
+
+
+### Features
+
+* polygon points add and update ([401ba23](https://github.com/b-partners/bpartners-annotator-ui/commit/401ba23a642645d4d14dd0e2a233a7cd917edcdc))
+
+
+
+## [0.3.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.2...v0.3.3) (2024-02-29)
+
+
+
+## [0.3.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.1...v0.3.2) (2024-02-29)
 
 
 ### Bug Fixes
