@@ -3,7 +3,7 @@ import image from '../../src/assets/image.png';
 
 describe('Test annotator canvas component', () => {
   it('Test show and zoom image', () => {
-    cy.mount(<AnnotatorCanvas polygoneList={[]} addPolygone={() => {}} height='70vh' width='60vw' image={image} />);
+    cy.mount(<AnnotatorCanvas polygonList={[]} addPolygon={() => {}} height='70vh' width='60vw' image={image} />);
 
     cy.get('canvas').should('exist');
     cy.get('button').should('have.length', 3);

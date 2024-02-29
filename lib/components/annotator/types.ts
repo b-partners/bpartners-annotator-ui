@@ -5,7 +5,7 @@ export interface AnnotatorCanvasProps {
   width: CSSProperties['width'];
   height: CSSProperties['height'];
   image: string;
-  addPolygone: (polygone: Polygon) => void;
-  polygoneList: Polygon[];
+  addPolygon: (polygon: Polygon) => void;
+  polygonList: Polygon[];
   allowAnnotation?: boolean;
 }

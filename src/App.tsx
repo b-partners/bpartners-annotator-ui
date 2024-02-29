@@ -11,8 +11,8 @@ function App() {
       <AnnotatorCanvas
         height='70vh'
         width='60vw'
-        addPolygone={polygon => setPolygons(prev => [...prev, polygon])}
-        polygoneList={polygons}
+        addPolygon={polygon => setPolygons(prev => [...prev, polygon])}
+        polygonList={polygons}
         image={image}
         allowAnnotation
       />
