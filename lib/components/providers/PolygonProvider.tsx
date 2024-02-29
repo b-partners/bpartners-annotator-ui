@@ -6,8 +6,8 @@ import { Polygon } from '../../types';
 
 export const PolygonProvider: FC<PolygonProviderProps> = props => {
   const { children, addPolygons, polygons, allowAnnotation } = props;
-  const { current: polygon } = useRef<Polygon>(defaultPolygon);
-  const { current: isDrawing } = useRef<boolean>(false);
+  const polygon = useRef<Polygon>(defaultPolygon);
+  const isDrawing = useRef<boolean>(false);
 
   return <PolygonContext.Provider value={{ addPolygon: addPolygons, polygons, isDrawing, polygon, allowAnnotation }}>{children}</PolygonContext.Provider>;
 };

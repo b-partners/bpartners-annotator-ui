@@ -1,3 +1,4 @@
+import { MutableRefObject } from 'react';
 import { CanvasHandler, ScaleHandler } from '.';
 import { Point, Polygon } from '../types';
 
@@ -16,8 +17,8 @@ export interface PointInfo {
 export interface EventHandlerParams {
   canvas: HTMLCanvasElement;
   image: HTMLImageElement;
-  isAnnotating: boolean;
-  polygon: Polygon;
+  isDrawing: MutableRefObject<boolean>;
+  polygon: MutableRefObject<Polygon>;
   polygons: Polygon[];
   canvasPolygonHandler: CanvasHandler;
   canvasCursorHandler: CanvasHandler;

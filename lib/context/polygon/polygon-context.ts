@@ -5,7 +5,7 @@ import { defaultPolygon } from '../../constant';
 export const PolygonContext = createContext<PolygonContextType>({
   addPolygon: () => {},
   polygons: [],
-  isDrawing: false,
-  polygon: defaultPolygon,
+  isDrawing: { current: false },
+  polygon: { current: defaultPolygon },
   allowAnnotation: false,
 });
