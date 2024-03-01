@@ -107,7 +107,9 @@ export class EventHandler {
 
     if (!this.isDrawing.current && this.currentPointInfo !== null) {
       const { index, polygonId } = this.currentPointInfo;
-      const polygonIndex = this.polygons.findIndex(polygon => (polygon.id = polygonId));
+      console.log(polygonId);
+
+      const polygonIndex = this.polygons.findIndex(polygon => polygon.id === polygonId);
       const points = this.polygons[polygonIndex].points;
       const lastIndex = points.length - 1;
 
@@ -179,13 +181,12 @@ export class EventHandler {
     }
 
     if (this.currentMiddlePosition && !this.currentPointInfo && !this.isDrawing.current) {
-      console.log('here');
-
-      const annotationIndex = this.currentMiddlePosition.annotationIndex;
+      const { polygonId } = this.currentMiddlePosition;
+      const polygonIndex = this.polygons.findIndex(p => p.id === polygonId);
       const pointIndex = this.currentMiddlePosition.index;
       const point = this.currentMiddlePosition.point;
 
-      this.polygons[annotationIndex].points.splice(pointIndex, 0, point);
+      this.polygons[polygonIndex].points.splice(pointIndex, 0, point);
       this.currentMiddlePosition = null;
       this.createPointInfo();
       this.draw();
