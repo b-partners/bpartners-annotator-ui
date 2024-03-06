@@ -6,3 +6,4 @@ export * from './types';
 export * from './url-params';
 export * from './event-handler';
 export * from './canvas-tools';
+export * from './mappers';

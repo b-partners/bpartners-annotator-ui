@@ -1,4 +1,4 @@
-import { Point } from '../types';
+import { Point, Segment } from '../types';
 
 const OVERLAPPING_MARGIN = 3;
 export const isBetween = (value: number, ref: number) => value >= ref - OVERLAPPING_MARGIN && value <= ref + OVERLAPPING_MARGIN;
@@ -17,9 +17,9 @@ export const getColorFromMain = (main: string) => {
   };
 };
 
-const distanceBetweenPoints = (pointA: Point, pointB: Point) => Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
+export const distanceBetweenPoints = (pointA: Point, pointB: Point) => Math.sqrt(Math.pow(pointA.x - pointB.x, 2) + Math.pow(pointA.y - pointB.y, 2));
 
-export const pointBelongsToOrIsClose = (currentPoint: Point, segment: [A: Point, B: Point]) => {
+export const pointBelongsToOrIsClose = (currentPoint: Point, segment: Segment) => {
   const [A, B] = segment;
 
   const d1 = distanceBetweenPoints(currentPoint, A);
@@ -29,7 +29,7 @@ export const pointBelongsToOrIsClose = (currentPoint: Point, segment: [A: Point,
   return Math.abs(d1 + d2 - segmentDistance) <= 1;
 };
 
-export const findMidpoint = (segment: [A: Point, B: Point]) => {
+export const findMidpoint = (segment: Segment) => {
   const [A, B] = segment;
 
   return {

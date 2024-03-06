@@ -4,3 +4,16 @@
   left: 0;
   cursor: none;
 }
+
+.measurement {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 2px;
+  padding: 2px;
+  background: #0f0;
+  color: #000;
+  opacity: 0.5;
+  transition: all 100ms;
+  scale: 1.2;
+}
+
