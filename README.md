@@ -55,6 +55,16 @@ interface Polygon {
   strokeColor: string;
   points: Point[]; // default []
   isInvisible?: boolean; // default false
+  polygonLineSizeProps?: PolygonSizeProps; // default undefined
+}
+```
+
+**PolygonSizeProps**
+
+```ts
+interface PolygonSizeProps {
+  imageName: string; // default ""
+  showLineSize: boolean; // default false
 }
 ```
 
@@ -69,10 +79,11 @@ interface Point {
 
 # Props
 
-| Name        | Type                           | Description                               |
-| ----------- | ------------------------------ | ----------------------------------------- |
-| height      | `string`                       | The height of the canvas                  |
-| width       | `string`                       | The width of the canvas                   |
-| setPolygons | `(polygons: Polygon[])=> void` | Function to update the polygon list state |
-| polygonList | `Polygon`                      | List of polygons to show                  |
-| image       | `string`,`file`                | Image to show and to annotate             |
+| Name                 | Type                           | Description                                   |
+| -------------------- | ------------------------------ | --------------------------------------------- |
+| height               | `string`                       | The height of the canvas                      |
+| width                | `string`                       | The width of the canvas                       |
+| setPolygons          | `(polygons: Polygon[])=> void` | Function to update the polygon list state     |
+| polygonList          | `Polygon`                      | List of polygons to show                      |
+| image                | `string`,`file`                | Image to show and to annotate                 |
+| polygonLineSizeProps | `PolygonLineSizeProps`         | Props to show polygon line & area measurement |
