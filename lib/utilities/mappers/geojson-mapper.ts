@@ -1,5 +1,6 @@
+import getAreaOfPolygon from 'geolib/es/getAreaOfPolygon';
 import getDistance from 'geolib/es/getPreciseDistance';
-import { GeoPointMapper, findMidpoint } from '..';
+import { GeoPointMapper, findMidpoint, getCenterOfPolygon } from '..';
 import { GeojsonReturn, Measurement, Polygon } from '../..';
 
 export class GeojsonMapper {
@@ -11,6 +12,8 @@ export class GeojsonMapper {
       const coordinates = geojson.geometry.coordinates[0][0];
 
       if (associatedPolygon) {
+        const area = this.getSurfaceMeasurement(geojson, associatedPolygon);
+        measurements.push(area as Measurement);
         for (let a = 1; a < coordinates.length; a++) {
           const prevCoordinate = coordinates[a - 1];
           const currentCoordinate = coordinates[a];
@@ -28,5 +31,15 @@ export class GeojsonMapper {
     });
 
     return measurements;
+  }
+
+  private static getSurfaceMeasurement(geojson: GeojsonReturn, polygon: Polygon) {
+    const area = getAreaOfPolygon(geojson.geometry.coordinates[0][0].map(GeoPointMapper.toGeoLocation));
+    const position = getCenterOfPolygon(polygon.points);
+    return {
+      position,
+      unity: 'm²',
+      value: Math.round(area),
+    };
   }
 }

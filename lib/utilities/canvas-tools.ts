@@ -37,3 +37,17 @@ export const findMidpoint = (segment: Segment) => {
     y: (A.y + B.y) / 2,
   } as Point;
 };
+
+export const getCenterOfPolygon = (points: Point[]) => {
+  let sumX = 0;
+  let sumY = 0;
+  for (const point of points) {
+    sumX += point.x;
+    sumY += point.y;
+  }
+
+  const centerX = sumX / points.length;
+  const centerY = sumY / points.length;
+
+  return { x: centerX, y: centerY };
+};
