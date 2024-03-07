@@ -1,3 +1,18 @@
+# [0.5.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.4.1...v0.5.0) (2024-03-07)
+
+
+### Bug Fixes
+
+* calcule reload on change polygon ([b54797d](https://github.com/b-partners/bpartners-annotator-ui/commit/b54797db404073625d5db777237fc2977cd5d64e))
+
+
+### Features
+
+* show line width on polygons ([58215d3](https://github.com/b-partners/bpartners-annotator-ui/commit/58215d3f745fe71cda5ad9378096747671c14625))
+* show polygon area ([5d8c12b](https://github.com/b-partners/bpartners-annotator-ui/commit/5d8c12b8d5d560061f1790635ed23bfe2095f9ea))
+
+
+
 ## [0.4.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.4.0...v0.4.1) (2024-03-02)
 
 
