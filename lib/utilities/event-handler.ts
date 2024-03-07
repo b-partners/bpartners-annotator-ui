@@ -66,7 +66,7 @@ export class EventHandler {
   private mouseUp = (setPolygons: (polygons: Polygon[]) => void) => () => {
     this.currentPointInfo = null;
     this.createPointInfo();
-    setPolygons(this.polygons);
+    setPolygons(this.polygons.slice());
   };
 
   private mouseLeave() {
@@ -107,7 +107,6 @@ export class EventHandler {
 
     if (!this.isDrawing.current && this.currentPointInfo !== null) {
       const { index, polygonId } = this.currentPointInfo;
-      console.log(polygonId);
 
       const polygonIndex = this.polygons.findIndex(polygon => polygon.id === polygonId);
       const points = this.polygons[polygonIndex].points;

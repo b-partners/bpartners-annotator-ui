@@ -28,8 +28,6 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
         const res = await pointsToGeoPoints(currentGeoJson);
         if (res) {
           const measurements = GeojsonMapper.toMeasurements(res, polygons);
-          console.log(measurements);
-
           setMeasurements(measurements);
         }
       }, 500),

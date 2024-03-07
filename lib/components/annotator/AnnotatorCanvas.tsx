@@ -8,7 +8,7 @@ import style from './style.module.css';
 
 export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { height, width, setPolygons: addPolygon, polygonList, allowAnnotation = false, polygonLineSizeProps: polygonSizeProps } = props;
+  const { height, width, setPolygons, polygonList, allowAnnotation = false, polygonLineSizeProps: polygonSizeProps } = props;
   const { imageName = '', showLineSize = false } = polygonSizeProps || {};
   const image = useImageCreation(props.image, imageName);
 
@@ -20,7 +20,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
             <div style={{ width }}>
               <TopBar />
               <div style={{ height, width }} className={style.container} ref={containerRef}>
-                <PolygonProvider showLineSize={showLineSize} allowAnnotation={allowAnnotation} setPolygons={addPolygon} polygons={polygonList}>
+                <PolygonProvider showLineSize={showLineSize} allowAnnotation={allowAnnotation} setPolygons={setPolygons} polygons={polygonList}>
                   <Canvas />
                 </PolygonProvider>
               </div>
