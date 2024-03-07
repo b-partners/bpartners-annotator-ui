@@ -1,3 +1,12 @@
+## [0.5.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.1...v0.5.2) (2024-03-07)
+
+
+### Bug Fixes
+
+* use props instead of env ([549cf53](https://github.com/b-partners/bpartners-annotator-ui/commit/549cf53ec737de9732b12a10d54d42efc8070214))
+
+
+
 ## [0.5.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.0...v0.5.1) (2024-03-07)
 
 
@@ -85,15 +94,6 @@
 ### Bug Fixes
 
 * package json export ([6df52c5](https://github.com/b-partners/bpartners-annotator-ui/commit/6df52c575db423a1787ff735ee43e7968fcfdd5b))
-
-
-
-## [0.2.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.0...v0.2.1) (2024-02-22)
-
-
-### Bug Fixes
-
-* index exports ([b49bafb](https://github.com/b-partners/bpartners-annotator-ui/commit/b49bafb0defd5e6cd732bd8466da22570a8b3034))
 
 
 
