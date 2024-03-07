@@ -4,6 +4,7 @@ import { Polygon } from '../../types';
 interface PolygonSizeProps {
   imageName: string;
   showLineSize: boolean;
+  converterApiUrl: string;
 }
 
 export interface AnnotatorCanvasProps {

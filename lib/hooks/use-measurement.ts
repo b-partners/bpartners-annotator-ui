@@ -5,7 +5,7 @@ import { Geojson, GeojsonMapper, Measurement, Polygon, PolygonMapper } from '..'
 import { pointsToGeoPoints } from '../provider';
 
 export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
-  const { polygons, showLineSize } = usePolygonContext();
+  const { polygons, showLineSize, converterApiUrl } = usePolygonContext();
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const { image } = useElementContext();
 
@@ -25,13 +25,13 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
             shape_attributes: PolygonMapper.toGeoShapeAttributes(polygon),
           };
         });
-        const res = await pointsToGeoPoints(currentGeoJson);
+        const res = await pointsToGeoPoints(converterApiUrl, currentGeoJson);
         if (res) {
           const measurements = GeojsonMapper.toMeasurements(res, polygons);
           setMeasurements(measurements);
         }
       }, 500),
-    [image]
+    [converterApiUrl, image.ariaLabel]
   );
 
   useEffect(() => {

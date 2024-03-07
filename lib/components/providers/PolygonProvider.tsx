@@ -5,9 +5,13 @@ import { PolygonContext } from '../../context/polygon';
 import { Polygon } from '../../types';
 
 export const PolygonProvider: FC<PolygonProviderProps> = props => {
-  const { children, setPolygons, polygons, allowAnnotation, showLineSize } = props;
+  const { children, setPolygons, polygons, allowAnnotation, showLineSize, converterApiUrl } = props;
   const polygon = useRef<Polygon>(defaultPolygon);
   const isDrawing = useRef<boolean>(false);
 
-  return <PolygonContext.Provider value={{ setPolygons, polygons, isDrawing, polygon, allowAnnotation, showLineSize }}>{children}</PolygonContext.Provider>;
+  return (
+    <PolygonContext.Provider value={{ setPolygons, polygons, converterApiUrl, isDrawing, polygon, allowAnnotation, showLineSize }}>
+      {children}
+    </PolygonContext.Provider>
+  );
 };

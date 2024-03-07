@@ -12,5 +12,6 @@ export interface PolygonProviderProps extends Children {
   showLineSize: boolean;
   setPolygons: (polygon: Polygon[]) => void;
   polygons: Polygon[];
+  converterApiUrl: string;
   allowAnnotation?: boolean;
 }

@@ -63,6 +63,7 @@ interface Polygon {
 
 ```ts
 interface PolygonSizeProps {
+  converterApiUrl: string; // default ""
   imageName: string; // default ""
   showLineSize: boolean; // default false
 }
@@ -87,7 +88,3 @@ interface Point {
 | polygonList          | `Polygon`                      | List of polygons to show                      |
 | image                | `string`,`file`                | Image to show and to annotate                 |
 | polygonLineSizeProps | `PolygonLineSizeProps`         | Props to show polygon line & area measurement |
-
-# NB
-
-If you want to show measurement for polygons, you should provide an API url to convert points in pixels to geo location as environment variable like set in `.env.template` file.

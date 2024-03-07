@@ -6,6 +6,7 @@ export const PolygonContext = createContext<PolygonContextType>({
   setPolygons: () => {},
   polygons: [],
   showLineSize: false,
+  converterApiUrl: '',
   isDrawing: { current: false },
   polygon: { current: defaultPolygon },
   allowAnnotation: false,
