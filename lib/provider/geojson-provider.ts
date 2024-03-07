@@ -2,7 +2,7 @@ import { Geojson, GeojsonReturn } from '..';
 
 export const pointsToGeoPoints = async (body: Geojson) => {
   try {
-    const res = await fetch(process.env.ANNOTATOR_GEO_CONVERTER_API_URL || '', {
+    const res = await fetch(process.env.REACT_APP_ANNOTATOR_GEO_CONVERTER_API_URL || '', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
