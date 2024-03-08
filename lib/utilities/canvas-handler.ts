@@ -50,17 +50,19 @@ export class CanvasHandler {
     const ctx = this.ctx;
     this.clearAll();
     polygons.forEach(polygon => {
-      ctx.strokeStyle = polygon.strokeColor;
-      ctx.fillStyle = polygon.fillColor;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      this.drawPoints(polygon.points);
-      ctx.stroke();
-      ctx.fill();
-      ctx.closePath();
-      ctx.strokeStyle = polygon.strokeColor;
-      ctx.fillStyle = polygon.strokeColor;
-      polygon.points.forEach(point => this.drawPoint.bind(this)(point));
+      if (!polygon.isInvisible) {
+        ctx.strokeStyle = polygon.strokeColor;
+        ctx.fillStyle = polygon.fillColor;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        this.drawPoints(polygon.points);
+        ctx.stroke();
+        ctx.fill();
+        ctx.closePath();
+        ctx.strokeStyle = polygon.strokeColor;
+        ctx.fillStyle = polygon.strokeColor;
+        polygon.points.forEach(point => this.drawPoint.bind(this)(point));
+      }
     });
   }
 
