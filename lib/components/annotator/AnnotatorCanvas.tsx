@@ -10,7 +10,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { height, width, setPolygons, polygonList, allowAnnotation = false, polygonLineSizeProps: polygonSizeProps } = props;
   const { imageName = '', showLineSize = false, converterApiUrl = '' } = polygonSizeProps || {};
-  const image = useImageCreation(props.image, imageName);
+  const { image, isImageLoading } = useImageCreation(props.image, imageName);
 
   return (
     <ElementProvider containerRef={containerRef} image={image}>
@@ -28,6 +28,11 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
                   polygons={polygonList}
                 >
                   <Canvas />
+                  {isImageLoading && (
+                    <div style={{ height, width }} className={style.loadingContainer}>
+                      <div></div>
+                    </div>
+                  )}
                 </PolygonProvider>
               </div>
             </div>

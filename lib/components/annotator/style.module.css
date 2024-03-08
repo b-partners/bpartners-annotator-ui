@@ -7,4 +7,35 @@
   background-color: rgba(0, 0, 0, 0.1);
   padding: 0;
   margin: 0;
+  position: relative;
+}
+
+.loadingContainer {
+  position: absolute;
+  top: 0;
+  background: #00000020;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadingContainer > div {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: solid 4px transparent;
+  border-top: 4px solid rgb(255, 0, 140);
+  border-left: 4px solid rgb(255, 0, 140, 0.5);
+  animation: rotate .5s infinite linear;
+  padding: 0;
+  margin: 0;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
