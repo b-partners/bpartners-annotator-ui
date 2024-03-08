@@ -1,3 +1,12 @@
+## [0.5.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.2...v0.5.3) (2024-03-08)
+
+
+### Bug Fixes
+
+* polygons visibilities ([7ab9a28](https://github.com/b-partners/bpartners-annotator-ui/commit/7ab9a280820270b24a7d01aee7e7f5f3970ef939))
+
+
+
 ## [0.5.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.1...v0.5.2) (2024-03-07)
 
 
@@ -85,15 +94,6 @@
 ### Features
 
 * conditional annotation  ([a78e9e0](https://github.com/b-partners/bpartners-annotator-ui/commit/a78e9e08b713c294d8929d5634ff9d43b51bc1fd))
-
-
-
-## [0.2.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.1...v0.2.3) (2024-02-23)
-
-
-### Bug Fixes
-
-* package json export ([6df52c5](https://github.com/b-partners/bpartners-annotator-ui/commit/6df52c575db423a1787ff735ee43e7968fcfdd5b))
 
 
 
