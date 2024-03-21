@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { Polygon } from '../../types';
 
 interface PolygonSizeProps {
@@ -7,6 +7,11 @@ interface PolygonSizeProps {
   converterApiUrl: string;
 }
 
+export interface ScaleCallbacks {
+  scaleUp: () => void;
+  scaleReste: () => void;
+  scaleDown: () => void;
+}
 export interface AnnotatorCanvasProps {
   width: CSSProperties['width'];
   height: CSSProperties['height'];
@@ -15,4 +20,5 @@ export interface AnnotatorCanvasProps {
   polygonList: Polygon[];
   allowAnnotation?: boolean;
   polygonLineSizeProps?: PolygonSizeProps;
+  buttonsComponent?: (callback: ScaleCallbacks) => ReactNode;
 }
