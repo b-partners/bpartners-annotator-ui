@@ -38,6 +38,7 @@ function App() {
         polygonList={polygons}
         image={image}
         allowAnnotation
+        buttonsComponent={CustomButtonsComponent}
       />
     </div>
   );
@@ -78,13 +79,22 @@ interface Point {
 }
 ```
 
+```ts
+interface ScaleCallbacks {
+  scaleUp: () => void;
+  scaleReste: () => void;
+  scaleDown: () => void;
+}
+```
+
 # Props
 
-| Name                 | Type                           | Description                                   |
-| -------------------- | ------------------------------ | --------------------------------------------- |
-| height               | `string`                       | The height of the canvas                      |
-| width                | `string`                       | The width of the canvas                       |
-| setPolygons          | `(polygons: Polygon[])=> void` | Function to update the polygon list state     |
-| polygonList          | `Polygon`                      | List of polygons to show                      |
-| image                | `string`,`file`                | Image to show and to annotate                 |
-| polygonLineSizeProps | `PolygonLineSizeProps`         | Props to show polygon line & area measurement |
+| Name                 | Type                                      | Description                                   |
+| -------------------- | ----------------------------------------- | --------------------------------------------- |
+| height               | `string`                                  | The height of the canvas                      |
+| width                | `string`                                  | The width of the canvas                       |
+| setPolygons          | `(polygons: Polygon[])=> void`            | Function to update the polygon list state     |
+| polygonList          | `Polygon`                                 | List of polygons to show                      |
+| image                | `string`,`file`                           | Image to show and to annotate                 |
+| polygonLineSizeProps | `PolygonLineSizeProps`                    | Props to show polygon line & area measurement |
+| buttonsComponent     | `(callback: ScaleCallbacks) => ReactNode` | Add a custom buttons component                |

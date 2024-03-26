@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AnnotatorCanvas } from '../lib';
 import { Polygon } from '../lib/types';
 import image from '../src/assets/Rennes_Solar_Panel_Batch_1_519355_363821.jpg';
+import { CustomButtons } from './components/CustomButtons';
 
 function App() {
   const [polygons, setPolygons] = useState<Polygon[]>([]);
@@ -20,6 +21,7 @@ function App() {
         polygonList={polygons}
         image={image}
         allowAnnotation
+        buttonsComponent={CustomButtons}
       />
     </div>
   );

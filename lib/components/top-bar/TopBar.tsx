@@ -1,15 +1,24 @@
-import { ShowCursorPosition, useSizesContext } from '../..';
+import { ScaleCallbacks, ShowCursorPosition, useSizesContext } from '../..';
 import style from './style.module.css';
 
-export const TopBar = () => {
+interface TopBarProps {
+  buttonsComponent?: ((callbacks: ScaleCallbacks) => React.ReactNode) | undefined;
+}
+export const TopBar = ({ buttonsComponent }: TopBarProps) => {
   const { scaleDown, scaleUp, scaleReste } = useSizesContext();
 
   return (
     <div className={style.container}>
       <ShowCursorPosition />
-      <button onClick={scaleUp}>zoom +</button>
-      <button onClick={scaleReste}>reset</button>
-      <button onClick={scaleDown}>zoom -</button>
+      {buttonsComponent ? (
+        buttonsComponent({ scaleUp, scaleReste, scaleDown })
+      ) : (
+        <>
+          <button onClick={scaleUp}>zoom +</button>
+          <button onClick={scaleReste}>reset</button>
+          <button onClick={scaleDown}>zoom -</button>
+        </>
+      )}
     </div>
   );
 };
