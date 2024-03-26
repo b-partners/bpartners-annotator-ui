@@ -4,7 +4,7 @@ import { GeoPointMapper, findMidpoint, getCenterOfPolygon } from '..';
 import { GeojsonReturn, Measurement, Polygon } from '../..';
 
 export class GeojsonMapper {
-  public static toMeasurements(geojson: GeojsonReturn[], polygons: Polygon[]) {
+  public static toMeasurements(geojson: GeojsonReturn[], polygons: Polygon[]): Measurement[] {
     const measurements: Measurement[] = [];
 
     geojson.forEach(geojson => {
@@ -22,6 +22,7 @@ export class GeojsonMapper {
           const currentPoint = associatedPolygon.points[a];
 
           measurements.push({
+            polygonId: associatedPolygon.id,
             position: findMidpoint([prevPoint, currentPoint]),
             unity: 'm',
             value: getDistance(GeoPointMapper.toGeoLocation(prevCoordinate), GeoPointMapper.toGeoLocation(currentCoordinate)),
@@ -33,10 +34,11 @@ export class GeojsonMapper {
     return measurements;
   }
 
-  private static getSurfaceMeasurement(geojson: GeojsonReturn, polygon: Polygon) {
+  private static getSurfaceMeasurement(geojson: GeojsonReturn, polygon: Polygon): Measurement {
     const area = getAreaOfPolygon(geojson.geometry.coordinates[0][0].map(GeoPointMapper.toGeoLocation));
     const position = getCenterOfPolygon(polygon.points);
     return {
+      polygonId: polygon.id,
       position,
       unity: 'm²',
       value: Math.round(area),

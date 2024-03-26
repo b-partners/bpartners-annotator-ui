@@ -25,16 +25,18 @@ export const Canvas = () => {
         measurements.map(({ position, unity, value }) => {
           const { x, y } = sc.getPhysicalPositionByPoint(position);
           return (
-            <span
-              className={style.measurement}
-              style={{
-                top: y,
-                left: x,
-              }}
-            >
-              {value}
-              {unity}
-            </span>
+            unity === 'm' && (
+              <span
+                className={style.measurement}
+                style={{
+                  top: y,
+                  left: x,
+                }}
+              >
+                {value}
+                {unity}
+              </span>
+            )
           );
         })}
     </div>
