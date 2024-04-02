@@ -17,10 +17,10 @@ export const Canvas = () => {
   }, [image, cursorCanvasRef.current, scale]);
 
   return (
-    <div style={{ width, height, position: 'relative' }}>
+    <div data-cy='annotator-canvas-container' style={{ width, height, position: 'relative' }}>
       <canvas className={style.canvas} ref={imageCanvasRef} width={width} height={height}></canvas>
       <canvas className={style.canvas} ref={polygonCanvasRef} width={width} height={height}></canvas>
-      <canvas className={style.canvas} ref={cursorCanvasRef} width={width} height={height}></canvas>
+      <canvas data-cy='annotator-canvas-cursor' className={style.canvas} ref={cursorCanvasRef} width={width} height={height}></canvas>
       {sc &&
         measurements.map(({ position, unity, value }) => {
           const { x, y } = sc.getPhysicalPositionByPoint(position);

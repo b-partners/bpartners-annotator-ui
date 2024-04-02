@@ -7,12 +7,12 @@ export const ShowCursorPosition = () => {
   } = usePositionsContext();
 
   return (
-    <div className={style.positionContainer}>
+    <div data-cy='annotator-cursor-positions' className={style.positionContainer}>
       <div>
-        <p>x : {x}</p>
+        <p data-cy='annotator-x-positions'>x : {x}</p>
       </div>
       <div>
-        <p>y : {y}</p>
+        <p data-cy='annotator-y-positions'>y : {y}</p>
       </div>
     </div>
   );
