@@ -8,7 +8,7 @@ export const TopBar = ({ buttonsComponent }: TopBarProps) => {
   const { scaleDown, scaleUp, scaleReste } = useSizesContext();
 
   return (
-    <div className={style.container}>
+    <div data-cy='annotator-top-bar' className={style.container}>
       <ShowCursorPosition />
       {buttonsComponent ? (
         buttonsComponent({ scaleUp, scaleReste, scaleDown })
