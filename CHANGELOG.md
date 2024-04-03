@@ -1,3 +1,18 @@
+# [0.6.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.3...v0.6.0) (2024-04-03)
+
+
+### Bug Fixes
+
+* added surface and measurements to Polygon object ([946d427](https://github.com/b-partners/bpartners-annotator-ui/commit/946d4279c943c386480503e9b744b14349d2d622))
+* image loading ui ([f08dbfd](https://github.com/b-partners/bpartners-annotator-ui/commit/f08dbfd225facc2914b3fa7ef0536fe207f60115))
+
+
+### Features
+
+* add a custom buttons component ([dcc2187](https://github.com/b-partners/bpartners-annotator-ui/commit/dcc2187166b89e8a2eeeef1d4dbeddf67d16b8c2))
+
+
+
 ## [0.5.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.2...v0.5.3) (2024-03-08)
 
 
@@ -80,20 +95,6 @@
 
 * build config ([c892375](https://github.com/b-partners/bpartners-annotator-ui/commit/c8923750f2663fd5ea97a4493a77c2981cee612f))
 * top-bar css ([8afba02](https://github.com/b-partners/bpartners-annotator-ui/commit/8afba02900ed144104096370d48b1e3a8e7a971e))
-
-
-
-# [0.3.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.2.3...v0.3.0) (2024-02-23)
-
-
-### Bug Fixes
-
-* polygon render ([cd65a06](https://github.com/b-partners/bpartners-annotator-ui/commit/cd65a0662ddbe4ab3cfeeabeeae4a7540df04854))
-
-
-### Features
-
-* conditional annotation  ([a78e9e0](https://github.com/b-partners/bpartners-annotator-ui/commit/a78e9e08b713c294d8929d5634ff9d43b51bc1fd))
 
 
 
