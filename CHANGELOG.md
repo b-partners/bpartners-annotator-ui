@@ -1,3 +1,12 @@
+# [0.7.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.6.0...v0.7.0) (2024-04-03)
+
+
+### Features
+
+* add cy selector to canvas ([391b1ba](https://github.com/b-partners/bpartners-annotator-ui/commit/391b1ba1c2a76e4c0ceeaf24b8ad0ab57d42060c))
+
+
+
 # [0.6.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.3...v0.6.0) (2024-04-03)
 
 
@@ -85,16 +94,6 @@
 * polygon draw ending handler ([741325b](https://github.com/b-partners/bpartners-annotator-ui/commit/741325bb6183a47d3285e3ac2c488064a5a4c84d))
 * show polygon from polygon list render ([109e281](https://github.com/b-partners/bpartners-annotator-ui/commit/109e281a74d22bf598ba178cd5e8e01b4269a444))
 * store polygon state on every render ([2f87f25](https://github.com/b-partners/bpartners-annotator-ui/commit/2f87f252ed102bba236cf5b5820a4d322c5632d5))
-
-
-
-## [0.3.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.0...v0.3.1) (2024-02-28)
-
-
-### Bug Fixes
-
-* build config ([c892375](https://github.com/b-partners/bpartners-annotator-ui/commit/c8923750f2663fd5ea97a4493a77c2981cee612f))
-* top-bar css ([8afba02](https://github.com/b-partners/bpartners-annotator-ui/commit/8afba02900ed144104096370d48b1e3a8e7a971e))
 
 
 
