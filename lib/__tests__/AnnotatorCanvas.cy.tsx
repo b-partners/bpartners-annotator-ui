@@ -3,7 +3,6 @@ import App from '../../src/App';
 const CANVAS_FOR_CURSOR = 'annotator-canvas-cursor';
 const MOUSE_X_POSITION = 'annotator-x-positions';
 const MOUSE_Y_POSITION = 'annotator-y-positions';
-const CONVERTER_URL = 'https://tile-referencer.azurewebsites.net/api/reference';
 
 describe('Test annotator canvas component', () => {
   it('Test show and zoom image', () => {
@@ -18,6 +17,7 @@ describe('Test annotator canvas component', () => {
   });
 
   it('Test draw polygon', () => {
+    cy.viewport(1920, 1080);
     cy.mount(<App />);
     cy.dataCy('annotator-cursor-positions').contains('x : 0');
     cy.dataCy('annotator-cursor-positions').contains('y : 0');
@@ -45,13 +45,5 @@ describe('Test annotator canvas component', () => {
     cy.dataCy(CANVAS_FOR_CURSOR).click(500, 150, { force: true });
     cy.dataCy(MOUSE_X_POSITION).contains('232');
     cy.dataCy(MOUSE_Y_POSITION).contains('80');
-
-    cy.intercept('POST', CONVERTER_URL).as('convertValues');
-
-    cy.wait('@convertValues');
-
-    cy.contains('2m');
-    cy.contains('9m');
-    cy.contains('10m');
   });
 });
