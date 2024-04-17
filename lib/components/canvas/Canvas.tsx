@@ -22,11 +22,12 @@ export const Canvas = () => {
       <canvas data-cy='annotator-canvas-polygon' className={style.canvas} ref={polygonCanvasRef} width={width} height={height}></canvas>
       <canvas data-cy='annotator-canvas-cursor' className={style.canvas} ref={cursorCanvasRef} width={width} height={height}></canvas>
       {sc &&
-        measurements.map(({ position, unity, value }) => {
+        measurements.map(({ position, unity, value }, k) => {
           const { x, y } = sc.getPhysicalPositionByPoint(position);
           return (
             unity === 'm' && (
               <span
+                key={k}
                 className={style.measurement}
                 style={{
                   top: y,
