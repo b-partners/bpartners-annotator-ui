@@ -64,9 +64,11 @@ export class EventHandler {
   };
 
   private mouseUp = (setPolygons: (polygons: Polygon[]) => void) => () => {
-    this.currentPointInfo = null;
-    this.createPointInfo();
-    setPolygons(this.polygons.slice());
+    if (this.currentPointInfo) {
+      this.currentPointInfo = null;
+      this.createPointInfo();
+      setPolygons(this.polygons.slice());
+    }
   };
 
   private mouseLeave() {
