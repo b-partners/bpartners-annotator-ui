@@ -32,7 +32,7 @@ export const useScale = () => {
       return () => {};
     }
 
-    if (iwpDiff > ihpDiff) {
+    if (image.width > containerWidth && iwpDiff < ihpDiff) {
       setDefaultScale(+(containerWidth / iwp).toFixed(2) - 0.1);
       return () => {};
     }
