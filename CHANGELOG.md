@@ -1,3 +1,12 @@
+## [0.7.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.1...v0.7.2) (2024-04-23)
+
+
+### Bug Fixes
+
+* initial zoom bug ([82ca7d5](https://github.com/b-partners/bpartners-annotator-ui/commit/82ca7d55ddef95efaf12376e01df7b3692ceb0a2))
+
+
+
 ## [0.7.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.0...v0.7.1) (2024-04-17)
 
 
@@ -88,10 +97,6 @@
 ### Features
 
 * polygon points add and update ([401ba23](https://github.com/b-partners/bpartners-annotator-ui/commit/401ba23a642645d4d14dd0e2a233a7cd917edcdc))
-
-
-
-## [0.3.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.3.2...v0.3.3) (2024-02-29)
 
 
 
