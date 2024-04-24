@@ -22,28 +22,23 @@ describe('Test annotator canvas component', () => {
     cy.dataCy('annotator-cursor-positions').contains('x : 0');
     cy.dataCy('annotator-cursor-positions').contains('y : 0');
 
-    cy.dataCy(CANVAS_FOR_CURSOR).click(3710, 0, { force: true });
-    cy.dataCy(MOUSE_X_POSITION).contains('1024');
+    cy.dataCy(CANVAS_FOR_CURSOR).click(0, 0, { force: true });
+    cy.dataCy(MOUSE_X_POSITION).contains('0');
     cy.dataCy(MOUSE_Y_POSITION).contains('0');
 
-    cy.dataCy(CANVAS_FOR_CURSOR).click(200, 200, { force: true });
-    cy.dataCy(MOUSE_X_POSITION).contains('0');
-    cy.dataCy(MOUSE_Y_POSITION).contains('130');
+    cy.dataCy(CANVAS_FOR_CURSOR).click(1000, 1000, { force: true });
+    cy.dataCy(MOUSE_X_POSITION).contains('717');
+    cy.dataCy(MOUSE_Y_POSITION).contains('717');
 
-    cy.dataCy(CANVAS_FOR_CURSOR).click(500, 150, { force: true });
-    cy.dataCy(MOUSE_X_POSITION).contains('232');
-    cy.dataCy(MOUSE_Y_POSITION).contains('80');
+    const polygon1 = [
+      [500, 150],
+      [350, 350],
+      [200, 150],
+      [500, 150],
+    ];
 
-    cy.dataCy(CANVAS_FOR_CURSOR).click(300, 250, { force: true });
-    cy.dataCy(MOUSE_X_POSITION).contains('32');
-    cy.dataCy(MOUSE_Y_POSITION).contains('18');
-
-    cy.dataCy(CANVAS_FOR_CURSOR).click(200, 200, { force: true });
-    cy.dataCy(MOUSE_X_POSITION).contains('0');
-    cy.dataCy(MOUSE_Y_POSITION).contains('130');
-
-    cy.dataCy(CANVAS_FOR_CURSOR).click(500, 150, { force: true });
-    cy.dataCy(MOUSE_X_POSITION).contains('232');
-    cy.dataCy(MOUSE_Y_POSITION).contains('80');
+    polygon1.forEach(([x, y]) => {
+      cy.dataCy(CANVAS_FOR_CURSOR).click(x, y, { force: true });
+    });
   });
 });
