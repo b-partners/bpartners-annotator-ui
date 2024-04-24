@@ -25,20 +25,14 @@ export const useScale = () => {
     const iwp = image.width + IMAGE_PADDING;
     const ihp = image.height + IMAGE_PADDING;
 
-    const iwpDiff = Math.abs(containerWidth - iwp);
-    const ihpDiff = Math.abs(containerHeight - ihp);
-
     if (containerHeight === 0 || (containerWidth === 0 && image.src.length === 0)) {
       return () => {};
     }
 
-    if (image.width > containerWidth && iwpDiff < ihpDiff) {
-      setDefaultScale(+(containerWidth / iwp).toFixed(2) - 0.1);
-      return () => {};
-    }
+    const widthScale = +(containerWidth / iwp).toFixed(2);
+    const heightScale = +(containerHeight / ihp).toFixed(2);
 
-    setDefaultScale(+(containerHeight / ihp).toFixed(2) - 0.1);
-    return () => {};
+    setDefaultScale(widthScale > heightScale ? heightScale : widthScale);
   }, [containerSize, image]);
 
   return {
