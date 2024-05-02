@@ -25,7 +25,7 @@ export class GeojsonMapper {
             polygonId: associatedPolygon.id,
             position: findMidpoint([prevPoint, currentPoint]),
             unity: 'm',
-            value: getDistance(GeoPointMapper.toGeoLocation(prevCoordinate), GeoPointMapper.toGeoLocation(currentCoordinate)),
+            value: +getDistance(GeoPointMapper.toGeoLocation(prevCoordinate), GeoPointMapper.toGeoLocation(currentCoordinate), 0.2).toFixed(2),
           });
         }
       }
