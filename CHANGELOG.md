@@ -1,3 +1,12 @@
+## [0.7.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.3...v0.7.4) (2024-05-02)
+
+
+### Bug Fixes
+
+* distance precision ([7b69ae0](https://github.com/b-partners/bpartners-annotator-ui/commit/7b69ae00f194a655325108eff54d74d0ae8132bb))
+
+
+
 ## [0.7.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.2...v0.7.3) (2024-04-24)
 
 
@@ -88,15 +97,6 @@
 
 * show line width on polygons ([58215d3](https://github.com/b-partners/bpartners-annotator-ui/commit/58215d3f745fe71cda5ad9378096747671c14625))
 * show polygon area ([5d8c12b](https://github.com/b-partners/bpartners-annotator-ui/commit/5d8c12b8d5d560061f1790635ed23bfe2095f9ea))
-
-
-
-## [0.4.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.4.0...v0.4.1) (2024-03-02)
-
-
-### Bug Fixes
-
-* polygon update ([010c19f](https://github.com/b-partners/bpartners-annotator-ui/commit/010c19f75647587b2dd7898b2149d5cf7058c41b))
 
 
 
