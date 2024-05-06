@@ -5,6 +5,7 @@ export interface GeoShapeAttributes {
 }
 
 export interface GeoRegion {
+  id: string;
   shape_attributes: GeoShapeAttributes;
 }
 
