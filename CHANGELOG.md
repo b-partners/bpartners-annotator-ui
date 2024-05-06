@@ -1,3 +1,12 @@
+## [0.7.6](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.5...v0.7.6) (2024-05-06)
+
+
+### Bug Fixes
+
+* adding the 'image_size' attribute to have the correct measurements ([7b167fb](https://github.com/b-partners/bpartners-annotator-ui/commit/7b167fb470c42a1d96e512c9e4e40cf0a566bcf4))
+
+
+
 ## [0.7.5](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.4...v0.7.5) (2024-05-06)
 
 
@@ -82,15 +91,6 @@
 ### Bug Fixes
 
 * use props instead of env ([549cf53](https://github.com/b-partners/bpartners-annotator-ui/commit/549cf53ec737de9732b12a10d54d42efc8070214))
-
-
-
-## [0.5.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.0...v0.5.1) (2024-03-07)
-
-
-### Bug Fixes
-
-* env name for react ([5a7d7e6](https://github.com/b-partners/bpartners-annotator-ui/commit/5a7d7e6b832533e7d134df6e381a5ee526e35119))
 
 
 
