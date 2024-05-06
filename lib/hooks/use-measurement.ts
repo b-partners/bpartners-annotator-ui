@@ -27,11 +27,13 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
         polygons.forEach(polygon => {
           if (!polygon.isInvisible) {
             currentGeoJson.regions[polygon.id] = {
+              id: polygon.id,
               shape_attributes: PolygonMapper.toGeoShapeAttributes(polygon),
             };
           }
         });
         const res = await pointsToGeoPoints(converterApiUrl, currentGeoJson);
+
         if (res) {
           const measurements = GeojsonMapper.toMeasurements(res, polygons);
           setMeasurements(measurements);
