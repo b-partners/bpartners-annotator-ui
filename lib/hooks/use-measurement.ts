@@ -9,6 +9,7 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const { image } = useElementContext();
   const hasGeojsonGenerated = useRef(true);
+  const [imageWidth, setImageWidth] = useState(0);
 
   const setGeojsonDebounced = useMemo(
     () =>
@@ -23,7 +24,9 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
           region_attributes: {
             label: 'pathway',
           },
+          image_size: imageWidth,
         };
+
         polygons.forEach(polygon => {
           if (!polygon.isInvisible) {
             currentGeoJson.regions[polygon.id] = {
@@ -47,7 +50,7 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
         }
       }, 500),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [converterApiUrl, image.ariaLabel]
+    [converterApiUrl, image.ariaLabel, imageWidth]
   );
 
   useEffect(() => {
@@ -57,6 +60,14 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
       hasGeojsonGenerated.current = true;
     }
   }, [canvas, polygons, setGeojsonDebounced, showLineSize]);
+
+  useEffect(() => {
+    const newImg = new Image();
+    newImg.src = image.src;
+    newImg.onload = () => {
+      setImageWidth(newImg.naturalWidth);
+    };
+  }, [image.src]);
 
   return measurements;
 };

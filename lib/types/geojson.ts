@@ -15,6 +15,7 @@ export interface Geojson {
   region_attributes: {
     label: string;
   };
+  image_size: number;
 }
 
 export type GeoPoint = [
