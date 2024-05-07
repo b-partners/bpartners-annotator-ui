@@ -54,12 +54,12 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
   );
 
   useEffect(() => {
-    if (showLineSize && hasGeojsonGenerated.current) {
+    if (showLineSize && hasGeojsonGenerated.current && imageWidth > 0) {
       setGeojsonDebounced(polygons);
     } else {
       hasGeojsonGenerated.current = true;
     }
-  }, [canvas, polygons, setGeojsonDebounced, showLineSize]);
+  }, [canvas, polygons, setGeojsonDebounced, showLineSize, imageWidth]);
 
   useEffect(() => {
     const newImg = new Image();
