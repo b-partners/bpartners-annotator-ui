@@ -1,3 +1,12 @@
+## [0.7.7](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.6...v0.7.7) (2024-05-07)
+
+
+### Bug Fixes
+
+* ensure single execution of 'reference' ([7e390c5](https://github.com/b-partners/bpartners-annotator-ui/commit/7e390c5265cb73ee8e5a6cacb87615a92d3e5b5b))
+
+
+
 ## [0.7.6](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.5...v0.7.6) (2024-05-06)
 
 
@@ -82,15 +91,6 @@
 ### Bug Fixes
 
 * polygons visibilities ([7ab9a28](https://github.com/b-partners/bpartners-annotator-ui/commit/7ab9a280820270b24a7d01aee7e7f5f3970ef939))
-
-
-
-## [0.5.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.1...v0.5.2) (2024-03-07)
-
-
-### Bug Fixes
-
-* use props instead of env ([549cf53](https://github.com/b-partners/bpartners-annotator-ui/commit/549cf53ec737de9732b12a10d54d42efc8070214))
 
 
 
