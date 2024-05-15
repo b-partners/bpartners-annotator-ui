@@ -1,3 +1,12 @@
+# [0.8.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.7...v0.8.0) (2024-05-15)
+
+
+### Features
+
+* rename package to @bpartners-imagery/annotator-component ([529bda2](https://github.com/b-partners/bpartners-annotator-ui/commit/529bda2562327c2905a6508b19a5670f19f94984))
+
+
+
 ## [0.7.7](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.6...v0.7.7) (2024-05-07)
 
 
@@ -82,15 +91,6 @@
 ### Features
 
 * add a custom buttons component ([dcc2187](https://github.com/b-partners/bpartners-annotator-ui/commit/dcc2187166b89e8a2eeeef1d4dbeddf67d16b8c2))
-
-
-
-## [0.5.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.2...v0.5.3) (2024-03-08)
-
-
-### Bug Fixes
-
-* polygons visibilities ([7ab9a28](https://github.com/b-partners/bpartners-annotator-ui/commit/7ab9a280820270b24a7d01aee7e7f5f3970ef939))
 
 
 
