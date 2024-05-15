@@ -1,5 +1,5 @@
 {
-  "name": "@bpartners/annotator-component",
+  "name": "@bpartners-imagery/annotator-component",
   "version": "0.7.7",
   "type": "module",
   "main": "./dist/index.js",
