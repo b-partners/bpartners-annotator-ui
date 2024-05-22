@@ -5,7 +5,7 @@ import { IMAGE_PADDING } from '../../constant';
 
 export const SizesProvider: FC<SizesProviderProps> = props => {
   const { children } = props;
-  const { containerHeight, containerWidth, defaultScale } = useScale();
+  const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
   const [scale, setScale] = useState(0);
 
@@ -38,6 +38,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         defaultScale,
         scale: scale + defaultScale,
         setScale,
+        scaleLimit,
       }}
     >
       {children}

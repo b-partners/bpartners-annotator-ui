@@ -9,6 +9,10 @@ export const useScale = () => {
     containerWidth: 0,
     containerHeight: 0,
   });
+  const [scaleLimit, setScaleLimit] = useState({
+    max: 2,
+    min: 0,
+  });
 
   useEffect(() => {
     if (containerRef.current) {
@@ -33,10 +37,15 @@ export const useScale = () => {
     const heightScale = +(containerHeight / ihp).toFixed(2);
 
     setDefaultScale(widthScale > heightScale ? heightScale : widthScale);
-  }, [containerSize, image]);
+    setScaleLimit({
+      max: defaultScale + 1.8,
+      min: defaultScale - 0.2,
+    });
+  }, [containerSize, image, defaultScale]);
 
   return {
     ...containerSize,
     defaultScale,
+    scaleLimit,
   };
 };
