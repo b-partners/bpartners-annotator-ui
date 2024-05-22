@@ -1,3 +1,17 @@
+## [0.8.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.8.0...v0.8.1) (2024-05-22)
+
+
+### Bug Fixes
+
+* zoom limit ([52682ef](https://github.com/b-partners/bpartners-annotator-ui/commit/52682ef96740be02a7cc775b0cac7be35134c130))
+
+
+### Reverts
+
+* Revert "feat: rename package to @bpartners-imagery/annotator-component" ([8aef32b](https://github.com/b-partners/bpartners-annotator-ui/commit/8aef32b76cb93dbfc2ff8674264e42094285ddb1))
+
+
+
 # [0.8.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.7...v0.8.0) (2024-05-15)
 
 
@@ -76,21 +90,6 @@
 ### Features
 
 * add cy selector to canvas ([391b1ba](https://github.com/b-partners/bpartners-annotator-ui/commit/391b1ba1c2a76e4c0ceeaf24b8ad0ab57d42060c))
-
-
-
-# [0.6.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.5.3...v0.6.0) (2024-04-03)
-
-
-### Bug Fixes
-
-* added surface and measurements to Polygon object ([946d427](https://github.com/b-partners/bpartners-annotator-ui/commit/946d4279c943c386480503e9b744b14349d2d622))
-* image loading ui ([f08dbfd](https://github.com/b-partners/bpartners-annotator-ui/commit/f08dbfd225facc2914b3fa7ef0536fe207f60115))
-
-
-### Features
-
-* add a custom buttons component ([dcc2187](https://github.com/b-partners/bpartners-annotator-ui/commit/dcc2187166b89e8a2eeeef1d4dbeddf67d16b8c2))
 
 
 
