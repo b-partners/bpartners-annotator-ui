@@ -18,6 +18,7 @@ export interface AnnotatorCanvasProps {
   image: string;
   setPolygons: (polygon: Polygon[]) => void;
   polygonList: Polygon[];
+  zoom: number;
   allowAnnotation?: boolean;
   polygonLineSizeProps?: PolygonSizeProps;
   buttonsComponent?: (callback: ScaleCallbacks) => ReactNode;

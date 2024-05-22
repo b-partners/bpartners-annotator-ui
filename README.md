@@ -39,6 +39,7 @@ function App() {
         image={image}
         allowAnnotation
         buttonsComponent={CustomButtonsComponent}
+        zoom={20}
       />
     </div>
   );
@@ -98,3 +99,4 @@ interface ScaleCallbacks {
 | image                | `string`,`file`                           | Image to show and to annotate                 |
 | polygonLineSizeProps | `PolygonLineSizeProps`                    | Props to show polygon line & area measurement |
 | buttonsComponent     | `(callback: ScaleCallbacks) => ReactNode` | Add a custom buttons component                |
+| zoom     | `number` | corresponds to those different zoom : <ul><li>BUILDINGS = 18</li><li>BUILDING = 19</li><li>HOUSES_0 = 20</li><li>HOUSES_1 = 21</li><li>HOUSES_2 = 22 </li><li>HOUSE_PROPERTY = 23</li></ul>

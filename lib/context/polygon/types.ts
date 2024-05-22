@@ -9,4 +9,5 @@ export interface PolygonContextType {
   polygon: MutableRefObject<Polygon>;
   isDrawing: MutableRefObject<boolean>;
   allowAnnotation?: boolean;
+  zoom: number;
 }

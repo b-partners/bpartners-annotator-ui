@@ -16,6 +16,7 @@ export interface Geojson {
     label: string;
   };
   image_size: number;
+  zoom: number;
 }
 
 export type GeoPoint = [

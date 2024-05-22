@@ -22,6 +22,7 @@ function App() {
         image={image}
         allowAnnotation
         buttonsComponent={CustomButtons}
+        zoom={20}
       />
     </div>
   );

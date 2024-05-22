@@ -10,4 +10,5 @@ export const PolygonContext = createContext<PolygonContextType>({
   isDrawing: { current: false },
   polygon: { current: defaultPolygon },
   allowAnnotation: false,
+  zoom: 20,
 });
