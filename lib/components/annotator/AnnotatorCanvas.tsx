@@ -14,7 +14,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
 
   return (
     <ElementProvider containerRef={containerRef} image={image}>
-      {image.src.length > 0 && (
+      {image.src.length > 0 ? (
         <SizesProvider>
           <PositionsProvider>
             <div style={{ width }}>
@@ -38,6 +38,12 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
             </div>
           </PositionsProvider>
         </SizesProvider>
+      ) : (
+        isImageLoading && (
+          <div style={{ height, width }} className={style.loadingContainer}>
+            <div></div>
+          </div>
+        )
       )}
     </ElementProvider>
   );
