@@ -9,4 +9,5 @@ export const SizesContext = createContext<SizesContextType>({
   scale: 1,
   defaultScale: 0,
   setScale: () => {},
+  scaleLimit: { max: 2, min: 0 },
 });
