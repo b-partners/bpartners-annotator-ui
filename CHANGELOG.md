@@ -1,3 +1,12 @@
+# [0.9.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.8.1...v0.9.0) (2024-05-23)
+
+
+### Features
+
+* add zoom property ([077649f](https://github.com/b-partners/bpartners-annotator-ui/commit/077649fef7fb751bd467589e37dfab5f6ddaabd9))
+
+
+
 ## [0.8.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.8.0...v0.8.1) (2024-05-22)
 
 
@@ -81,15 +90,6 @@
 ### Bug Fixes
 
 * polygons render ([191a54e](https://github.com/b-partners/bpartners-annotator-ui/commit/191a54e07272f5ff9e0775ed8ec3f4979d4a01b4))
-
-
-
-# [0.7.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.6.0...v0.7.0) (2024-04-03)
-
-
-### Features
-
-* add cy selector to canvas ([391b1ba](https://github.com/b-partners/bpartners-annotator-ui/commit/391b1ba1c2a76e4c0ceeaf24b8ad0ab57d42060c))
 
 
 
