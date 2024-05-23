@@ -14,4 +14,5 @@ export interface PolygonProviderProps extends Children {
   polygons: Polygon[];
   converterApiUrl: string;
   allowAnnotation?: boolean;
+  zoom: number;
 }

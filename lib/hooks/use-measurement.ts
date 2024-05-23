@@ -5,7 +5,7 @@ import { Geojson, GeojsonMapper, Measurement, Polygon, PolygonMapper } from '..'
 import { pointsToGeoPoints } from '../provider';
 
 export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
-  const { polygons, setPolygons, showLineSize, converterApiUrl } = usePolygonContext();
+  const { polygons, setPolygons, showLineSize, converterApiUrl, zoom } = usePolygonContext();
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const { image } = useElementContext();
   const hasGeojsonGenerated = useRef(true);
@@ -25,6 +25,7 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
             label: 'pathway',
           },
           image_size: imageWidth,
+          zoom: zoom,
         };
 
         polygons.forEach(polygon => {
