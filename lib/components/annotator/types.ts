@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode } from 'react';
-import { Polygon } from '../../types';
+import { CircleMarker, Polygon } from '../../types';
 
 interface PolygonSizeProps {
   imageName: string;
@@ -22,4 +22,5 @@ export interface AnnotatorCanvasProps {
   allowAnnotation?: boolean;
   polygonLineSizeProps?: PolygonSizeProps;
   buttonsComponent?: (callback: ScaleCallbacks) => ReactNode;
+  circleMarker?: CircleMarker;
 }

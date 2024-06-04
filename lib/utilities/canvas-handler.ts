@@ -46,6 +46,15 @@ export class CanvasHandler {
     }
   }
 
+  public drawCircleMarker({ x, y }: Point, radius: number) {
+    const ctx = this.ctx;
+    ctx.beginPath();
+    ctx.lineWidth = 1;
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.closePath();
+  }
+
   drawPolygon(polygons: Polygon[]) {
     const ctx = this.ctx;
     this.clearAll();
