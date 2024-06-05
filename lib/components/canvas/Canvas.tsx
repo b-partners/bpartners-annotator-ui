@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
-import { ScaleHandler, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, useSizesContext } from '../..';
+import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, useSizesContext } from '../..';
 import style from './style.module.css';
 
 export const Canvas = () => {
@@ -32,6 +32,7 @@ export const Canvas = () => {
                 style={{
                   top: y,
                   left: x,
+                  fontSize: `${+(UrlParams.get('scale') || '1') * 10}px`,
                 }}
               >
                 {value}
