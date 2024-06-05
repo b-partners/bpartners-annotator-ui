@@ -49,6 +49,8 @@ export class CanvasHandler {
   public drawCircleMarker(point: Point, radius: number) {
     const sc = this.scaleHandler;
     const ctx = this.ctx;
+    ctx.save();
+    ctx.strokeStyle = '#ff0000';
     const scaledRadius = sc.getScaledDownValue(radius);
     const { x, y } = sc.getPhysicalPositionByPoint(point);
     ctx.beginPath();
@@ -56,6 +58,7 @@ export class CanvasHandler {
     ctx.arc(x, y, scaledRadius, 0, Math.PI * 2);
     ctx.stroke();
     ctx.closePath();
+    ctx.restore();
   }
 
   drawPolygon(polygons: Polygon[]) {
