@@ -6,7 +6,7 @@ import { CanvasHandler, EventHandler, ScaleHandler } from '..';
 export const useCursorPolygon = () => {
   const cursorCanvasRef = useRef<HTMLCanvasElement>(null);
   const polygonCanvasRef = useRef<HTMLCanvasElement>(null);
-  const { setPolygons, isDrawing, polygons, polygon, allowAnnotation } = usePolygonContext();
+  const { setPolygons, isDrawing, polygons, polygon, allowAnnotation, circleMarker } = usePolygonContext();
   const { image } = useElementContext();
 
   useEffect(() => {
@@ -15,7 +15,7 @@ export const useCursorPolygon = () => {
       const polygonCanvas = polygonCanvasRef.current;
       const scaleHandler = new ScaleHandler(cursorCanvas, image);
       const canvasCursorHandler = new CanvasHandler(cursorCanvas, scaleHandler);
-      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler);
+      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler, circleMarker);
 
       const eventHandler = new EventHandler({
         canvas: cursorCanvas,
@@ -31,7 +31,7 @@ export const useCursorPolygon = () => {
 
       return eventHandler.initEvent(cursorCanvas, setPolygons);
     }
-  }, [allowAnnotation, polygons]);
+  }, [allowAnnotation, polygons, circleMarker]);
 
   useDrawPolygon(cursorCanvasRef, polygonCanvasRef);
   useCursorPosition(cursorCanvasRef);

@@ -14,13 +14,9 @@ export const useDrawPolygon = (cursorCanvasRef: RefObject<HTMLCanvasElement>, po
       const cursorCanvas = cursorCanvasRef.current;
       const polygonCanvas = polygonCanvasRef.current;
       const scaleHandler = new ScaleHandler(cursorCanvas, image);
-      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler);
+      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler, circleMarker);
       canvasPolygonHandler.clearAll();
       canvasPolygonHandler.drawPolygon([...polygons, polygon.current]);
-      if (circleMarker) {
-        const { center, radius } = circleMarker;
-        canvasPolygonHandler.drawCircleMarker(center, radius);
-      }
     }
-  }, [polygons, scale, circleMarker]);
+  }, [polygons, scale]);
 };
