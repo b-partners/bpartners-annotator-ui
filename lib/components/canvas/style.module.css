@@ -15,5 +15,13 @@
   opacity: 0.5;
   transition: all 100ms;
   scale: 1.2;
+  cursor: pointer;
 }
 
+.measurement:hover {
+  scale: 2;
+  background: red;
+  z-index: 999;
+  opacity: 1;
+  color: #fff;
+}
