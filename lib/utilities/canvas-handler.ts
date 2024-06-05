@@ -46,11 +46,14 @@ export class CanvasHandler {
     }
   }
 
-  public drawCircleMarker({ x, y }: Point, radius: number) {
+  public drawCircleMarker(point: Point, radius: number) {
+    const sc = this.scaleHandler;
     const ctx = this.ctx;
+    const scaledRadius = sc.getScaledDownValue(radius);
+    const { x, y } = sc.getPhysicalPositionByPoint(point);
     ctx.beginPath();
     ctx.lineWidth = 1;
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(x, y, scaledRadius, 0, Math.PI * 2);
     ctx.stroke();
     ctx.closePath();
   }
