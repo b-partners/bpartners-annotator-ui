@@ -32,7 +32,7 @@ export const Canvas = () => {
                 style={{
                   top: y,
                   left: x,
-                  fontSize: `${+(UrlParams.get('scale') ?? '1') * 5}px`,
+                  fontSize: `${+(UrlParams.get('scale') || '1') * 5}px`,
                 }}
               >
                 {value}
