@@ -16,6 +16,9 @@ export const Canvas = () => {
     return null;
   }, [image, cursorCanvasRef.current, scale]);
 
+  const currentScale = +(UrlParams.get('scale') ?? '1');
+  const fontSize = `${5 * currentScale}px`;
+
   return (
     <div data-cy='annotator-canvas-container' style={{ width, height, position: 'relative' }}>
       <canvas data-cy='annotator-canvas-image' className={style.canvas} ref={imageCanvasRef} width={width} height={height}></canvas>
@@ -32,7 +35,7 @@ export const Canvas = () => {
                 style={{
                   top: y,
                   left: x,
-                  fontSize: `${+(UrlParams.get('scale') || '1') * 10}px`,
+                  fontSize,
                 }}
               >
                 {value}
