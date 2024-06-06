@@ -1,3 +1,12 @@
+## [0.9.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.3...v0.9.4) (2024-06-06)
+
+
+### Bug Fixes
+
+* build code loader  ([044c829](https://github.com/b-partners/bpartners-annotator-ui/commit/044c829ac6c607f0aa14b878eff6f291f2279da5))
+
+
+
 ## [0.9.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.2...v0.9.3) (2024-06-06)
 
 
@@ -81,15 +90,6 @@
 ### Bug Fixes
 
 * display measurements ([e015a8d](https://github.com/b-partners/bpartners-annotator-ui/commit/e015a8d5f65ded543dfa6a12d3bc4c7e49496202))
-
-
-
-## [0.7.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.3...v0.7.4) (2024-05-02)
-
-
-### Bug Fixes
-
-* distance precision ([7b69ae0](https://github.com/b-partners/bpartners-annotator-ui/commit/7b69ae00f194a655325108eff54d74d0ae8132bb))
 
 
 
