@@ -23,7 +23,7 @@ function App() {
         allowAnnotation
         buttonsComponent={CustomButtons}
         zoom={20}
-        marker={{ position: { x: 209, y: 328 }, icon: <div></div> }}
+        marker={{ position: { x: 209, y: 328 } }}
       />
     </div>
   );

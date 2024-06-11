@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { cloneElement, useMemo } from 'react';
+import { useMemo } from 'react';
 import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, usePolygonContext, useSizesContext } from '../..';
 import style from './style.module.css';
+import { MarkerIcon } from '../icons';
 
 export const Canvas = () => {
   const { canvasHeight: height, canvasWidth: width, scale } = useSizesContext();
@@ -43,27 +44,18 @@ export const Canvas = () => {
             )
           );
         })}
-      {sc &&
-        marker &&
-        marker.icon &&
-        cloneElement(marker.icon, {
-          className: style.icon_marker,
-          style: {
-            top: sc.getPhysicalPositionByPoint(marker.position).y,
-            left: sc.getPhysicalPositionByPoint(marker.position).x,
-            fontSize: `${+(UrlParams.get('scale') || '1') * 10}px`,
-          },
-        })}
-      {sc && marker && !marker.icon && (
+      {sc && marker && (
         <span
           className={style.marker}
           style={{
             top: sc.getPhysicalPositionByPoint(marker.position).y,
             left: sc.getPhysicalPositionByPoint(marker.position).x,
-            height: `${+(UrlParams.get('scale') || '1') * 10}px`,
-            width: `${+(UrlParams.get('scale') || '1') * 10}px`,
+            height: `${+(UrlParams.get('scale') || '1') * 90}px`,
+            width: `${+(UrlParams.get('scale') || '1') * 90}px`,
           }}
-        ></span>
+        >
+          <MarkerIcon />
+        </span>
       )}
     </div>
   );
