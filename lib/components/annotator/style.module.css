@@ -26,7 +26,7 @@
   border: solid 4px transparent;
   border-top: 4px solid rgb(255, 0, 140);
   border-left: 4px solid rgb(255, 0, 140, 0.5);
-  animation: rotate .5s infinite linear;
+  animation: rotate 0.5s infinite linear;
   padding: 0;
   margin: 0;
 }

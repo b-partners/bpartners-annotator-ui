@@ -25,3 +25,24 @@
   opacity: 1;
   color: #fff;
 }
+
+.marker {
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+  transition: all 100ms;
+}
+
+.marker > svg {
+  color: red;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -100%);
+}
+
+.marker:hover {
+  scale: 2;
+  transform: translate(-25%, -25%);
+}

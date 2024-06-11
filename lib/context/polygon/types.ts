@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react';
-import { Polygon } from '../../types';
+import { Marker, Polygon } from '../../types';
 
 export interface PolygonContextType {
   polygons: Polygon[];
@@ -10,4 +10,5 @@ export interface PolygonContextType {
   isDrawing: MutableRefObject<boolean>;
   allowAnnotation?: boolean;
   zoom: number;
+  marker?: Marker;
 }

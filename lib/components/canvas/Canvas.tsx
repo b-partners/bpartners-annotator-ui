@@ -1,14 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
-import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, useSizesContext } from '../..';
+import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, usePolygonContext, useSizesContext } from '../..';
 import style from './style.module.css';
+import { MarkerIcon } from '../icons';
 
 export const Canvas = () => {
   const { canvasHeight: height, canvasWidth: width, scale } = useSizesContext();
+  const { marker } = usePolygonContext();
   const imageCanvasRef = useDrawStaticImage();
   const { cursorCanvasRef, polygonCanvasRef } = useCursorPolygon();
   const measurements = useMeasurement(cursorCanvasRef);
   const { image } = useElementContext();
+
   const sc = useMemo(() => {
     if (cursorCanvasRef.current) {
       return new ScaleHandler(cursorCanvasRef.current as HTMLCanvasElement, image);
@@ -41,6 +44,19 @@ export const Canvas = () => {
             )
           );
         })}
+      {sc && marker && (
+        <span
+          className={style.marker}
+          style={{
+            top: sc.getPhysicalPositionByPoint(marker.position).y,
+            left: sc.getPhysicalPositionByPoint(marker.position).x,
+            height: `${+(UrlParams.get('scale') || '1') * 90}px`,
+            width: `${+(UrlParams.get('scale') || '1') * 90}px`,
+          }}
+        >
+          <MarkerIcon />
+        </span>
+      )}
     </div>
   );
 };

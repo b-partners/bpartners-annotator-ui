@@ -1,3 +1,3 @@
-npm run prettier:write
+git status | grep -Eo "(fied|file):.+.(js|ts|tsx|jsx|html)" | awk '{print $2}' | xargs prettier --config .prettierrc.json --write
 npm run lint
-npm run prettier:check
+git status | grep -Eo "(fied|file):.+.(js|ts|tsx|jsx|html)" | awk '{print $2}' | xargs prettier --config .prettierrc.json --check

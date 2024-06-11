@@ -73,6 +73,11 @@ export class ScaleHandler {
     return { x: x * scale, y: y * scale };
   };
 
+  public getScaledDownValue = (value: number) => {
+    const scale = this.getScale();
+    return scale * value;
+  };
+
   /**
    * Use the current scale value to scale down one point
    * @param param0

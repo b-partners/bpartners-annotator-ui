@@ -48,6 +48,7 @@ export class CanvasHandler {
 
   drawPolygon(polygons: Polygon[]) {
     const ctx = this.ctx;
+
     this.clearAll();
     polygons.forEach(polygon => {
       if (!polygon.isInvisible) {
