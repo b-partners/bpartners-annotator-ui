@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { ElementContextType } from '../..';
-import { CircleMarker, Polygon } from '../../types';
+import { Marker, Polygon } from '../../types';
 
 export interface Children {
   children: ReactNode;
@@ -15,5 +15,5 @@ export interface PolygonProviderProps extends Children {
   converterApiUrl: string;
   allowAnnotation?: boolean;
   zoom: number;
-  circleMarker?: CircleMarker;
+  circleMarker?: Marker;
 }

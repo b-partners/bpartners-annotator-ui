@@ -1,13 +1,13 @@
 import { ScaleHandler } from '.';
-import { CircleMarker, MouseType, Point, Polygon } from '../types';
+import { Marker, MouseType, Point, Polygon } from '../types';
 
 export class CanvasHandler {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
-  private circleMarker?: CircleMarker;
+  private circleMarker?: Marker;
 
-  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, circleMarker?: CircleMarker) {
+  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, circleMarker?: Marker) {
     this.canvas = canvas;
     this.ctx = (canvas?.getContext('2d') as CanvasRenderingContext2D) || {};
     this.scaleHandler = scaleHandler;
