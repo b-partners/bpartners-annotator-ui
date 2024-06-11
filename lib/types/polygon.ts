@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Measurement } from '.';
 
 export interface Point {
@@ -19,5 +20,5 @@ export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT';
 
 export type Marker = {
   position: Point;
-  radius: number;
+  icon?: ReactElement;
 };

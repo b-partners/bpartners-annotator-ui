@@ -31,3 +31,8 @@
   border-radius: 50%;
   position: absolute;
 }
+
+.icon_marker {
+  position: absolute;
+  transform: translate(-50%, -100%);
+}

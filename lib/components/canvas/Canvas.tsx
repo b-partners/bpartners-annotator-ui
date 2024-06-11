@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useMemo } from 'react';
+import { cloneElement, useMemo } from 'react';
 import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, usePolygonContext, useSizesContext } from '../..';
 import style from './style.module.css';
 
@@ -43,7 +43,18 @@ export const Canvas = () => {
             )
           );
         })}
-      {sc && marker && (
+      {sc &&
+        marker &&
+        marker.icon &&
+        cloneElement(marker.icon, {
+          className: style.icon_marker,
+          style: {
+            top: sc.getPhysicalPositionByPoint(marker.position).y,
+            left: sc.getPhysicalPositionByPoint(marker.position).x,
+            fontSize: `${+(UrlParams.get('scale') || '1') * 10}px`,
+          },
+        })}
+      {sc && marker && !marker.icon && (
         <span
           className={style.marker}
           style={{
