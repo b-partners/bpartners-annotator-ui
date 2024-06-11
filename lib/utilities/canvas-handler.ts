@@ -83,7 +83,7 @@ export class CanvasHandler {
       }
     });
     if (this.circleMarker) {
-      const { center, radius } = this.circleMarker;
+      const { position: center, radius } = this.circleMarker;
       this.drawCircleMarker(center, radius);
     }
   }

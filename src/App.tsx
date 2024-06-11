@@ -23,7 +23,7 @@ function App() {
         allowAnnotation
         buttonsComponent={CustomButtons}
         zoom={20}
-        circleMarker={{ center: { x: 200, y: 200 }, radius: 100 }}
+        circleMarker={{ position: { x: 200, y: 200 }, radius: 100 }}
       />
     </div>
   );

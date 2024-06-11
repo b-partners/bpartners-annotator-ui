@@ -18,6 +18,6 @@ export interface Polygon {
 export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT';
 
 export type Marker = {
-  center: Point;
+  position: Point;
   radius: number;
 };
