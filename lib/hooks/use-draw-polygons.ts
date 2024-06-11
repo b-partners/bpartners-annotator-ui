@@ -5,7 +5,7 @@ import { ScaleHandler, CanvasHandler, UrlParams } from '..';
 
 export const useDrawPolygon = (cursorCanvasRef: RefObject<HTMLCanvasElement>, polygonCanvasRef: RefObject<HTMLCanvasElement>) => {
   const { scale } = useSizesContext();
-  const { polygons, polygon, circleMarker } = usePolygonContext();
+  const { polygons, polygon } = usePolygonContext();
   const { image } = useElementContext();
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export const useDrawPolygon = (cursorCanvasRef: RefObject<HTMLCanvasElement>, po
       const cursorCanvas = cursorCanvasRef.current;
       const polygonCanvas = polygonCanvasRef.current;
       const scaleHandler = new ScaleHandler(cursorCanvas, image);
-      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler, circleMarker);
+      const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler);
       canvasPolygonHandler.clearAll();
       canvasPolygonHandler.drawPolygon([...polygons, polygon.current]);
     }

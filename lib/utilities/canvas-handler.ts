@@ -1,17 +1,15 @@
 import { ScaleHandler } from '.';
-import { Marker, MouseType, Point, Polygon } from '../types';
+import { MouseType, Point, Polygon } from '../types';
 
 export class CanvasHandler {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
-  private circleMarker?: Marker;
 
-  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, circleMarker?: Marker) {
+  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler) {
     this.canvas = canvas;
     this.ctx = (canvas?.getContext('2d') as CanvasRenderingContext2D) || {};
     this.scaleHandler = scaleHandler;
-    this.circleMarker = circleMarker;
   }
 
   public drawImage(image: HTMLImageElement, x: number, y: number, w: number, h: number) {
@@ -48,21 +46,6 @@ export class CanvasHandler {
     }
   }
 
-  public drawCircleMarker(point: Point, radius: number) {
-    const sc = this.scaleHandler;
-    const ctx = this.ctx;
-    ctx.save();
-    ctx.strokeStyle = '#ff0000';
-    const scaledRadius = sc.getScaledDownValue(radius);
-    const { x, y } = sc.getPhysicalPositionByPoint(point);
-    ctx.beginPath();
-    ctx.lineWidth = 1;
-    ctx.arc(x, y, scaledRadius, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.closePath();
-    ctx.restore();
-  }
-
   drawPolygon(polygons: Polygon[]) {
     const ctx = this.ctx;
 
@@ -82,10 +65,6 @@ export class CanvasHandler {
         polygon.points.forEach(point => this.drawPoint.bind(this)(point));
       }
     });
-    if (this.circleMarker) {
-      const { position: center, radius } = this.circleMarker;
-      this.drawCircleMarker(center, radius);
-    }
   }
 
   public drawMouseCursor({ x, y }: Point, type: MouseType) {
