@@ -22,5 +22,5 @@ export interface AnnotatorCanvasProps {
   allowAnnotation?: boolean;
   polygonLineSizeProps?: PolygonSizeProps;
   buttonsComponent?: (callback: ScaleCallbacks) => ReactNode;
-  circleMarker?: Marker;
+  marker?: Marker;
 }

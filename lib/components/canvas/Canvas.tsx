@@ -10,6 +10,7 @@ export const Canvas = () => {
   const { cursorCanvasRef, polygonCanvasRef } = useCursorPolygon();
   const measurements = useMeasurement(cursorCanvasRef);
   const { image } = useElementContext();
+
   const sc = useMemo(() => {
     if (cursorCanvasRef.current) {
       return new ScaleHandler(cursorCanvasRef.current as HTMLCanvasElement, image);
@@ -42,12 +43,14 @@ export const Canvas = () => {
             )
           );
         })}
-      {marker && (
+      {sc && marker && (
         <span
           className={style.marker}
           style={{
-            top: marker.position.y,
-            left: marker.position.x,
+            top: sc.getPhysicalPositionByPoint(marker.position).y,
+            left: sc.getPhysicalPositionByPoint(marker.position).x,
+            height: `${+(UrlParams.get('scale') || '1') * 10}px`,
+            width: `${+(UrlParams.get('scale') || '1') * 10}px`,
           }}
         ></span>
       )}

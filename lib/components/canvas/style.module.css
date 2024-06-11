@@ -25,3 +25,9 @@
   opacity: 1;
   color: #fff;
 }
+
+.marker {
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+}

@@ -15,5 +15,5 @@ export interface PolygonProviderProps extends Children {
   converterApiUrl: string;
   allowAnnotation?: boolean;
   zoom: number;
-  circleMarker?: Marker;
+  marker?: Marker;
 }
