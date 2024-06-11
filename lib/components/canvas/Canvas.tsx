@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useMemo } from 'react';
-import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, useSizesContext } from '../..';
+import { ScaleHandler, UrlParams, useCursorPolygon, useDrawStaticImage, useElementContext, useMeasurement, usePolygonContext, useSizesContext } from '../..';
 import style from './style.module.css';
 
 export const Canvas = () => {
   const { canvasHeight: height, canvasWidth: width, scale } = useSizesContext();
+  const { marker } = usePolygonContext();
   const imageCanvasRef = useDrawStaticImage();
   const { cursorCanvasRef, polygonCanvasRef } = useCursorPolygon();
   const measurements = useMeasurement(cursorCanvasRef);
@@ -41,6 +42,15 @@ export const Canvas = () => {
             )
           );
         })}
+      {marker && (
+        <span
+          className={style.marker}
+          style={{
+            top: marker.position.y,
+            left: marker.position.x,
+          }}
+        ></span>
+      )}
     </div>
   );
 };

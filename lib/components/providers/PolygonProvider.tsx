@@ -10,7 +10,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
   const isDrawing = useRef<boolean>(false);
 
   return (
-    <PolygonContext.Provider value={{ setPolygons, polygons, converterApiUrl, isDrawing, polygon, allowAnnotation, showLineSize, zoom, circleMarker }}>
+    <PolygonContext.Provider value={{ setPolygons, polygons, converterApiUrl, isDrawing, polygon, allowAnnotation, showLineSize, zoom, marker: circleMarker }}>
       {children}
     </PolygonContext.Provider>
   );

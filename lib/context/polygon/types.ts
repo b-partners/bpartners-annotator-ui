@@ -10,5 +10,5 @@ export interface PolygonContextType {
   isDrawing: MutableRefObject<boolean>;
   allowAnnotation?: boolean;
   zoom: number;
-  circleMarker?: Marker;
+  marker?: Marker;
 }
