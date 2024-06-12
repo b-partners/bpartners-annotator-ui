@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction } from 'react';
-import { Point } from '../../types';
+import { RefObject } from 'react';
 
 export interface IPositionContext {
-  cursorPosition: Point;
-  setCursorPosition: Dispatch<SetStateAction<Point>>;
+  xRef: RefObject<HTMLParagraphElement>;
+  yRef: RefObject<HTMLParagraphElement>;
 }

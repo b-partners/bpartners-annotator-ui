@@ -3,9 +3,6 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
-import dotenv from 'dotenv';
-
-dotenv.config();
 
 // https://vitejs.dev/config/
 export default defineConfig({
