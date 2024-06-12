@@ -14,8 +14,8 @@ export const useCursorPosition = (canvasRef: RefObject<HTMLCanvasElement>) => {
       const eventListener = (event: MouseEvent) => {
         const { x, y } = scaleHandler.getRestrictedPhysicalPositionByEvent(event);
         if (xRef.current && yRef.current) {
-          xRef.current.innerHTML = `x: ${x}`;
-          yRef.current.innerHTML = `y: ${y}`;
+          xRef.current.innerHTML = `x : ${x}`;
+          yRef.current.innerHTML = `y : ${y}`;
         }
       };
 

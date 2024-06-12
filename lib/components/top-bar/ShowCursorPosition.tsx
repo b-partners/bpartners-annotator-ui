@@ -8,12 +8,12 @@ export const ShowCursorPosition = () => {
     <div data-cy='annotator-cursor-positions' className={style.positionContainer}>
       <div>
         <p ref={xRef} data-cy='annotator-x-positions'>
-          x: 0
+          x : 0
         </p>
       </div>
       <div>
         <p ref={yRef} data-cy='annotator-y-positions'>
-          y: 0
+          y : 0
         </p>
       </div>
     </div>
