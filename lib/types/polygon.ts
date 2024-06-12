@@ -1,4 +1,3 @@
-import { ReactElement } from 'react';
 import { Measurement } from '.';
 
 export interface Point {
@@ -17,8 +16,3 @@ export interface Polygon {
 }
 
 export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT';
-
-export type Marker = {
-  position: Point;
-  icon?: ReactElement;
-};

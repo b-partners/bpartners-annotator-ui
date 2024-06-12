@@ -6,6 +6,7 @@ import { CustomButtons } from './components/CustomButtons';
 
 function App() {
   const [polygons, setPolygons] = useState<Polygon[]>([]);
+  const markerPosition = { x: 209, y: 328 };
 
   return (
     <div>
@@ -23,7 +24,7 @@ function App() {
         allowAnnotation
         buttonsComponent={CustomButtons}
         zoom={20}
-        marker={{ position: { x: 209, y: 328 } }}
+        markerPosition={markerPosition}
       />
     </div>
   );

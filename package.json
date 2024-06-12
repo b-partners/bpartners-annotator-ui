@@ -22,7 +22,6 @@
   },
   "peerDependencies": {
     "debounce": "^2.0.0",
-    "dotenv": "^16.4.5",
     "geolib": "^3.3.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

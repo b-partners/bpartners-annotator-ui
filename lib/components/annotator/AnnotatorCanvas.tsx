@@ -8,10 +8,19 @@ import style from './style.module.css';
 
 export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { height, width, setPolygons, polygonList, allowAnnotation = false, polygonLineSizeProps: polygonSizeProps, buttonsComponent, zoom, marker } = props;
+  const {
+    height,
+    width,
+    setPolygons,
+    polygonList,
+    allowAnnotation = false,
+    polygonLineSizeProps: polygonSizeProps,
+    buttonsComponent,
+    zoom,
+    markerPosition,
+  } = props;
   const { imageName = '', showLineSize = false, converterApiUrl = '' } = polygonSizeProps || {};
   const { image, isImageLoading } = useImageCreation(props.image, imageName);
-
   return (
     <ElementProvider containerRef={containerRef} image={image}>
       {image.src.length > 0 ? (
@@ -22,7 +31,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
               <div style={{ height, width }} className={style.container} ref={containerRef}>
                 <PolygonProvider
                   allowAnnotation={allowAnnotation}
-                  marker={marker}
+                  markerPosition={markerPosition}
                   converterApiUrl={converterApiUrl}
                   polygons={polygonList}
                   showLineSize={showLineSize}

@@ -40,6 +40,7 @@ function App() {
         allowAnnotation
         buttonsComponent={CustomButtonsComponent}
         zoom={20}
+        markerPosition={markerPosition}
       />
     </div>
   );
@@ -90,13 +91,14 @@ interface ScaleCallbacks {
 
 # Props
 
-| Name                 | Type                                      | Description                                   |
-| -------------------- | ----------------------------------------- | --------------------------------------------- |
-| height               | `string`                                  | The height of the canvas                      |
-| width                | `string`                                  | The width of the canvas                       |
-| setPolygons          | `(polygons: Polygon[])=> void`            | Function to update the polygon list state     |
-| polygonList          | `Polygon`                                 | List of polygons to show                      |
-| image                | `string`,`file`                           | Image to show and to annotate                 |
-| polygonLineSizeProps | `PolygonLineSizeProps`                    | Props to show polygon line & area measurement |
-| buttonsComponent     | `(callback: ScaleCallbacks) => ReactNode` | Add a custom buttons component                |
-| zoom     | `number` | corresponds to those different zoom : <ul><li>BUILDINGS = 18</li><li>BUILDING = 19</li><li>HOUSES_0 = 20</li><li>HOUSES_1 = 21</li><li>HOUSES_2 = 22 </li><li>HOUSE_PROPERTY = 23</li></ul>
+| Name                 | Type                                      | Description                                                                                                                                                                                 |            |
+| -------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| height               | `string`                                  | The height of the canvas                                                                                                                                                                    | `required` |
+| width                | `string`                                  | The width of the canvas                                                                                                                                                                     | `required` |
+| setPolygons          | `(polygons: Polygon[])=> void`            | Function to update the polygon list state                                                                                                                                                   | `required` |
+| polygonList          | `Polygon`                                 | List of polygons to show                                                                                                                                                                    | `required` |
+| image                | `string`,`file`                           | Image to show and to annotate                                                                                                                                                               | `required` |
+| polygonLineSizeProps | `PolygonLineSizeProps`                    | Props to show polygon line & area measurement                                                                                                                                               | `optional` |
+| buttonsComponent     | `(callback: ScaleCallbacks) => ReactNode` | Add a custom buttons component                                                                                                                                                              | `optional` |
+| zoom                 | `number`                                  | corresponds to those different zoom : <ul><li>BUILDINGS = 18</li><li>BUILDING = 19</li><li>HOUSES_0 = 20</li><li>HOUSES_1 = 21</li><li>HOUSES_2 = 22 </li><li>HOUSE_PROPERTY = 23</li></ul> | `required` |
+| markerPosition       | `Point`                                   | Position to put location marker                                                                                                                                                             | `optional` |
