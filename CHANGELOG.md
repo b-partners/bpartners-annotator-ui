@@ -1,3 +1,12 @@
+# [0.11.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.10.0...v0.11.0) (2024-06-12)
+
+
+### Features
+
+* update marker ([f3588bb](https://github.com/b-partners/bpartners-annotator-ui/commit/f3588bbf2c2480c578f1f46d26820949f74c649c))
+
+
+
 # [0.10.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.4...v0.10.0) (2024-06-11)
 
 
@@ -81,15 +90,6 @@
 ### Bug Fixes
 
 * ensure single execution of 'reference' ([7e390c5](https://github.com/b-partners/bpartners-annotator-ui/commit/7e390c5265cb73ee8e5a6cacb87615a92d3e5b5b))
-
-
-
-## [0.7.6](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.5...v0.7.6) (2024-05-06)
-
-
-### Bug Fixes
-
-* adding the 'image_size' attribute to have the correct measurements ([7b167fb](https://github.com/b-partners/bpartners-annotator-ui/commit/7b167fb470c42a1d96e512c9e4e40cf0a566bcf4))
 
 
 
