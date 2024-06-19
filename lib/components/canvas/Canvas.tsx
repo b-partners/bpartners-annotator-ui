@@ -38,7 +38,7 @@ export const Canvas = () => {
         physicalMarker: markerPosition ? sc.getPhysicalPositionByPoint(markerPosition) : null,
       });
     }
-  }, [image, scale, measurements]);
+  }, [image, scale, measurements, markerPosition]);
 
   return (
     <div data-cy='annotator-canvas-container' style={{ width, height, position: 'relative' }}>
