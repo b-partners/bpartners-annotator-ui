@@ -1,3 +1,12 @@
+## [0.11.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.0...v0.11.1) (2024-06-19)
+
+
+### Bug Fixes
+
+* marker render  ([17ff0c1](https://github.com/b-partners/bpartners-annotator-ui/commit/17ff0c13c2be8e097c8ad9b69014dce5d5bb9778))
+
+
+
 # [0.11.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.10.0...v0.11.0) (2024-06-12)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * rename package to @bpartners-imagery/annotator-component ([529bda2](https://github.com/b-partners/bpartners-annotator-ui/commit/529bda2562327c2905a6508b19a5670f19f94984))
-
-
-
-## [0.7.7](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.6...v0.7.7) (2024-05-07)
-
-
-### Bug Fixes
-
-* ensure single execution of 'reference' ([7e390c5](https://github.com/b-partners/bpartners-annotator-ui/commit/7e390c5265cb73ee8e5a6cacb87615a92d3e5b5b))
 
 
 
