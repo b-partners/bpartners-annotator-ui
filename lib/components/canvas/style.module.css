@@ -6,6 +6,7 @@
 }
 
 .measurement {
+  pointer-events: none;
   position: absolute;
   transform: translate(-50%, -50%);
   border-radius: 2px;
@@ -20,9 +21,10 @@
 
 .measurement:hover {
   scale: 2;
+  opacity: 0.5;
+  pointer-events: auto;
   background: red;
   z-index: 999;
-  opacity: 1;
   color: #fff;
 }
 
@@ -32,6 +34,7 @@
   transform: translate(-50%, -50%);
   overflow: visible;
   transition: all 100ms;
+  pointer-events: none;
 }
 
 .marker > svg {
