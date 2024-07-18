@@ -21,9 +21,10 @@
 
 .measurement:hover {
   scale: 2;
+  opacity: 0.5;
+  pointer-events: auto;
   background: red;
   z-index: 999;
-  opacity: 1;
   color: #fff;
 }
 
@@ -48,6 +49,5 @@
 
 .marker:hover {
   scale: 1.5;
-  opacity: 0.5;
   transform: translate(-25%, -25%);
 }

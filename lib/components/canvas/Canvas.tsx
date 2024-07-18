@@ -49,7 +49,7 @@ export const Canvas = () => {
         const { x: left, y: top } = position;
         return (
           unity === 'm' && (
-            <span key={`${value}-measure-${k}`} className={style.measurement} style={{ top, left, fontSize: `${+(UrlParams.get('scale') ?? '1') * 5}px` }}>
+            <span key={`${value}-measure-${k}`} className={style.measurement} style={{ top, left, fontSize: `${+(UrlParams.get('scale') ?? '1') * 5.7}px` }}>
               {value}
               {unity}
             </span>
