@@ -1,3 +1,12 @@
+## [0.11.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.1...v0.11.2) (2024-07-18)
+
+
+### Bug Fixes
+
+* draw polygon under measurements ([59f84e0](https://github.com/b-partners/bpartners-annotator-ui/commit/59f84e03e4051a8052d706c378d981a8b1186bb6))
+
+
+
 ## [0.11.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.0...v0.11.1) (2024-06-19)
 
 
@@ -81,15 +90,6 @@
 ### Reverts
 
 * Revert "feat: rename package to @bpartners-imagery/annotator-component" ([8aef32b](https://github.com/b-partners/bpartners-annotator-ui/commit/8aef32b76cb93dbfc2ff8674264e42094285ddb1))
-
-
-
-# [0.8.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.7.7...v0.8.0) (2024-05-15)
-
-
-### Features
-
-* rename package to @bpartners-imagery/annotator-component ([529bda2](https://github.com/b-partners/bpartners-annotator-ui/commit/529bda2562327c2905a6508b19a5670f19f94984))
 
 
 
