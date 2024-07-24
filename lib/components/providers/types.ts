@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { ElementContextType } from '../..';
-import { Point, Polygon } from '../../types';
+import { Measurement, Point, Polygon } from '../../types';
 
 export interface Children {
   children: ReactNode;
@@ -16,4 +16,5 @@ export interface PolygonProviderProps extends Children {
   allowAnnotation?: boolean;
   zoom: number;
   markerPosition?: Point;
+  measurementMapper?: (measurement: Measurement) => Measurement;
 }

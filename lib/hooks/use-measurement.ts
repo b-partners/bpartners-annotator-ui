@@ -5,7 +5,7 @@ import { Geojson, GeojsonMapper, Measurement, Polygon, PolygonMapper } from '..'
 import { pointsToGeoPoints } from '../provider';
 
 export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
-  const { polygons, setPolygons, showLineSize, converterApiUrl, zoom } = usePolygonContext();
+  const { polygons, setPolygons, showLineSize, converterApiUrl, zoom, measurementMapper } = usePolygonContext();
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const { image } = useElementContext();
   const hasGeojsonGenerated = useRef(true);
@@ -39,12 +39,15 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
         const res = await pointsToGeoPoints(converterApiUrl, currentGeoJson);
 
         if (res) {
-          const measurements = GeojsonMapper.toMeasurements(res, polygons);
+          let measurements = GeojsonMapper.toMeasurements(res, polygons);
+          if (measurementMapper) {
+            measurements = measurements.map(measurementMapper);
+          }
           setMeasurements(measurements);
           const newPolygons = polygons.map(polygon => {
             const currentPolygonSurface = measurements.find(measurement => measurement.unity === 'm²' && measurement.polygonId === polygon.id);
-            const currentPolygonMeasurments = measurements.filter(measurement => measurement.polygonId === polygon.id);
-            return { ...polygon, surface: currentPolygonSurface?.value, measurements: currentPolygonMeasurments };
+            const currentPolygonMeasurements = measurements.filter(measurement => measurement.polygonId === polygon.id);
+            return { ...polygon, surface: currentPolygonSurface?.value, measurements: currentPolygonMeasurements };
           });
           setPolygons(newPolygons);
           hasGeojsonGenerated.current = false;
