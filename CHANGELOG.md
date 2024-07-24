@@ -1,3 +1,12 @@
+# [0.12.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.2...v0.12.0) (2024-07-24)
+
+
+### Features
+
+* add measurement mapper ([641f1e6](https://github.com/b-partners/bpartners-annotator-ui/commit/641f1e60d39f2618cc3d76424b1a2a5e7ab736df))
+
+
+
 ## [0.11.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.1...v0.11.2) (2024-07-18)
 
 
@@ -76,20 +85,6 @@
 ### Features
 
 * add zoom property ([077649f](https://github.com/b-partners/bpartners-annotator-ui/commit/077649fef7fb751bd467589e37dfab5f6ddaabd9))
-
-
-
-## [0.8.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.8.0...v0.8.1) (2024-05-22)
-
-
-### Bug Fixes
-
-* zoom limit ([52682ef](https://github.com/b-partners/bpartners-annotator-ui/commit/52682ef96740be02a7cc775b0cac7be35134c130))
-
-
-### Reverts
-
-* Revert "feat: rename package to @bpartners-imagery/annotator-component" ([8aef32b](https://github.com/b-partners/bpartners-annotator-ui/commit/8aef32b76cb93dbfc2ff8674264e42094285ddb1))
 
 
 
