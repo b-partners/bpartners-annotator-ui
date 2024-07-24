@@ -5,12 +5,14 @@ import { PolygonContext } from '../../context/polygon';
 import { Polygon } from '../../types';
 
 export const PolygonProvider: FC<PolygonProviderProps> = props => {
-  const { children, setPolygons, polygons, allowAnnotation, showLineSize, converterApiUrl, zoom, markerPosition } = props;
+  const { children, setPolygons, polygons, allowAnnotation, showLineSize, converterApiUrl, zoom, markerPosition, measurementMapper } = props;
   const polygon = useRef<Polygon>(defaultPolygon);
   const isDrawing = useRef<boolean>(false);
 
   return (
-    <PolygonContext.Provider value={{ setPolygons, polygons, converterApiUrl, isDrawing, polygon, allowAnnotation, showLineSize, zoom, markerPosition }}>
+    <PolygonContext.Provider
+      value={{ setPolygons, polygons, converterApiUrl, isDrawing, polygon, allowAnnotation, showLineSize, zoom, markerPosition, measurementMapper }}
+    >
       {children}
     </PolygonContext.Provider>
   );

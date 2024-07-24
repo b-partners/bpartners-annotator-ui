@@ -1,5 +1,5 @@
 import { MutableRefObject } from 'react';
-import { Point, Polygon } from '../../types';
+import { Measurement, Point, Polygon } from '../../types';
 
 export interface PolygonContextType {
   polygons: Polygon[];
@@ -11,4 +11,5 @@ export interface PolygonContextType {
   allowAnnotation?: boolean;
   zoom: number;
   markerPosition?: Point;
+  measurementMapper?: (measurement: Measurement) => Measurement;
 }
