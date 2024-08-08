@@ -1,3 +1,12 @@
+## [0.12.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.12.0...v0.12.1) (2024-08-08)
+
+
+### Bug Fixes
+
+* release on value fixed to 2 ([0ca799d](https://github.com/b-partners/bpartners-annotator-ui/commit/0ca799d91ffac7904af2ecdfac43c44b442f9e16))
+
+
+
 # [0.12.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.2...v0.12.0) (2024-07-24)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * show polygon length ([3b2ed31](https://github.com/b-partners/bpartners-annotator-ui/commit/3b2ed31d2d88715cfb501766192dd805136446c1))
-
-
-
-# [0.9.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.8.1...v0.9.0) (2024-05-23)
-
-
-### Features
-
-* add zoom property ([077649f](https://github.com/b-partners/bpartners-annotator-ui/commit/077649fef7fb751bd467589e37dfab5f6ddaabd9))
 
 
 
