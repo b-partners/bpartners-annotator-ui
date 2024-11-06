@@ -10,7 +10,7 @@ export const useScale = () => {
     containerHeight: 0,
   });
   const [scaleLimit, setScaleLimit] = useState({
-    max: 2,
+    max: 3,
     min: 0,
   });
 
@@ -38,7 +38,7 @@ export const useScale = () => {
 
     setDefaultScale(widthScale > heightScale ? heightScale : widthScale);
     setScaleLimit({
-      max: defaultScale + 1.8,
+      max: defaultScale + 2.6,
       min: defaultScale - 0.2,
     });
   }, [containerSize, image, defaultScale]);
