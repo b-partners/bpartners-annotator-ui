@@ -1,8 +1,26 @@
 import { useState } from 'react';
 import { AnnotatorCanvas } from '../lib';
-import { Polygon } from '../lib/types';
+import { Polygon, PolygonColor } from '../lib/types';
 import image from '../src/assets/Rennes_Solar_Panel_Batch_1_519355_363821.jpg';
 import { CustomButtons } from './components/CustomButtons';
+
+const POLYGON_COLORS: PolygonColor[] = [
+  { fillColor: '#0E4EB340', strokeColor: '#0E4EB3' },
+  { fillColor: '#8A2BE240', strokeColor: '#8A2BE2' },
+  { fillColor: '#00ff0040', strokeColor: '#00ff00' },
+  { fillColor: '#2196F340', strokeColor: '#2196F3' },
+  { fillColor: '#FFC10740', strokeColor: '#FFC107' },
+  { fillColor: '#FF572240', strokeColor: '#FF5722' },
+  { fillColor: '#E91E6340', strokeColor: '#E91E63' },
+  { fillColor: '#00BCD440', strokeColor: '#00BCD4' },
+  { fillColor: '#CDDC3940', strokeColor: '#CDDC39' },
+  { fillColor: '#331E0A40', strokeColor: '#331E0A' },
+];
+
+const getNewPolygonColor = (polygons: Polygon[]) => {
+  const index = polygons.length % POLYGON_COLORS.length;
+  return POLYGON_COLORS[index];
+};
 
 function App() {
   const [polygons, setPolygons] = useState<Polygon[]>([]);
@@ -25,6 +43,10 @@ function App() {
         buttonsComponent={CustomButtons}
         zoom={20}
         markerPosition={markerPosition}
+        getNewPolygonColor={getNewPolygonColor}
+        measurementMapper={(mesurement, currentPolygons = []) => {
+          return { ...mesurement, isInvisible: currentPolygons[0]?.id !== mesurement.polygonId };
+        }}
       />
     </div>
   );

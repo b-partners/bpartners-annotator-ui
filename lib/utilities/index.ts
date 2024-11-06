@@ -7,3 +7,4 @@ export * from './url-params';
 export * from './event-handler';
 export * from './canvas-tools';
 export * from './mappers';
+export * from './style-tools';

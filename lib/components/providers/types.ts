@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { ElementContextType } from '../..';
-import { Measurement, Point, Polygon } from '../../types';
+import { Measurement, Point, Polygon, PolygonColor } from '../../types';
 
 export interface Children {
   children: ReactNode;
@@ -17,4 +17,5 @@ export interface PolygonProviderProps extends Children {
   zoom: number;
   markerPosition?: Point;
   measurementMapper?: (measurement: Measurement) => Measurement;
+  getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
 }

@@ -6,7 +6,7 @@ import { CanvasHandler, EventHandler, ScaleHandler } from '..';
 export const useCursorPolygon = () => {
   const cursorCanvasRef = useRef<HTMLCanvasElement>(null);
   const polygonCanvasRef = useRef<HTMLCanvasElement>(null);
-  const { setPolygons, isDrawing, polygons, polygon, allowAnnotation } = usePolygonContext();
+  const { setPolygons, getNewPolygonColor, isDrawing, polygons, polygon, allowAnnotation } = usePolygonContext();
   const { image } = useElementContext();
 
   useEffect(() => {
@@ -18,6 +18,7 @@ export const useCursorPolygon = () => {
       const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler);
 
       const eventHandler = new EventHandler({
+        getNewPolygonColor,
         canvas: cursorCanvas,
         canvasCursorHandler,
         canvasPolygonHandler,

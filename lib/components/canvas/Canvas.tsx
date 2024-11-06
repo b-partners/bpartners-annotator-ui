@@ -1,10 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import {
+  DEFAULT_MAIN_COLOR,
   Measurement,
   Point,
   ScaleHandler,
   UrlParams,
+  getContrastColor,
   useCursorPolygon,
   useDrawStaticImage,
   useElementContext,
@@ -17,7 +19,7 @@ import style from './style.module.css';
 
 export const Canvas = () => {
   const { canvasHeight: height, canvasWidth: width, scale } = useSizesContext();
-  const { markerPosition } = usePolygonContext();
+  const { markerPosition, polygons } = usePolygonContext();
   const imageCanvasRef = useDrawStaticImage();
   const { cursorCanvasRef, polygonCanvasRef } = useCursorPolygon();
   const measurements = useMeasurement(cursorCanvasRef);
@@ -45,11 +47,19 @@ export const Canvas = () => {
       <canvas data-cy='annotator-canvas-image' className={style.canvas} ref={imageCanvasRef} width={width} height={height}></canvas>
       <canvas data-cy='annotator-canvas-polygon' className={style.canvas} ref={polygonCanvasRef} width={width} height={height}></canvas>
       <canvas data-cy='annotator-canvas-cursor' className={style.canvas} ref={cursorCanvasRef} width={width} height={height}></canvas>
-      {physicalMeasurements.map(({ position, unity, value }, k) => {
+      {physicalMeasurements.map(({ isInvisible = false, position, polygonId, unity, value }, k) => {
         const { x: left, y: top } = position;
+        const currentPolygon = polygons.find(polygon => polygon.id === polygonId);
+        const textColor = getContrastColor(currentPolygon?.strokeColor || DEFAULT_MAIN_COLOR);
+
         return (
+          !isInvisible &&
           unity === 'm' && (
-            <span key={`${value}-measure-${k}`} className={style.measurement} style={{ top, left, fontSize: `${+(UrlParams.get('scale') ?? '1') * 5.7}px` }}>
+            <span
+              key={`${value}-measure-${k}`}
+              className={style.measurement}
+              style={{ color: textColor, backgroundColor: currentPolygon?.strokeColor, top, left, fontSize: `${+(UrlParams.get('scale') ?? '1') * 5.7}px` }}
+            >
               {value.toFixed(2)}
               {unity}
             </span>

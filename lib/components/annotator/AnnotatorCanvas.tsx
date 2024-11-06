@@ -19,6 +19,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
     zoom,
     markerPosition,
     measurementMapper,
+    getNewPolygonColor,
   } = props;
   const { imageName = '', showLineSize = false, converterApiUrl = '' } = polygonSizeProps || {};
   const { image, isImageLoading } = useImageCreation(props.image, imageName);
@@ -31,6 +32,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
               <TopBar buttonsComponent={buttonsComponent} />
               <div style={{ height, width }} className={style.container} ref={containerRef}>
                 <PolygonProvider
+                  getNewPolygonColor={getNewPolygonColor}
                   measurementMapper={measurementMapper}
                   allowAnnotation={allowAnnotation}
                   markerPosition={markerPosition}

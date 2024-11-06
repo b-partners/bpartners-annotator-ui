@@ -1,4 +1,4 @@
-import { Point, Segment } from '../types';
+import { Point, PolygonColor, Segment } from '../types';
 
 const OVERLAPPING_MARGIN = 3;
 export const isBetween = (value: number, ref: number) => value >= ref - OVERLAPPING_MARGIN && value <= ref + OVERLAPPING_MARGIN;
@@ -10,7 +10,7 @@ export const areOverlappingPoints = (under: Point, upper: Point) => {
   return isXValid && isYValid;
 };
 
-export const getColorFromMain = (main: string) => {
+export const getColorFromMain = (main: string): PolygonColor => {
   return {
     fillColor: `${main}40`,
     strokeColor: main,
