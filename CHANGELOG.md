@@ -1,3 +1,12 @@
+# [0.13.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.12.1...v0.13.0) (2024-11-06)
+
+
+### Features
+
+* multiple measurement & polygon colors ([6b20051](https://github.com/b-partners/bpartners-annotator-ui/commit/6b2005107374be8ff45506c7d42091401a870704))
+
+
+
 ## [0.12.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.12.0...v0.12.1) (2024-08-08)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * polygon length font size  ([bc9d96b](https://github.com/b-partners/bpartners-annotator-ui/commit/bc9d96ba2b7b146ee06057f03854d3a1a31e5593))
-
-
-
-## [0.9.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.0...v0.9.1) (2024-06-06)
-
-
-### Bug Fixes
-
-* show polygon length ([3b2ed31](https://github.com/b-partners/bpartners-annotator-ui/commit/3b2ed31d2d88715cfb501766192dd805136446c1))
 
 
 
