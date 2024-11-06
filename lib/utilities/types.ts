@@ -1,6 +1,6 @@
 import { MutableRefObject } from 'react';
 import { CanvasHandler, ScaleHandler } from '.';
-import { Point, Polygon } from '../types';
+import { Point, Polygon, PolygonColor } from '../types';
 
 export interface ImageInfo {
   imageHeight: number;
@@ -25,4 +25,5 @@ export interface EventHandlerParams {
   canvasCursorHandler: CanvasHandler;
   scaleHandler: ScaleHandler;
   allowAnnotation?: boolean;
+  getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
 }

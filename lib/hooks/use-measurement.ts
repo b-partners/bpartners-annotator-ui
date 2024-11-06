@@ -41,7 +41,7 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
         if (res) {
           let measurements = GeojsonMapper.toMeasurements(res, polygons);
           if (measurementMapper) {
-            measurements = measurements.map(measurementMapper);
+            measurements = measurements.map((measurement, measurementIndex) => measurementMapper(measurement, polygons, measurementIndex));
           }
           setMeasurements(measurements);
           const newPolygons = polygons.map(polygon => {

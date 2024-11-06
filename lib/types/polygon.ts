@@ -5,10 +5,13 @@ export interface Point {
   y: number;
 }
 
-export interface Polygon {
-  id: string;
+export interface PolygonColor {
   fillColor: string;
   strokeColor: string;
+}
+
+export interface Polygon extends PolygonColor {
+  id: string;
   points: Point[];
   isInvisible?: boolean;
   surface?: number;

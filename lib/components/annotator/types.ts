@@ -1,5 +1,5 @@
 import { CSSProperties, ReactNode } from 'react';
-import { Measurement, Point, Polygon } from '../../types';
+import { Measurement, Point, Polygon, PolygonColor } from '../../types';
 
 interface PolygonSizeProps {
   imageName: string;
@@ -23,5 +23,6 @@ export interface AnnotatorCanvasProps {
   polygonLineSizeProps?: PolygonSizeProps;
   buttonsComponent?: (callback: ScaleCallbacks) => ReactNode;
   markerPosition?: Point;
-  measurementMapper?: (measurement: Measurement) => Measurement;
+  measurementMapper?: (measurement: Measurement, polygons?: Polygon[], index?: number) => Measurement;
+  getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
 }

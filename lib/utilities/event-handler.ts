@@ -1,7 +1,7 @@
 import { MutableRefObject } from 'react';
 import { CanvasHandler, EventHandlerParams, PointInfo, ScaleHandler, areOverlappingPoints, findMidpoint, getColorFromMain, pointBelongsToOrIsClose } from '.';
-import { defaultPolygon } from '../constant';
-import { Point, Polygon } from '../types';
+import { DEFAULT_MAIN_COLOR, defaultPolygon } from '../constant';
+import { Point, Polygon, PolygonColor } from '../types';
 import { getPolygonLastColors } from './polygon-tools';
 import { v4 as uuidV4 } from 'uuid';
 
@@ -14,6 +14,7 @@ export class EventHandler {
   private canvasPolygonHandler: CanvasHandler;
   private scaleHandler: ScaleHandler;
   private currentMiddlePosition: (PointInfo & { annotationIndex: number }) | null = null;
+  private getNewPolygonColor: ((polygons: Polygon[]) => PolygonColor) | undefined;
 
   // Points info is a list of all points in the polygon list with the polygon's id and the
   // index of the point in the polygon points
@@ -22,7 +23,7 @@ export class EventHandler {
   private currentPointInfo: PointInfo | null = null;
 
   constructor(params: EventHandlerParams) {
-    const { canvasCursorHandler, canvasPolygonHandler, isDrawing, polygon, polygons, scaleHandler, allowAnnotation } = params;
+    const { getNewPolygonColor, canvasCursorHandler, canvasPolygonHandler, isDrawing, polygon, polygons, scaleHandler, allowAnnotation } = params;
     this.scaleHandler = scaleHandler;
     this.allowAnnotation = allowAnnotation || false;
     this.isDrawing = isDrawing;
@@ -30,6 +31,7 @@ export class EventHandler {
     this.canvasCursorHandler = canvasCursorHandler;
     this.canvasPolygonHandler = canvasPolygonHandler;
     this.polygon = polygon;
+    this.getNewPolygonColor = getNewPolygonColor;
     this.createPointInfo();
   }
 
@@ -159,7 +161,7 @@ export class EventHandler {
       points.push(points[0]);
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
       const colors = getPolygonLastColors(this.polygons);
-      if (colors) {
+      if (!this.getNewPolygonColor && colors) {
         polygon.fillColor = colors.fillColor;
         polygon.strokeColor = colors.strokeColor;
       }
@@ -177,7 +179,8 @@ export class EventHandler {
 
     if (!this.currentMiddlePosition && !this.isDrawing.current && !this.currentPointInfo && !sc.isPointOutsideOrImage(currentLogicalPosition)) {
       this.isDrawing.current = true;
-      this.polygon.current = { ...getColorFromMain('#00ff00'), points: [currentLogicalPosition], id: uuidV4() };
+      const polygonColor = this.getNewPolygonColor ? this.getNewPolygonColor(this.polygons) : getColorFromMain(DEFAULT_MAIN_COLOR);
+      this.polygon.current = { ...polygonColor, points: [currentLogicalPosition], id: uuidV4() };
       this.draw();
     }
 
