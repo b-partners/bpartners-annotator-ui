@@ -5,11 +5,15 @@ export class CanvasHandler {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
+  private ponintRadius: number = 2;
 
-  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler) {
+  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number) {
     this.canvas = canvas;
     this.ctx = (canvas?.getContext('2d') as CanvasRenderingContext2D) || {};
     this.scaleHandler = scaleHandler;
+    if (pointRadius !== null && pointRadius !== undefined) {
+      this.ponintRadius = pointRadius;
+    }
   }
 
   public drawImage(image: HTMLImageElement, x: number, y: number, w: number, h: number) {
@@ -28,7 +32,7 @@ export class CanvasHandler {
 
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.arc(x, y, 2, 0, 2 * Math.PI);
+    ctx.arc(x, y, this.ponintRadius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
   }

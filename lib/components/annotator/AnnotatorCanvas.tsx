@@ -20,6 +20,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
     markerPosition,
     measurementMapper,
     getNewPolygonColor,
+    pointRadius,
   } = props;
   const { imageName = '', showLineSize = false, converterApiUrl = '' } = polygonSizeProps || {};
   const { image, isImageLoading } = useImageCreation(props.image, imageName);
@@ -41,6 +42,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
                   showLineSize={showLineSize}
                   setPolygons={setPolygons}
                   zoom={zoom}
+                  pointRadius={pointRadius}
                 >
                   <Canvas />
                   {isImageLoading && (

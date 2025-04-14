@@ -5,8 +5,19 @@ import { PolygonContext } from '../../context/polygon';
 import { Polygon } from '../../types';
 
 export const PolygonProvider: FC<PolygonProviderProps> = props => {
-  const { children, setPolygons, polygons, allowAnnotation, showLineSize, converterApiUrl, zoom, markerPosition, measurementMapper, getNewPolygonColor } =
-    props;
+  const {
+    children,
+    setPolygons,
+    polygons,
+    allowAnnotation,
+    showLineSize,
+    converterApiUrl,
+    zoom,
+    markerPosition,
+    measurementMapper,
+    getNewPolygonColor,
+    pointRadius,
+  } = props;
   const polygon = useRef<Polygon>(defaultPolygon);
   const isDrawing = useRef<boolean>(false);
 
@@ -24,6 +35,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
         markerPosition,
         measurementMapper,
         getNewPolygonColor,
+        pointRadius,
       }}
     >
       {children}
