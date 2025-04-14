@@ -13,4 +13,5 @@ export interface PolygonContextType {
   markerPosition?: Point;
   measurementMapper?: (measurement: Measurement, polygons?: Polygon[], index?: number) => Measurement;
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
+  pointRadius?: number;
 }
