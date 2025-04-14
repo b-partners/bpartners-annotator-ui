@@ -1,3 +1,12 @@
+# [0.14.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.13.0...v0.14.0) (2025-04-14)
+
+
+### Features
+
+* add point radius props ([3eae7b7](https://github.com/b-partners/bpartners-annotator-ui/commit/3eae7b713ea03848c8edf03ea3bafba52fe2d102))
+
+
+
 # [0.13.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.12.1...v0.13.0) (2024-11-06)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * code build loader ([36bc68c](https://github.com/b-partners/bpartners-annotator-ui/commit/36bc68cc4e838d238df3522c1581f527871072b3))
-
-
-
-## [0.9.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.1...v0.9.2) (2024-06-06)
-
-
-### Bug Fixes
-
-* polygon length font size  ([bc9d96b](https://github.com/b-partners/bpartners-annotator-ui/commit/bc9d96ba2b7b146ee06057f03854d3a1a31e5593))
 
 
 
