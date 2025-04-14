@@ -47,6 +47,7 @@ function App() {
         measurementMapper={(mesurement, currentPolygons = []) => {
           return { ...mesurement, isInvisible: currentPolygons[0]?.id !== mesurement.polygonId };
         }}
+        pointRadius={2}
       />
     </div>
   );
