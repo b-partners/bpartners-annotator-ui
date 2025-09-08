@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from 'react';
+import { CSSProperties, ReactNode, RefObject } from 'react';
 import { Measurement, Point, Polygon, PolygonColor } from '../../types';
 
 interface PolygonSizeProps {
@@ -11,6 +11,8 @@ export interface ScaleCallbacks {
   scaleUp: () => void;
   scaleReste: () => void;
   scaleDown: () => void;
+  xRef: RefObject<HTMLParagraphElement>;
+  yRef: RefObject<HTMLParagraphElement>;
 }
 export interface AnnotatorCanvasProps {
   width: CSSProperties['width'];
