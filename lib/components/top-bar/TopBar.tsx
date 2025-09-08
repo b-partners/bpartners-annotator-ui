@@ -1,4 +1,4 @@
-import { ScaleCallbacks, ShowCursorPosition, useSizesContext } from '../..';
+import { ScaleCallbacks, ShowCursorPosition, usePositionsContext, useSizesContext } from '../..';
 import style from './style.module.css';
 
 interface TopBarProps {
@@ -6,14 +6,15 @@ interface TopBarProps {
 }
 export const TopBar = ({ buttonsComponent }: TopBarProps) => {
   const { scaleDown, scaleUp, scaleReste } = useSizesContext();
+  const { xRef, yRef } = usePositionsContext();
 
   return (
     <div data-cy='annotator-top-bar' className={style.container}>
-      <ShowCursorPosition />
       {buttonsComponent ? (
-        buttonsComponent({ scaleUp, scaleReste, scaleDown })
+        buttonsComponent({ scaleUp, scaleReste, scaleDown, xRef, yRef })
       ) : (
         <>
+          <ShowCursorPosition />
           <button onClick={scaleUp}>zoom +</button>
           <button onClick={scaleReste}>reset</button>
           <button onClick={scaleDown}>zoom -</button>
