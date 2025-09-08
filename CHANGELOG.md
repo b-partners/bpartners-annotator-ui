@@ -1,3 +1,12 @@
+# [0.15.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.14.0...v0.15.0) (2025-09-08)
+
+
+### Features
+
+* custom cursor position ([2837585](https://github.com/b-partners/bpartners-annotator-ui/commit/2837585e59f07f19e00d2a8d12372a41467f182f))
+
+
+
 # [0.14.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.13.0...v0.14.0) (2025-04-14)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * build code loader  ([044c829](https://github.com/b-partners/bpartners-annotator-ui/commit/044c829ac6c607f0aa14b878eff6f291f2279da5))
-
-
-
-## [0.9.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.2...v0.9.3) (2024-06-06)
-
-
-### Bug Fixes
-
-* code build loader ([36bc68c](https://github.com/b-partners/bpartners-annotator-ui/commit/36bc68cc4e838d238df3522c1581f527871072b3))
 
 
 
