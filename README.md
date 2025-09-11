@@ -86,6 +86,8 @@ interface ScaleCallbacks {
   scaleUp: () => void;
   scaleReste: () => void;
   scaleDown: () => void;
+  xRef: RefObject<HTMLParagraphElement>;
+  yRef: RefObject<HTMLParagraphElement>;
 }
 ```
 
