@@ -16,6 +16,7 @@ export interface Polygon extends PolygonColor {
   isInvisible?: boolean;
   surface?: number;
   measurements?: Measurement[];
+  lineIndividualColor?: boolean;
 }
 
 export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT';
