@@ -44,6 +44,7 @@ function App() {
         zoom={20}
         markerPosition={markerPosition}
         getNewPolygonColor={getNewPolygonColor}
+        polygonLineColor
         measurementMapper={(mesurement, currentPolygons = []) => {
           return { ...mesurement, isInvisible: currentPolygons[0]?.id !== mesurement.polygonId };
         }}

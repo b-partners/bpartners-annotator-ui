@@ -17,6 +17,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
     measurementMapper,
     getNewPolygonColor,
     pointRadius,
+    polygonLineColor,
   } = props;
   const polygon = useRef<Polygon>(defaultPolygon);
   const isDrawing = useRef<boolean>(false);
@@ -36,6 +37,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
         measurementMapper,
         getNewPolygonColor,
         pointRadius,
+        polygonLineColor,
       }}
     >
       {children}
