@@ -58,7 +58,14 @@ export const Canvas = () => {
             <span
               key={`${value}-measure-${k}`}
               className={style.measurement}
-              style={{ color: textColor, backgroundColor: currentPolygon?.strokeColor, top, left, fontSize: `${+(UrlParams.get('scale') ?? '1') * 5.7}px` }}
+              style={{
+                color: textColor,
+                backgroundColor: currentPolygon?.strokeColor,
+                top,
+                left,
+                fontSize: `${+(UrlParams.get('scale') ?? '1') * 20}px`,
+                fontWeight: 'bold',
+              }}
             >
               {value.toFixed(2)}
               {unity}

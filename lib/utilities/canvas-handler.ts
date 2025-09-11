@@ -1,4 +1,5 @@
 import { ScaleHandler } from '.';
+import { POLYGON_LINE_COLOR } from '../constant';
 import { MouseType, Point, Polygon } from '../types';
 
 export class CanvasHandler {
@@ -6,11 +7,14 @@ export class CanvasHandler {
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
   private ponintRadius: number = 2;
+  private polygonLineColor?: boolean = false;
 
-  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number) {
+  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number, polygonLineColor?: boolean) {
     this.canvas = canvas;
     this.ctx = (canvas?.getContext('2d') as CanvasRenderingContext2D) || {};
     this.scaleHandler = scaleHandler;
+    this.polygonLineColor = polygonLineColor || false;
+
     if (pointRadius !== null && pointRadius !== undefined) {
       this.ponintRadius = pointRadius;
     }
@@ -37,16 +41,35 @@ export class CanvasHandler {
     ctx.closePath();
   }
 
-  public drawPoints(points: Point[]) {
+  public drawLines(points: Point[]) {
     const sc = this.scaleHandler;
     const ctx = this.ctx;
-    if (points.length > 0) {
-      const { x: x0, y: y0 } = sc.getPhysicalPositionByPoint(points[0]);
-      ctx.moveTo(x0, y0);
-      points.slice(1).forEach(point => {
-        const { x, y } = sc.getPhysicalPositionByPoint(point);
-        ctx.lineTo(x, y);
-      });
+
+    if (points.length === 0) return;
+
+    const { x: x0, y: y0 } = sc.getPhysicalPositionByPoint(points[0]);
+    ctx.moveTo(x0, y0);
+    points.slice(1).forEach(point => {
+      const { x, y } = sc.getPhysicalPositionByPoint(point);
+      ctx.lineTo(x, y);
+    });
+  }
+
+  public drawLinesIndividualy(points: Point[]) {
+    const sc = this.scaleHandler;
+    const ctx = this.ctx;
+    ctx.lineWidth = 2;
+
+    if (points.length === 0) return;
+    ctx.strokeStyle = POLYGON_LINE_COLOR[0];
+    for (let i = 1; i < points.length; i++) {
+      const prevPoint = sc.getPhysicalPositionByPoint(points[i - 1]);
+      const nextPoint = sc.getPhysicalPositionByPoint(points[i]);
+      ctx.beginPath();
+      ctx.moveTo(prevPoint.x, prevPoint.y);
+      ctx.lineTo(nextPoint.x, nextPoint.y);
+      ctx.stroke();
+      ctx.strokeStyle = POLYGON_LINE_COLOR[i];
     }
   }
 
@@ -60,10 +83,15 @@ export class CanvasHandler {
         ctx.fillStyle = polygon.fillColor;
         ctx.lineWidth = 1;
         ctx.beginPath();
-        this.drawPoints(polygon.points);
+        this.drawLines(polygon.points);
         ctx.stroke();
         ctx.fill();
         ctx.closePath();
+        if (this.polygonLineColor) {
+          ctx.save();
+          this.drawLinesIndividualy(polygon.points);
+          ctx.restore();
+        }
         ctx.strokeStyle = polygon.strokeColor;
         ctx.fillStyle = polygon.strokeColor;
         polygon.points.forEach(point => this.drawPoint.bind(this)(point));
