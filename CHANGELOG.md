@@ -1,3 +1,17 @@
+# [0.16.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.15.0...v0.16.0) (2025-09-30)
+
+
+### Bug Fixes
+
+* use polygon to get line color info ([219c054](https://github.com/b-partners/bpartners-annotator-ui/commit/219c05487fa0fedba5dbf8d150cd15542ac58042))
+
+
+### Features
+
+* different color for each polygon line ([1ee5fcc](https://github.com/b-partners/bpartners-annotator-ui/commit/1ee5fcc50cb2fdd0837608367da6466c9c92022a))
+
+
+
 # [0.15.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.14.0...v0.15.0) (2025-09-08)
 
 
@@ -76,15 +90,6 @@
 ### Features
 
 * add marker  ([205c652](https://github.com/b-partners/bpartners-annotator-ui/commit/205c652cede4446d46fa3ba54319ceaabc53ac62))
-
-
-
-## [0.9.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.3...v0.9.4) (2024-06-06)
-
-
-### Bug Fixes
-
-* build code loader  ([044c829](https://github.com/b-partners/bpartners-annotator-ui/commit/044c829ac6c607f0aa14b878eff6f291f2279da5))
 
 
 
