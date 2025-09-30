@@ -7,13 +7,11 @@ export class CanvasHandler {
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
   private ponintRadius: number = 2;
-  private polygonLineColor?: boolean = false;
 
-  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number, polygonLineColor?: boolean) {
+  constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number) {
     this.canvas = canvas;
     this.ctx = (canvas?.getContext('2d') as CanvasRenderingContext2D) || {};
     this.scaleHandler = scaleHandler;
-    this.polygonLineColor = polygonLineColor || false;
 
     if (pointRadius !== null && pointRadius !== undefined) {
       this.ponintRadius = pointRadius;
@@ -87,7 +85,7 @@ export class CanvasHandler {
         ctx.stroke();
         ctx.fill();
         ctx.closePath();
-        if (this.polygonLineColor) {
+        if (polygon.lineIndividualColor) {
           ctx.save();
           this.drawLinesIndividualy(polygon.points);
           ctx.restore();
