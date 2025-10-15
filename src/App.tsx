@@ -44,10 +44,11 @@ function App() {
         zoom={20}
         markerPosition={markerPosition}
         getNewPolygonColor={getNewPolygonColor}
-        measurementMapper={(mesurement, currentPolygons = []) => {
-          return { ...mesurement, isInvisible: currentPolygons[0]?.id !== mesurement.polygonId };
+        measurementMapper={(measurement, currentPolygons = []) => {
+          return { ...measurement, isInvisible: currentPolygons[0]?.id !== measurement.polygonId };
         }}
         pointRadius={2}
+        closeOnNear={false}
       />
     </div>
   );

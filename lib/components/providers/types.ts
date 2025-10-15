@@ -19,4 +19,5 @@ export interface PolygonProviderProps extends Children {
   measurementMapper?: (measurement: Measurement) => Measurement;
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   pointRadius?: number;
+  closeOnNear?: boolean;
 }
