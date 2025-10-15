@@ -1,3 +1,12 @@
+# [0.17.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.16.0...v0.17.0) (2025-10-15)
+
+
+### Features
+
+* close polygon on near to the first point ([5e91ef7](https://github.com/b-partners/bpartners-annotator-ui/commit/5e91ef7968c8e4b7a2a5b518e043e3af25213d57))
+
+
+
 # [0.16.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.15.0...v0.16.0) (2025-09-30)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * update marker ([f3588bb](https://github.com/b-partners/bpartners-annotator-ui/commit/f3588bbf2c2480c578f1f46d26820949f74c649c))
-
-
-
-# [0.10.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.9.4...v0.10.0) (2024-06-11)
-
-
-### Features
-
-* add marker  ([205c652](https://github.com/b-partners/bpartners-annotator-ui/commit/205c652cede4446d46fa3ba54319ceaabc53ac62))
 
 
 
