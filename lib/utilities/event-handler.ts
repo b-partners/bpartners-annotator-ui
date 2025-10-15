@@ -21,9 +21,10 @@ export class EventHandler {
   private pointsInfo: PointInfo[] = [];
   // The current selected point on edit one polygon
   private currentPointInfo: PointInfo | null = null;
+  private closeOnNear: boolean = false;
 
   constructor(params: EventHandlerParams) {
-    const { getNewPolygonColor, canvasCursorHandler, canvasPolygonHandler, isDrawing, polygon, polygons, scaleHandler, allowAnnotation } = params;
+    const { getNewPolygonColor, canvasCursorHandler, canvasPolygonHandler, isDrawing, polygon, polygons, scaleHandler, allowAnnotation, closeOnNear } = params;
     this.scaleHandler = scaleHandler;
     this.allowAnnotation = allowAnnotation || false;
     this.isDrawing = isDrawing;
@@ -33,6 +34,7 @@ export class EventHandler {
     this.polygon = polygon;
     this.getNewPolygonColor = getNewPolygonColor;
     this.createPointInfo();
+    this.closeOnNear = closeOnNear || false;
   }
 
   public initEvent = (canvas: HTMLCanvasElement, setPolygons: (polygons: Polygon[]) => void) => {
@@ -41,7 +43,7 @@ export class EventHandler {
 
     const mouseLeave = this.mouseLeave.bind(this);
     const escapeKeyDown = this.escapeKeyDown.bind(this);
-    const mouseMove = this.mouseMove.bind(this);
+    const mouseMove = this.mouseMove(addPolygon.bind(this));
     const mouseUp = this.mouseUp(setPolygons).bind(this);
     const mouseDownEventHandler = this.mouseDown(addPolygon.bind(this));
 
@@ -88,7 +90,7 @@ export class EventHandler {
     }
   }
 
-  private mouseMove = (event: MouseEvent) => {
+  private mouseMove = (end: (polygon: Polygon) => void) => (event: MouseEvent) => {
     const sc = this.scaleHandler;
 
     const currentPhysicalPosition = sc.getPhysicalPositionByEvent(event);
@@ -123,6 +125,22 @@ export class EventHandler {
         points[index] = currentLogicalPosition;
       }
       this.draw();
+    }
+
+    const polygon = this.polygon.current;
+    if (this.closeOnNear && this.isDrawing.current && points.length > 1 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+      points.push(points[0]);
+      canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
+      const colors = getPolygonLastColors(this.polygons);
+      if (!this.getNewPolygonColor && colors) {
+        polygon.fillColor = colors.fillColor;
+        polygon.strokeColor = colors.strokeColor;
+      }
+      this.isDrawing.current = false;
+      this.polygon.current = { ...defaultPolygon, id: uuidV4() };
+      this.draw();
+      end(polygon);
+      return;
     }
 
     if (!this.isDrawing.current) {

@@ -6,7 +6,7 @@ export class CanvasHandler {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
-  private ponintRadius: number = 2;
+  private pointRadius: number = 2;
 
   constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number) {
     this.canvas = canvas;
@@ -14,7 +14,7 @@ export class CanvasHandler {
     this.scaleHandler = scaleHandler;
 
     if (pointRadius !== null && pointRadius !== undefined) {
-      this.ponintRadius = pointRadius;
+      this.pointRadius = pointRadius;
     }
   }
 
@@ -34,7 +34,7 @@ export class CanvasHandler {
 
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.arc(x, y, this.ponintRadius, 0, 2 * Math.PI);
+    ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
   }
@@ -53,7 +53,7 @@ export class CanvasHandler {
     });
   }
 
-  public drawLinesIndividualy(points: Point[]) {
+  public drawLinesIndividually(points: Point[]) {
     const sc = this.scaleHandler;
     const ctx = this.ctx;
     ctx.lineWidth = 2;
@@ -87,7 +87,7 @@ export class CanvasHandler {
         ctx.closePath();
         if (polygon.lineIndividualColor) {
           ctx.save();
-          this.drawLinesIndividualy(polygon.points);
+          this.drawLinesIndividually(polygon.points);
           ctx.restore();
         }
         ctx.strokeStyle = polygon.strokeColor;

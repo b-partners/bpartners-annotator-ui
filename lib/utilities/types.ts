@@ -26,4 +26,5 @@ export interface EventHandlerParams {
   scaleHandler: ScaleHandler;
   allowAnnotation?: boolean;
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
+  closeOnNear?: boolean;
 }

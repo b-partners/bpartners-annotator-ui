@@ -1,6 +1,6 @@
 import { Point, PolygonColor, Segment } from '../types';
 
-const OVERLAPPING_MARGIN = 3;
+const OVERLAPPING_MARGIN = 5;
 export const isBetween = (value: number, ref: number) => value >= ref - OVERLAPPING_MARGIN && value <= ref + OVERLAPPING_MARGIN;
 
 export const areOverlappingPoints = (under: Point, upper: Point) => {
