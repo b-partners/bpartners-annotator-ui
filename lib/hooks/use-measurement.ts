@@ -5,7 +5,7 @@ import { Geojson, GeojsonMapper, Measurement, Polygon, PolygonMapper } from '..'
 import { pointsToGeoPoints } from '../provider';
 
 export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
-  const { polygons, setPolygons, showLineSize, converterApiUrl, zoom, measurementMapper } = usePolygonContext();
+  const { polygons, setPolygons, showLineSize, lineSizeShowOnly, converterApiUrl, zoom, measurementMapper } = usePolygonContext();
   const [measurements, setMeasurements] = useState<Measurement[]>([]);
   const { image } = useElementContext();
   const hasGeojsonGenerated = useRef(true);
@@ -58,12 +58,16 @@ export const useMeasurement = (canvas: RefObject<HTMLCanvasElement>) => {
   );
 
   useEffect(() => {
-    if (showLineSize && hasGeojsonGenerated.current && imageWidth > 0) {
+    if (showLineSize && !lineSizeShowOnly && hasGeojsonGenerated.current && imageWidth > 0) {
       setGeojsonDebounced(polygons);
+    } else if (showLineSize && lineSizeShowOnly && imageWidth > 0) {
+      const currentMeasurements: Measurement[] = [];
+      polygons.forEach(p => currentMeasurements.push(...(p.measurements || [])));
+      setMeasurements(currentMeasurements);
     } else {
       hasGeojsonGenerated.current = true;
     }
-  }, [canvas, polygons, setGeojsonDebounced, showLineSize, imageWidth]);
+  }, [canvas, polygons, setGeojsonDebounced, showLineSize, lineSizeShowOnly, imageWidth]);
 
   useEffect(() => {
     const newImg = new Image();

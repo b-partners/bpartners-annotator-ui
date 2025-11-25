@@ -23,7 +23,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
     pointRadius,
     closeOnNear,
   } = props;
-  const { imageName = '', showLineSize = false, converterApiUrl = '' } = polygonSizeProps || {};
+  const { imageName = '', showLineSize = false, converterApiUrl = '', showOnly = false } = polygonSizeProps || {};
   const { image, isImageLoading } = useImageCreation(props.image, imageName);
   return (
     <ElementProvider containerRef={containerRef} image={image}>
@@ -41,6 +41,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
                   converterApiUrl={converterApiUrl}
                   polygons={polygonList}
                   showLineSize={showLineSize}
+                  lineSizeShowOnly={showOnly}
                   setPolygons={setPolygons}
                   zoom={zoom}
                   pointRadius={pointRadius}

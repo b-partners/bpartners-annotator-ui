@@ -14,4 +14,5 @@ export const PolygonContext = createContext<PolygonContextType>({
   allowAnnotation: false,
   zoom: 20,
   closeOnNear: false,
+  lineSizeShowOnly: false,
 });

@@ -5,6 +5,7 @@ interface PolygonSizeProps {
   imageName: string;
   showLineSize: boolean;
   converterApiUrl: string;
+  showOnly?: boolean;
 }
 
 export interface ScaleCallbacks {
