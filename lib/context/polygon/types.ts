@@ -15,4 +15,5 @@ export interface PolygonContextType {
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   pointRadius?: number;
   closeOnNear?: boolean;
+  lineSizeShowOnly: boolean;
 }

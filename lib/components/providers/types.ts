@@ -13,6 +13,7 @@ export interface PolygonProviderProps extends Children {
   setPolygons: (polygon: Polygon[]) => void;
   polygons: Polygon[];
   converterApiUrl: string;
+  lineSizeShowOnly: boolean;
   allowAnnotation?: boolean;
   zoom: number;
   markerPosition?: Point;
