@@ -1,3 +1,12 @@
+# [0.18.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.17.0...v0.18.0) (2025-11-25)
+
+
+### Features
+
+* add show only line size props ([cf5cb47](https://github.com/b-partners/bpartners-annotator-ui/commit/cf5cb476fdc6d9df03bae5df9aa25bf527be4f11))
+
+
+
 # [0.17.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.16.0...v0.17.0) (2025-10-15)
 
 
@@ -81,15 +90,6 @@
 ### Bug Fixes
 
 * marker render  ([17ff0c1](https://github.com/b-partners/bpartners-annotator-ui/commit/17ff0c13c2be8e097c8ad9b69014dce5d5bb9778))
-
-
-
-# [0.11.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.10.0...v0.11.0) (2024-06-12)
-
-
-### Features
-
-* update marker ([f3588bb](https://github.com/b-partners/bpartners-annotator-ui/commit/f3588bbf2c2480c578f1f46d26820949f74c649c))
 
 
 
