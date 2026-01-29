@@ -11,7 +11,7 @@ export const TopBar = ({ buttonsComponent }: TopBarProps) => {
   return (
     <div data-cy='annotator-top-bar' className={style.container}>
       {buttonsComponent ? (
-        buttonsComponent({ scaleUp, scaleReste, scaleDown, xRef, yRef })
+        buttonsComponent({ scaleUp, scaleReste, scaleDown, xRef, yRef, toggleClickAction: toggleIsMoving, clickActionValue: isMoving })
       ) : (
         <>
           <ShowCursorPosition />
