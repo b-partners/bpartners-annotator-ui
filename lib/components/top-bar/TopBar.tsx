@@ -5,7 +5,7 @@ interface TopBarProps {
   buttonsComponent?: ((callbacks: ScaleCallbacks) => React.ReactNode) | undefined;
 }
 export const TopBar = ({ buttonsComponent }: TopBarProps) => {
-  const { scaleDown, scaleUp, scaleReste } = useSizesContext();
+  const { scaleDown, scaleUp, scaleReste, isMoving, toggleIsMoving } = useSizesContext();
   const { xRef, yRef } = usePositionsContext();
 
   return (
@@ -18,6 +18,7 @@ export const TopBar = ({ buttonsComponent }: TopBarProps) => {
           <button onClick={scaleUp}>zoom +</button>
           <button onClick={scaleReste}>reset</button>
           <button onClick={scaleDown}>zoom -</button>
+          <button onClick={toggleIsMoving}>{isMoving ? 'annotate' : 'move'}</button>
         </>
       )}
     </div>

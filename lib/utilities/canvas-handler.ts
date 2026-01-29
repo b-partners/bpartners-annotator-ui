@@ -18,6 +18,16 @@ export class CanvasHandler {
     }
   }
 
+  public setCursor(cursorClassName: 'cursor-grab' | 'cursor-grabbing') {
+    if (cursorClassName === 'cursor-grab') {
+      this.canvas.classList.remove('cursor-grabbing');
+      this.canvas.classList.add('cursor-grab');
+      return;
+    }
+    this.canvas.classList.remove('cursor-grab');
+    this.canvas.classList.add('cursor-grabbing');
+  }
+
   public drawImage(image: HTMLImageElement, x: number, y: number, w: number, h: number) {
     this.clearAll();
     this.ctx.drawImage(image, x, y, w, h);

@@ -2,7 +2,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  cursor: none;
+}
+
+.canvasMoving {
+  cursor: grab !important;
 }
 
 .measurement {

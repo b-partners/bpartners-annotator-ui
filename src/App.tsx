@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { AnnotatorCanvas } from '../lib';
 import { Polygon, PolygonColor } from '../lib/types';
 import image from '../src/assets/Rennes_Solar_Panel_Batch_1_519355_363821.jpg';
-import { CustomButtons } from './components/CustomButtons';
 
 const POLYGON_COLORS: PolygonColor[] = [
   { fillColor: '#0E4EB340', strokeColor: '#0E4EB3' },
@@ -40,7 +39,6 @@ function App() {
         polygonList={polygons}
         image={image}
         allowAnnotation
-        buttonsComponent={CustomButtons}
         zoom={20}
         markerPosition={markerPosition}
         getNewPolygonColor={getNewPolygonColor}

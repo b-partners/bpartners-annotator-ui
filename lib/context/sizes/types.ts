@@ -11,4 +11,6 @@ export interface SizesContextType {
   defaultScale: number;
   setScale: Dispatch<SetStateAction<number>>;
   scaleLimit: ScaleLimit;
+  isMoving: boolean;
+  toggleIsMoving: () => void;
 }
