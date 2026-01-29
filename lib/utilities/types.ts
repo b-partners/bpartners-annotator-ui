@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react';
+import { MutableRefObject, RefObject } from 'react';
 import { CanvasHandler, ScaleHandler } from '.';
 import { Point, Polygon, PolygonColor } from '../types';
 
@@ -19,6 +19,7 @@ export interface EventHandlerParams {
   canvas: HTMLCanvasElement;
   image: HTMLImageElement;
   isDrawing: MutableRefObject<boolean>;
+  isMoving: boolean;
   polygon: MutableRefObject<Polygon>;
   polygons: Polygon[];
   canvasPolygonHandler: CanvasHandler;
@@ -27,4 +28,5 @@ export interface EventHandlerParams {
   allowAnnotation?: boolean;
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   closeOnNear?: boolean;
+  containerRef: RefObject<HTMLDivElement>;
 }

@@ -40,9 +40,9 @@ function App() {
         polygonList={polygons}
         image={image}
         allowAnnotation
-        buttonsComponent={CustomButtons}
         zoom={20}
         markerPosition={markerPosition}
+        buttonsComponent={CustomButtons}
         getNewPolygonColor={getNewPolygonColor}
         measurementMapper={(measurement, currentPolygons = []) => {
           return { ...measurement, isInvisible: currentPolygons[0]?.id !== measurement.polygonId };

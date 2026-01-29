@@ -1,4 +1,4 @@
-import { MutableRefObject } from 'react';
+import { MutableRefObject, RefObject } from 'react';
 import { CanvasHandler, EventHandlerParams, PointInfo, ScaleHandler, areOverlappingPoints, findMidpoint, getColorFromMain, pointBelongsToOrIsClose } from '.';
 import { DEFAULT_MAIN_COLOR, defaultPolygon } from '../constant';
 import { Point, Polygon, PolygonColor } from '../types';
@@ -7,6 +7,11 @@ import { v4 as uuidV4 } from 'uuid';
 
 export class EventHandler {
   private isDrawing: MutableRefObject<boolean>;
+  private containerRef: RefObject<HTMLDivElement>;
+  private startMouseMovePosition = { x: 0, y: 0 };
+  private startScrollMovePosition = { x: 0, y: 0 };
+  private isMoving: boolean;
+  private _isMoving: boolean = false;
   private allowAnnotation: boolean;
   private polygon: MutableRefObject<Polygon>;
   private polygons: Polygon[];
@@ -24,10 +29,23 @@ export class EventHandler {
   private closeOnNear: boolean = false;
 
   constructor(params: EventHandlerParams) {
-    const { getNewPolygonColor, canvasCursorHandler, canvasPolygonHandler, isDrawing, polygon, polygons, scaleHandler, allowAnnotation, closeOnNear } = params;
+    const {
+      getNewPolygonColor,
+      canvasCursorHandler,
+      canvasPolygonHandler,
+      isDrawing,
+      isMoving,
+      polygon,
+      polygons,
+      scaleHandler,
+      allowAnnotation,
+      closeOnNear,
+      containerRef,
+    } = params;
     this.scaleHandler = scaleHandler;
     this.allowAnnotation = allowAnnotation || false;
     this.isDrawing = isDrawing;
+    this.isMoving = isMoving;
     this.polygons = polygons;
     this.canvasCursorHandler = canvasCursorHandler;
     this.canvasPolygonHandler = canvasPolygonHandler;
@@ -35,6 +53,7 @@ export class EventHandler {
     this.getNewPolygonColor = getNewPolygonColor;
     this.createPointInfo();
     this.closeOnNear = closeOnNear || false;
+    this.containerRef = containerRef;
   }
 
   public initEvent = (canvas: HTMLCanvasElement, setPolygons: (polygons: Polygon[]) => void) => {
@@ -73,6 +92,10 @@ export class EventHandler {
       this.createPointInfo();
       setPolygons(this.polygons.slice());
     }
+    this._isMoving = false;
+    this.canvasCursorHandler.setCursor('cursor-grab');
+    this.startMouseMovePosition = { x: 0, y: 0 };
+    this.startScrollMovePosition = { x: 0, y: 0 };
   };
 
   private mouseLeave() {
@@ -91,6 +114,18 @@ export class EventHandler {
   }
 
   private mouseMove = (end: (polygon: Polygon) => void) => (event: MouseEvent) => {
+    const container = this.containerRef.current;
+    if (this._isMoving && container) {
+      const startMouseMovePosition = this.startMouseMovePosition;
+      const startScrollMovePosition = this.startScrollMovePosition;
+      const endMouseMovePosition = { x: event.clientX, y: event.clientY };
+
+      const dx = endMouseMovePosition.x - startMouseMovePosition.x;
+      const dy = endMouseMovePosition.y - startMouseMovePosition.y;
+
+      container.scrollLeft = startScrollMovePosition.x - dx;
+      container.scrollTop = startScrollMovePosition.y - dy;
+    }
     const sc = this.scaleHandler;
 
     const currentPhysicalPosition = sc.getPhysicalPositionByEvent(event);
@@ -168,6 +203,15 @@ export class EventHandler {
   };
 
   private mouseDown = (end: (polygon: Polygon) => void) => (event: MouseEvent) => {
+    const container = this.containerRef.current;
+
+    if (this.isMoving && container) {
+      this._isMoving = true;
+      this.startMouseMovePosition = { x: event.clientX, y: event.clientY };
+      this.startScrollMovePosition = { x: container.scrollLeft, y: container.scrollTop };
+      this.canvasCursorHandler.setCursor('cursor-grabbing');
+      return;
+    }
     const sc = this.scaleHandler;
     const polygon = this.polygon.current;
     const points = polygon.points;

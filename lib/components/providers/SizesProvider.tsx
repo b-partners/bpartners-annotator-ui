@@ -8,6 +8,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
   const [scale, setScale] = useState(0);
+  const [isMoving, setIsMoving] = useState(false);
 
   const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_PADDING) * (defaultScale + scale)), [defaultScale, image.height, scale]);
 
@@ -39,6 +40,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         scale: scale + defaultScale,
         setScale,
         scaleLimit,
+        isMoving,
+        toggleIsMoving: () => setIsMoving(p => !p),
       }}
     >
       {children}

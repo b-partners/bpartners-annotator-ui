@@ -12,6 +12,8 @@ export interface ScaleCallbacks {
   scaleUp: () => void;
   scaleReste: () => void;
   scaleDown: () => void;
+  toggleClickAction: () => void;
+  clickActionValue: boolean;
   xRef: RefObject<HTMLParagraphElement>;
   yRef: RefObject<HTMLParagraphElement>;
 }
