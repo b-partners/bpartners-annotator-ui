@@ -1,3 +1,12 @@
+## [0.19.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.0...v0.19.1) (2026-01-29)
+
+
+### Bug Fixes
+
+* move image with hand mouse up handler ([71ad3a1](https://github.com/b-partners/bpartners-annotator-ui/commit/71ad3a18d19b7ee336be7b442c5480cd91a15214))
+
+
+
 # [0.19.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.18.0...v0.19.0) (2026-01-29)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * add measurement mapper ([641f1e6](https://github.com/b-partners/bpartners-annotator-ui/commit/641f1e60d39f2618cc3d76424b1a2a5e7ab736df))
-
-
-
-## [0.11.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.1...v0.11.2) (2024-07-18)
-
-
-### Bug Fixes
-
-* draw polygon under measurements ([59f84e0](https://github.com/b-partners/bpartners-annotator-ui/commit/59f84e03e4051a8052d706c378d981a8b1186bb6))
 
 
 
