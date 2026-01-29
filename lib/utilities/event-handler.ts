@@ -92,10 +92,12 @@ export class EventHandler {
       this.createPointInfo();
       setPolygons(this.polygons.slice());
     }
-    this._isMoving = false;
-    this.canvasCursorHandler.setCursor('cursor-grab');
-    this.startMouseMovePosition = { x: 0, y: 0 };
-    this.startScrollMovePosition = { x: 0, y: 0 };
+    if (this._isMoving) {
+      this._isMoving = false;
+      this.canvasCursorHandler.setCursor('cursor-grab');
+      this.startMouseMovePosition = { x: 0, y: 0 };
+      this.startScrollMovePosition = { x: 0, y: 0 };
+    }
   };
 
   private mouseLeave() {
