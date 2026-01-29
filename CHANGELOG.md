@@ -1,3 +1,12 @@
+# [0.19.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.18.0...v0.19.0) (2026-01-29)
+
+
+### Features
+
+* add click action to move image ([6ac8252](https://github.com/b-partners/bpartners-annotator-ui/commit/6ac8252b97778efd65c536c1db7a6689ef1f2e67))
+
+
+
 # [0.18.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.17.0...v0.18.0) (2025-11-25)
 
 
@@ -81,15 +90,6 @@
 ### Bug Fixes
 
 * draw polygon under measurements ([59f84e0](https://github.com/b-partners/bpartners-annotator-ui/commit/59f84e03e4051a8052d706c378d981a8b1186bb6))
-
-
-
-## [0.11.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.0...v0.11.1) (2024-06-19)
-
-
-### Bug Fixes
-
-* marker render  ([17ff0c1](https://github.com/b-partners/bpartners-annotator-ui/commit/17ff0c13c2be8e097c8ad9b69014dce5d5bb9778))
 
 
 
