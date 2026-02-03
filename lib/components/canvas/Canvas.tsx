@@ -20,7 +20,7 @@ import './cursor-style.css';
 
 export const Canvas = () => {
   const { canvasHeight: height, canvasWidth: width, scale, isMoving } = useSizesContext();
-  const { markerPosition, polygons } = usePolygonContext();
+  const { markerPosition, polygons, zoom, imagePrecisionLevel = 5 } = usePolygonContext();
   const imageCanvasRef = useDrawStaticImage();
   const { cursorCanvasRef, polygonCanvasRef } = useCursorPolygon();
   const measurements = useMeasurement(cursorCanvasRef);
@@ -78,7 +78,7 @@ export const Canvas = () => {
                 backgroundColor: currentPolygon?.strokeColor,
                 top,
                 left,
-                fontSize: `${+(UrlParams.get('scale') ?? '1') * 20}px`,
+                fontSize: `${+(UrlParams.get('scale') ?? '1') * (zoom || 20 - (imagePrecisionLevel - 5))}px`,
                 fontWeight: 'bold',
               }}
             >

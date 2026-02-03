@@ -19,6 +19,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
     pointRadius,
     closeOnNear,
     lineSizeShowOnly,
+    imagePrecisionLevel,
   } = props;
   const polygon = useRef<Polygon>(defaultPolygon);
   const isDrawing = useRef<boolean>(false);
@@ -40,6 +41,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
         pointRadius,
         closeOnNear,
         lineSizeShowOnly,
+        imagePrecisionLevel,
       }}
     >
       {children}

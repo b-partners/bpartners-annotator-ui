@@ -16,4 +16,5 @@ export interface PolygonContextType {
   pointRadius?: number;
   closeOnNear?: boolean;
   lineSizeShowOnly: boolean;
+  imagePrecisionLevel?: number;
 }
