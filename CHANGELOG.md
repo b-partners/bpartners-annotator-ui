@@ -1,3 +1,12 @@
+## [0.19.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.1...v0.19.2) (2026-02-03)
+
+
+### Bug Fixes
+
+* measurements size ([fc8fbd8](https://github.com/b-partners/bpartners-annotator-ui/commit/fc8fbd897004110aaf78b82709033792a3b1a177))
+
+
+
 ## [0.19.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.0...v0.19.1) (2026-01-29)
 
 
@@ -81,15 +90,6 @@
 ### Bug Fixes
 
 * release on value fixed to 2 ([0ca799d](https://github.com/b-partners/bpartners-annotator-ui/commit/0ca799d91ffac7904af2ecdfac43c44b442f9e16))
-
-
-
-# [0.12.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.11.2...v0.12.0) (2024-07-24)
-
-
-### Features
-
-* add measurement mapper ([641f1e6](https://github.com/b-partners/bpartners-annotator-ui/commit/641f1e60d39f2618cc3d76424b1a2a5e7ab736df))
 
 
 
