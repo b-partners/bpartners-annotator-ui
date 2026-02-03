@@ -32,4 +32,5 @@ export interface AnnotatorCanvasProps {
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   pointRadius?: number;
   closeOnNear?: boolean;
+  imagePrecisionLevel?: number;
 }

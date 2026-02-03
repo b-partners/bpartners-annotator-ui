@@ -40,7 +40,8 @@ function App() {
         polygonList={polygons}
         image={image}
         allowAnnotation
-        zoom={20}
+        zoom={19}
+        imagePrecisionLevel={20}
         markerPosition={markerPosition}
         buttonsComponent={CustomButtons}
         getNewPolygonColor={getNewPolygonColor}
