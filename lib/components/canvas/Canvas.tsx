@@ -69,6 +69,7 @@ export const Canvas = () => {
 
         return (
           !isInvisible &&
+          !currentPolygon?.isInvisible &&
           unity === 'm' && (
             <span
               key={`${value}-measure-${k}`}
