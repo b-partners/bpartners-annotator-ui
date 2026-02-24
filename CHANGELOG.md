@@ -1,3 +1,12 @@
+## [0.19.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.2...v0.19.3) (2026-02-24)
+
+
+### Bug Fixes
+
+* measurement visibility  ([7c9c435](https://github.com/b-partners/bpartners-annotator-ui/commit/7c9c435e9fd8d0c524bb24410ecc740178e4489e))
+
+
+
 ## [0.19.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.1...v0.19.2) (2026-02-03)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * multiple measurement & polygon colors ([6b20051](https://github.com/b-partners/bpartners-annotator-ui/commit/6b2005107374be8ff45506c7d42091401a870704))
-
-
-
-## [0.12.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.12.0...v0.12.1) (2024-08-08)
-
-
-### Bug Fixes
-
-* release on value fixed to 2 ([0ca799d](https://github.com/b-partners/bpartners-annotator-ui/commit/0ca799d91ffac7904af2ecdfac43c44b442f9e16))
 
 
 
