@@ -1,3 +1,12 @@
+## [0.19.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.3...v0.19.4) (2026-04-17)
+
+
+### Bug Fixes
+
+* always set polygon state after mouse up in edit mode ([2daa37a](https://github.com/b-partners/bpartners-annotator-ui/commit/2daa37a95776f29356b9b3253ed954f9775ef84c))
+
+
+
 ## [0.19.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.2...v0.19.3) (2026-02-24)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * add point radius props ([3eae7b7](https://github.com/b-partners/bpartners-annotator-ui/commit/3eae7b713ea03848c8edf03ea3bafba52fe2d102))
-
-
-
-# [0.13.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.12.1...v0.13.0) (2024-11-06)
-
-
-### Features
-
-* multiple measurement & polygon colors ([6b20051](https://github.com/b-partners/bpartners-annotator-ui/commit/6b2005107374be8ff45506c7d42091401a870704))
 
 
 
