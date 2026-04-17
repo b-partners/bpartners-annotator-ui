@@ -90,7 +90,6 @@ export class EventHandler {
     if (this.currentPointInfo) {
       this.currentPointInfo = null;
       this.createPointInfo();
-      setPolygons(this.polygons.slice());
     }
     if (this._isMoving) {
       this._isMoving = false;
@@ -98,6 +97,8 @@ export class EventHandler {
       this.startMouseMovePosition = { x: 0, y: 0 };
       this.startScrollMovePosition = { x: 0, y: 0 };
     }
+
+    setPolygons(this.polygons.slice());
   };
 
   private mouseLeave() {
