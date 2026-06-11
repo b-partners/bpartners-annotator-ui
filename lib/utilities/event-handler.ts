@@ -145,6 +145,8 @@ export class EventHandler {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'UNDER_POINT');
     } else if (this.currentMiddlePosition) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'ADD_POINT');
+    } else if (this.allowAnnotation && !this.isMoving) {
+      canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'CROSS');
     } else {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
     }

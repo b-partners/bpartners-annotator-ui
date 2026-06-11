@@ -19,4 +19,4 @@ export interface Polygon extends PolygonColor {
   lineIndividualColor?: boolean;
 }
 
-export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT';
+export type MouseType = 'DEFAULT' | 'END' | 'UNDER_POINT' | 'ADD_POINT' | 'CROSS';

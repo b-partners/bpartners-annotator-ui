@@ -128,6 +128,13 @@ export class CanvasHandler {
       ctx.lineTo(x - size, y);
       ctx.lineTo(x + size, y);
       ctx.stroke();
+    } else if (type === 'CROSS') {
+      const size = 6;
+      ctx.moveTo(x - size, y);
+      ctx.lineTo(x + size, y);
+      ctx.moveTo(x, y - size);
+      ctx.lineTo(x, y + size);
+      ctx.stroke();
     } else {
       ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.stroke();
