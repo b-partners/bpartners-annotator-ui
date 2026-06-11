@@ -139,7 +139,7 @@ export class EventHandler {
     const isPointInAnnotation = this.pointsInfo.find(value => areOverlappingPoints(value.point, currentLogicalPosition));
     const points = this.polygon.current.points;
 
-    if (points.length > 0 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+    if (points.length > 1 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'END');
     } else if (!this.isDrawing.current && isPointInAnnotation) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'UNDER_POINT');
