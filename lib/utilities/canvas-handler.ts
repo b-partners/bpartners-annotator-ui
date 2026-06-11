@@ -130,11 +130,24 @@ export class CanvasHandler {
       ctx.stroke();
     } else if (type === 'CROSS') {
       const size = 6;
-      ctx.moveTo(x - size, y);
-      ctx.lineTo(x + size, y);
-      ctx.moveTo(x, y - size);
-      ctx.lineTo(x, y + size);
-      ctx.stroke();
+      const drawCross = () => {
+        ctx.beginPath();
+        ctx.moveTo(x - size, y);
+        ctx.lineTo(x + size, y);
+        ctx.moveTo(x, y - size);
+        ctx.lineTo(x, y + size);
+        ctx.stroke();
+        ctx.closePath();
+      };
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 3;
+      drawCross();
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 1;
+      drawCross();
+      ctx.restore();
     } else {
       ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.stroke();
