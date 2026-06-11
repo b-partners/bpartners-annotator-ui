@@ -113,12 +113,41 @@ export class CanvasHandler {
 
     ctx.lineWidth = 1;
     ctx.beginPath();
+
+    const strokeCircle = (radius: number) => {
+      const draw = () => {
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.closePath();
+      };
+      ctx.save();
+      // white border on both the inside and outside of the black ring
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 3;
+      draw();
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 1;
+      draw();
+      ctx.restore();
+    };
+
     if (type === 'DEFAULT') {
+      ctx.save();
+      // white outer border around the filled black dot
+      ctx.beginPath();
+      ctx.fillStyle = 'white';
+      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.closePath();
+      ctx.beginPath();
+      ctx.fillStyle = 'black';
       ctx.arc(x, y, 3, 0, Math.PI * 2);
       ctx.fill();
+      ctx.closePath();
+      ctx.restore();
     } else if (type === 'END') {
-      ctx.arc(x, y, 5, 0, Math.PI * 2);
-      ctx.stroke();
+      strokeCircle(5);
     } else if (type === 'ADD_POINT') {
       const size = 3;
       ctx.moveTo(x, y);
@@ -149,8 +178,7 @@ export class CanvasHandler {
       drawCross();
       ctx.restore();
     } else {
-      ctx.arc(x, y, 5, 0, Math.PI * 2);
-      ctx.stroke();
+      strokeCircle(5);
     }
     ctx.closePath();
   }
