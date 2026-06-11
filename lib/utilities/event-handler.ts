@@ -157,7 +157,7 @@ export class EventHandler {
     const isPointInAnnotation = this.pointsInfo.find(value => areOverlappingPoints(value.point, currentLogicalPosition));
     const points = this.polygon.current.points;
 
-    if (points.length > 1 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+    if (points.length > 2 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'END');
     } else if (!this.isDrawing.current && isPointInAnnotation) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'UNDER_POINT');
@@ -186,7 +186,7 @@ export class EventHandler {
     }
 
     const polygon = this.polygon.current;
-    if (this.closeOnNear && this.isDrawing.current && points.length > 1 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+    if (this.closeOnNear && this.isDrawing.current && points.length > 2 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       points.push(points[0]);
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
       const colors = getPolygonLastColors(this.polygons);
@@ -244,7 +244,7 @@ export class EventHandler {
     const currentPhysicalPosition = sc.getPhysicalPositionByEvent(event);
     const canvasCursorHandler = this.canvasCursorHandler;
 
-    if (this.isDrawing.current && points.length > 1 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+    if (this.isDrawing.current && points.length > 2 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       points.push(points[0]);
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
       const colors = getPolygonLastColors(this.polygons);
