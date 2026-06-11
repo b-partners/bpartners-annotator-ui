@@ -1,3 +1,12 @@
+## [0.19.5](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.4...v0.19.5) (2026-06-11)
+
+
+### Bug Fixes
+
+* cursor and zoom ([2d320d4](https://github.com/b-partners/bpartners-annotator-ui/commit/2d320d484a454e55ff0b3b4797e78aaaac58b8f8))
+
+
+
 ## [0.19.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.3...v0.19.4) (2026-04-17)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * custom cursor position ([2837585](https://github.com/b-partners/bpartners-annotator-ui/commit/2837585e59f07f19e00d2a8d12372a41467f182f))
-
-
-
-# [0.14.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.13.0...v0.14.0) (2025-04-14)
-
-
-### Features
-
-* add point radius props ([3eae7b7](https://github.com/b-partners/bpartners-annotator-ui/commit/3eae7b713ea03848c8edf03ea3bafba52fe2d102))
 
 
 
