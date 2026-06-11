@@ -115,20 +115,20 @@ export class CanvasHandler {
     ctx.beginPath();
 
     const strokeCircle = (radius: number) => {
-      const draw = () => {
+      const draw = (r: number) => {
         ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.stroke();
         ctx.closePath();
       };
       ctx.save();
-      // white border on both the inside and outside of the black ring
+      // white outline only on the outside of the black ring
       ctx.strokeStyle = 'white';
-      ctx.lineWidth = 5;
-      draw();
+      ctx.lineWidth = 2;
+      draw(radius + 1.5);
       ctx.strokeStyle = 'black';
       ctx.lineWidth = 2;
-      draw();
+      draw(radius);
       ctx.restore();
     };
 
