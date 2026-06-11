@@ -65,9 +65,11 @@ export class EventHandler {
     const mouseMove = this.mouseMove(addPolygon.bind(this));
     const mouseUp = this.mouseUp(setPolygons).bind(this);
     const mouseDownEventHandler = this.mouseDown(addPolygon.bind(this));
+    const container = this.containerRef.current;
 
     canvas.addEventListener('mousemove', mouseMove);
     canvas.addEventListener('mouseleave', mouseLeave);
+    container?.addEventListener('scroll', this.onScroll);
 
     if (this.allowAnnotation) {
       canvas.addEventListener('mousedown', mouseDownEventHandler);
@@ -78,6 +80,7 @@ export class EventHandler {
     return () => {
       canvas.removeEventListener('mousemove', mouseMove);
       canvas.removeEventListener('mouseleave', mouseLeave);
+      container?.removeEventListener('scroll', this.onScroll);
       if (this.allowAnnotation) {
         canvas.removeEventListener('mousedown', mouseDownEventHandler);
         canvas.removeEventListener('mouseup', mouseUp);
@@ -106,6 +109,17 @@ export class EventHandler {
   private mouseLeave() {
     this.canvasCursorHandler.clearAll();
   }
+
+  // While the container scrolls (wheel/scrollbar), the pointer is stationary but the
+  // image — and the canvas the cursor is painted on — slides underneath it. No mousemove
+  // fires during a scroll, so the painted cursor would stay glued to the image and drift
+  // away from the real pointer. Hand off to a native CSS dot cursor (cleared painted one)
+  // that tracks the pointer without a redraw; mouseMove restores the painted cursor.
+  private onScroll = () => {
+    if (this.isMoving) return;
+    this.canvasCursorHandler.clearAll();
+    this.canvasCursorHandler.showScrollCursor();
+  };
 
   private escapeKeyDown(event: KeyboardEvent) {
     if (this.isDrawing.current && (event.key === 'Escape' || event.key === 'Backspace')) {
@@ -137,6 +151,8 @@ export class EventHandler {
     const currentLogicalPosition = sc.getLogicalPosition(event);
 
     const canvasCursorHandler = this.canvasCursorHandler;
+    // The mouse moved again, so a scroll (if any) has ended: bring back the painted cursor.
+    if (!this.isMoving) canvasCursorHandler.hideScrollCursor();
 
     const isPointInAnnotation = this.pointsInfo.find(value => areOverlappingPoints(value.point, currentLogicalPosition));
     const points = this.polygon.current.points;

@@ -18,6 +18,25 @@ export class CanvasHandler {
     }
   }
 
+  /**
+   * Swap the painted cursor for a native CSS dot cursor (matching the DEFAULT cursor).
+   * Used while scrolling so the cursor stays under the real pointer without redrawing.
+   */
+  public showScrollCursor() {
+    this.canvas.classList.remove('cursor-none');
+    this.canvas.classList.add('cursor-dot');
+  }
+
+  /**
+   * Restore the painted cursor once scrolling stops (i.e. the mouse moves again).
+   */
+  public hideScrollCursor() {
+    if (this.canvas.classList.contains('cursor-dot')) {
+      this.canvas.classList.remove('cursor-dot');
+      this.canvas.classList.add('cursor-none');
+    }
+  }
+
   public setCursor(cursorClassName: 'cursor-grab' | 'cursor-grabbing') {
     if (cursorClassName === 'cursor-grab') {
       this.canvas.classList.remove('cursor-grabbing');

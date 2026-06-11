@@ -7,3 +7,11 @@
 .cursor-grabbing {
   cursor: grabbing;
 }
+/* Native equivalent of the painted DEFAULT cursor (white dot with a black core),
+   used while scrolling so the cursor tracks the real pointer without a redraw. */
+.cursor-dot {
+  cursor:
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"><circle cx="6" cy="6" r="5" fill="white"/><circle cx="6" cy="6" r="3" fill="black"/></svg>')
+      6 6,
+    auto;
+}
