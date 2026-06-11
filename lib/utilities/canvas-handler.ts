@@ -124,10 +124,10 @@ export class CanvasHandler {
       ctx.save();
       // white border on both the inside and outside of the black ring
       ctx.strokeStyle = 'white';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 5;
       draw();
       ctx.strokeStyle = 'black';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 2;
       draw();
       ctx.restore();
     };
@@ -137,7 +137,7 @@ export class CanvasHandler {
       // white outer border around the filled black dot
       ctx.beginPath();
       ctx.fillStyle = 'white';
-      ctx.arc(x, y, 4, 0, Math.PI * 2);
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
       ctx.fill();
       ctx.closePath();
       ctx.beginPath();
@@ -171,10 +171,10 @@ export class CanvasHandler {
       ctx.save();
       ctx.lineCap = 'round';
       ctx.strokeStyle = 'white';
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 5;
       drawCross();
       ctx.strokeStyle = 'black';
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 2;
       drawCross();
       ctx.restore();
     } else {
