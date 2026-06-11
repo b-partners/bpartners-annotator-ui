@@ -65,9 +65,11 @@ export class EventHandler {
     const mouseMove = this.mouseMove(addPolygon.bind(this));
     const mouseUp = this.mouseUp(setPolygons).bind(this);
     const mouseDownEventHandler = this.mouseDown(addPolygon.bind(this));
+    const container = this.containerRef.current;
 
     canvas.addEventListener('mousemove', mouseMove);
     canvas.addEventListener('mouseleave', mouseLeave);
+    container?.addEventListener('scroll', this.onScroll);
 
     if (this.allowAnnotation) {
       canvas.addEventListener('mousedown', mouseDownEventHandler);
@@ -78,6 +80,7 @@ export class EventHandler {
     return () => {
       canvas.removeEventListener('mousemove', mouseMove);
       canvas.removeEventListener('mouseleave', mouseLeave);
+      container?.removeEventListener('scroll', this.onScroll);
       if (this.allowAnnotation) {
         canvas.removeEventListener('mousedown', mouseDownEventHandler);
         canvas.removeEventListener('mouseup', mouseUp);
@@ -96,6 +99,8 @@ export class EventHandler {
       this.canvasCursorHandler.setCursor('cursor-grab');
       this.startMouseMovePosition = { x: 0, y: 0 };
       this.startScrollMovePosition = { x: 0, y: 0 };
+      // Restore eased scrolling (set in the CSS) once the drag ends.
+      if (this.containerRef.current) this.containerRef.current.style.scrollBehavior = '';
     }
 
     setPolygons(this.polygons.slice());
@@ -104,6 +109,17 @@ export class EventHandler {
   private mouseLeave() {
     this.canvasCursorHandler.clearAll();
   }
+
+  // While the container scrolls (wheel/scrollbar), the pointer is stationary but the
+  // image — and the canvas the cursor is painted on — slides underneath it. No mousemove
+  // fires during a scroll, so the painted cursor would stay glued to the image and drift
+  // away from the real pointer. Hand off to a native CSS dot cursor (cleared painted one)
+  // that tracks the pointer without a redraw; mouseMove restores the painted cursor.
+  private onScroll = () => {
+    if (this.isMoving) return;
+    this.canvasCursorHandler.clearAll();
+    this.canvasCursorHandler.showScrollCursor();
+  };
 
   private escapeKeyDown(event: KeyboardEvent) {
     if (this.isDrawing.current && (event.key === 'Escape' || event.key === 'Backspace')) {
@@ -135,16 +151,20 @@ export class EventHandler {
     const currentLogicalPosition = sc.getLogicalPosition(event);
 
     const canvasCursorHandler = this.canvasCursorHandler;
+    // The mouse moved again, so a scroll (if any) has ended: bring back the painted cursor.
+    if (!this.isMoving) canvasCursorHandler.hideScrollCursor();
 
     const isPointInAnnotation = this.pointsInfo.find(value => areOverlappingPoints(value.point, currentLogicalPosition));
     const points = this.polygon.current.points;
 
-    if (points.length > 0 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+    if (points.length > 1 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'END');
     } else if (!this.isDrawing.current && isPointInAnnotation) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'UNDER_POINT');
     } else if (this.currentMiddlePosition) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'ADD_POINT');
+    } else if (this.allowAnnotation && !this.isMoving) {
+      canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'CROSS');
     } else {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
     }
@@ -212,6 +232,8 @@ export class EventHandler {
       this._isMoving = true;
       this.startMouseMovePosition = { x: event.clientX, y: event.clientY };
       this.startScrollMovePosition = { x: container.scrollLeft, y: container.scrollTop };
+      // Pan must track the cursor 1:1; eased (smooth) scrolling would lag the drag.
+      container.style.scrollBehavior = 'auto';
       this.canvasCursorHandler.setCursor('cursor-grabbing');
       return;
     }
