@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { SizesProviderProps } from '.';
 import { SizesContext, UrlParams, useElementContext, useScale } from '../..';
-import { IMAGE_PADDING, SCALE_DELTA_QUERY_NAME } from '../../constant';
+import { IMAGE_MARGIN, SCALE_DELTA_QUERY_NAME } from '../../constant';
 
 export const SizesProvider: FC<SizesProviderProps> = props => {
   const { children } = props;
@@ -12,9 +12,9 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   const [scale, setScale] = useState(() => +(UrlParams.get(SCALE_DELTA_QUERY_NAME) ?? '0'));
   const [isMoving, setIsMoving] = useState(false);
 
-  const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_PADDING) * (defaultScale + scale)), [defaultScale, image.height, scale]);
+  const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.height, scale]);
 
-  const canvasWidth = useMemo(() => Math.round((image.width + IMAGE_PADDING) * (defaultScale + scale)), [defaultScale, image.width, scale]);
+  const canvasWidth = useMemo(() => Math.round((image.width + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.width, scale]);
 
   useEffect(() => {
     UrlParams.set('scale', (defaultScale + scale).toFixed(2));

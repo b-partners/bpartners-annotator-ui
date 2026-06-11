@@ -1,6 +1,12 @@
 import { getColorFromMain } from '../utilities/canvas-tools';
 
+// Padding fed into the fit-scale computation (use-scale). Kept small so the image
+// is not shrunk to make room for the surrounding margin.
 export const IMAGE_PADDING = 50;
+// Extra scrollable area (in image-pixel units) added around the image when sizing
+// the canvas. Larger value => more room to pan/scroll around the image without
+// affecting the displayed image size.
+export const IMAGE_MARGIN = 600;
 export const SCALE_VALUE_QUERY_NAME = 'scale';
 export const SCALE_DELTA_QUERY_NAME = 'scale-delta';
 export const CURSOR_SIZE = 3;

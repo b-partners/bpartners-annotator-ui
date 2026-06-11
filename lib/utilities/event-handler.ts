@@ -96,6 +96,8 @@ export class EventHandler {
       this.canvasCursorHandler.setCursor('cursor-grab');
       this.startMouseMovePosition = { x: 0, y: 0 };
       this.startScrollMovePosition = { x: 0, y: 0 };
+      // Restore eased scrolling (set in the CSS) once the drag ends.
+      if (this.containerRef.current) this.containerRef.current.style.scrollBehavior = '';
     }
 
     setPolygons(this.polygons.slice());
@@ -214,6 +216,8 @@ export class EventHandler {
       this._isMoving = true;
       this.startMouseMovePosition = { x: event.clientX, y: event.clientY };
       this.startScrollMovePosition = { x: container.scrollLeft, y: container.scrollTop };
+      // Pan must track the cursor 1:1; eased (smooth) scrolling would lag the drag.
+      container.style.scrollBehavior = 'auto';
       this.canvasCursorHandler.setCursor('cursor-grabbing');
       return;
     }
