@@ -1,3 +1,12 @@
+## [0.19.6](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.5...v0.19.6) (2026-06-12)
+
+
+### Bug Fixes
+
+* cursor  ([f0236ce](https://github.com/b-partners/bpartners-annotator-ui/commit/f0236ceccdfa941853ec5d3a711c8ef3afa2c39c))
+
+
+
 ## [0.19.5](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.4...v0.19.5) (2026-06-11)
 
 
@@ -81,15 +90,6 @@
 ### Features
 
 * different color for each polygon line ([1ee5fcc](https://github.com/b-partners/bpartners-annotator-ui/commit/1ee5fcc50cb2fdd0837608367da6466c9c92022a))
-
-
-
-# [0.15.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.14.0...v0.15.0) (2025-09-08)
-
-
-### Features
-
-* custom cursor position ([2837585](https://github.com/b-partners/bpartners-annotator-ui/commit/2837585e59f07f19e00d2a8d12372a41467f182f))
 
 
 
