@@ -34,6 +34,8 @@ A `.env` providing `REACT_APP_ANNOTATOR_GEO_CONVERTER_API_URL` is needed for the
 
 Releases are **automated from conventional commits**. The CI `publish-package.yml` workflow runs `conventional-changelog-action`, which bumps `version.yml`, syncs `package.json` via `.shell/update-version.sh`, updates `CHANGELOG.md`, and publishes to AWS CodeArtifact. Commit message prefixes (`fix:`, `feat:`, `release:`) directly determine the next version — follow them. The `husky` pre-commit hook runs `prettier:write` then `lint`.
 
+Always write a commit message whose text accurately describes the work done. **Never** add a Claude co-author trailer or any "Co-authored-by: Claude" / "Generated with Claude" attribution to commits.
+
 ## Architecture
 
 ### Provider nesting (state lives in React Context, not props)
