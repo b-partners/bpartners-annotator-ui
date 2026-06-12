@@ -1,3 +1,12 @@
+## [0.19.7](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.6...v0.19.7) (2026-06-12)
+
+
+### Bug Fixes
+
+* preserve scroll position on rerender ([886402d](https://github.com/b-partners/bpartners-annotator-ui/commit/886402d8019520bf30230f38d347fb15386b0fc9))
+
+
+
 ## [0.19.6](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.5...v0.19.6) (2026-06-12)
 
 
@@ -76,20 +85,6 @@
 ### Features
 
 * close polygon on near to the first point ([5e91ef7](https://github.com/b-partners/bpartners-annotator-ui/commit/5e91ef7968c8e4b7a2a5b518e043e3af25213d57))
-
-
-
-# [0.16.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.15.0...v0.16.0) (2025-09-30)
-
-
-### Bug Fixes
-
-* use polygon to get line color info ([219c054](https://github.com/b-partners/bpartners-annotator-ui/commit/219c05487fa0fedba5dbf8d150cd15542ac58042))
-
-
-### Features
-
-* different color for each polygon line ([1ee5fcc](https://github.com/b-partners/bpartners-annotator-ui/commit/1ee5fcc50cb2fdd0837608367da6466c9c92022a))
 
 
 
