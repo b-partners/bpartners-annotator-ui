@@ -18,6 +18,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
     getNewPolygonColor,
     pointRadius,
     closeOnNear,
+    edit,
     lineSizeShowOnly,
     imagePrecisionLevel,
   } = props;
@@ -40,6 +41,7 @@ export const PolygonProvider: FC<PolygonProviderProps> = props => {
         getNewPolygonColor,
         pointRadius,
         closeOnNear,
+        edit,
         lineSizeShowOnly,
         imagePrecisionLevel,
       }}

@@ -13,6 +13,11 @@ export class EventHandler {
   private isMoving: boolean;
   private _isMoving: boolean = false;
   private allowAnnotation: boolean;
+  // When `edit` is true the user may only edit existing polygons (move a point, add a
+  // point on a segment); when false they may only draw new polygons. Left undefined,
+  // both interactions stay enabled (backward-compatible default).
+  private canEdit: boolean;
+  private canCreate: boolean;
   private polygon: MutableRefObject<Polygon>;
   private polygons: Polygon[];
   private canvasCursorHandler: CanvasHandler;
@@ -40,10 +45,13 @@ export class EventHandler {
       scaleHandler,
       allowAnnotation,
       closeOnNear,
+      edit,
       containerRef,
     } = params;
     this.scaleHandler = scaleHandler;
     this.allowAnnotation = allowAnnotation || false;
+    this.canEdit = edit !== false;
+    this.canCreate = edit !== true;
     this.isDrawing = isDrawing;
     this.isMoving = isMoving;
     this.polygons = polygons;
@@ -159,17 +167,17 @@ export class EventHandler {
 
     if (points.length > 2 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'END');
-    } else if (!this.isDrawing.current && isPointInAnnotation) {
+    } else if (this.canEdit && !this.isDrawing.current && isPointInAnnotation) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'UNDER_POINT');
-    } else if (this.currentMiddlePosition) {
+    } else if (this.canEdit && this.currentMiddlePosition) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'ADD_POINT');
-    } else if (this.allowAnnotation && !this.isMoving) {
+    } else if (this.canCreate && this.allowAnnotation && !this.isMoving) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'CROSS');
     } else {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'DEFAULT');
     }
 
-    if (!this.isDrawing.current && this.currentPointInfo !== null) {
+    if (this.canEdit && !this.isDrawing.current && this.currentPointInfo !== null) {
       const { index, polygonId } = this.currentPointInfo;
 
       const polygonIndex = this.polygons.findIndex(polygon => polygon.id === polygonId);
@@ -201,7 +209,7 @@ export class EventHandler {
       return;
     }
 
-    if (!this.isDrawing.current) {
+    if (this.canEdit && !this.isDrawing.current) {
       for (let index = 0; index < this.polygons.length; index++) {
         const currentPolygon = this.polygons[index];
         if (!currentPolygon.isInvisible) {
@@ -260,18 +268,24 @@ export class EventHandler {
     } else if (this.isDrawing.current) {
       points.push(currentLogicalPosition);
       this.draw();
-    } else if (!this.isDrawing.current) {
+    } else if (this.canEdit && !this.isDrawing.current) {
       this.currentPointInfo = this.pointsInfo.find(value => areOverlappingPoints(value.point, currentLogicalPosition)) || null;
     }
 
-    if (!this.currentMiddlePosition && !this.isDrawing.current && !this.currentPointInfo && !sc.isPointOutsideOrImage(currentLogicalPosition)) {
+    if (
+      this.canCreate &&
+      !this.currentMiddlePosition &&
+      !this.isDrawing.current &&
+      !this.currentPointInfo &&
+      !sc.isPointOutsideOrImage(currentLogicalPosition)
+    ) {
       this.isDrawing.current = true;
       const polygonColor = this.getNewPolygonColor ? this.getNewPolygonColor(this.polygons) : getColorFromMain(DEFAULT_MAIN_COLOR);
       this.polygon.current = { ...polygonColor, points: [currentLogicalPosition], id: uuidV4() };
       this.draw();
     }
 
-    if (this.currentMiddlePosition && !this.currentPointInfo && !this.isDrawing.current) {
+    if (this.canEdit && this.currentMiddlePosition && !this.currentPointInfo && !this.isDrawing.current) {
       const { polygonId } = this.currentMiddlePosition;
       const polygonIndex = this.polygons.findIndex(p => p.id === polygonId);
       const pointIndex = this.currentMiddlePosition.index;

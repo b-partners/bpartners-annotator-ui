@@ -28,5 +28,6 @@ export interface EventHandlerParams {
   allowAnnotation?: boolean;
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   closeOnNear?: boolean;
+  edit?: boolean;
   containerRef: RefObject<HTMLDivElement>;
 }
