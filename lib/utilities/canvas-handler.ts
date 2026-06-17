@@ -6,7 +6,7 @@ export class CanvasHandler {
   private ctx: CanvasRenderingContext2D;
   private canvas: HTMLCanvasElement;
   private scaleHandler: ScaleHandler;
-  private pointRadius: number = 2;
+  private pointRadius: number = 4;
 
   constructor(canvas: HTMLCanvasElement, scaleHandler: ScaleHandler, pointRadius?: number) {
     this.canvas = canvas;
@@ -56,6 +56,18 @@ export class CanvasHandler {
     this.ctx.clearRect(0, 0, width, height);
   }
 
+  /**
+   * Point radius that grows/shrinks with the current zoom so vertices stay
+   * proportional to the displayed image, clamped around the base radius so they
+   * remain visible when zoomed out and don't overwhelm the image when zoomed in.
+   */
+  private getResponsivePointRadius() {
+    const scaledRadius = this.scaleHandler.getScaledDownValue(this.pointRadius);
+    const min = this.pointRadius * 0.75;
+    const max = this.pointRadius * 2;
+    return Math.min(max, Math.max(min, scaledRadius));
+  }
+
   public drawPoint(point: Point) {
     const sc = this.scaleHandler;
     const { x, y } = sc.getPhysicalPositionByPoint(point);
@@ -63,7 +75,7 @@ export class CanvasHandler {
 
     ctx.beginPath();
     ctx.fillStyle = 'black';
-    ctx.arc(x, y, this.pointRadius, 0, 2 * Math.PI);
+    ctx.arc(x, y, this.getResponsivePointRadius(), 0, 2 * Math.PI);
     ctx.fill();
     ctx.closePath();
   }
