@@ -165,7 +165,11 @@ export class EventHandler {
     const isPointInAnnotation = this.pointsInfo.find(value => areOverlappingPoints(value.point, currentLogicalPosition));
     const points = this.polygon.current.points;
 
-    if (points.length > 2 && areOverlappingPoints(points[0], currentLogicalPosition)) {
+    if (this.isMoving) {
+      // In move mode panning relies on the native CSS hand cursor (cursor-grab/grabbing);
+      // never paint a cursor onto the canvas.
+      canvasCursorHandler.clearAll();
+    } else if (points.length > 2 && areOverlappingPoints(points[0], currentLogicalPosition)) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'END');
     } else if (this.canEdit && !this.isDrawing.current && isPointInAnnotation) {
       canvasCursorHandler.drawMouseCursor(currentPhysicalPosition, 'UNDER_POINT');
