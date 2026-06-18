@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { AnnotatorCanvas } from '../../lib';
 import { Point, Polygon } from '../../lib/types';
-import image from '../../src/assets/Rennes_Solar_Panel_Batch_1_519355_363821.jpg';
+import imageA from '../../src/assets/Rennes_Solar_Panel_Batch_1_519355_363821.jpg';
+import imageB from '../../src/assets/image-2.png';
 
-const Harness = () => {
+interface HarnessProps {
+  initialPosA?: Point;
+  initialPosB?: Point;
+}
+
+const Harness = ({ initialPosA, initialPosB }: HarnessProps) => {
   const [tab, setTab] = useState<'a' | 'b'>('a');
-  // Tab A is zoomed (real scroll room); tab B sits at base zoom where the image fits the
-  // container, so switching to it recenters with no scroll room — the case that fired no
-  // scroll event and left the old echo-guard stale.
   const [scaleA, setScaleA] = useState(2);
-  const [scaleB, setScaleB] = useState(0);
-  const [posA, setPosA] = useState<Point | undefined>({ x: 0.5, y: 0.85 });
-  const [posB, setPosB] = useState<Point | undefined>(undefined);
+  const [scaleB, setScaleB] = useState(2);
+  const [posA, setPosA] = useState<Point | undefined>(initialPosA);
+  const [posB, setPosB] = useState<Point | undefined>(initialPosB);
   const [polygons, setPolygons] = useState<Polygon[]>([]);
 
   const isA = tab === 'a';
@@ -29,7 +32,7 @@ const Harness = () => {
         width='60vw'
         setPolygons={setPolygons}
         polygonList={polygons}
-        image={image}
+        image={isA ? imageA : imageB}
         zoom={19}
         scale={isA ? scaleA : scaleB}
         onScaleChange={s => (isA ? setScaleA(s) : setScaleB(s))}
@@ -41,28 +44,58 @@ const Harness = () => {
 };
 
 const container = () => cy.get('[data-cy=annotator-canvas-container]').parent();
-const settle = 300;
+const settle = 350;
+const top = ($el: JQuery<HTMLElement>) => $el[0].scrollTop;
 
 describe('per-tab scroll position on a single mounted instance', () => {
-  it('restores a zoomed tab after visiting a fit-to-container tab (no scroll event)', () => {
+  it('keeps each tab independent scroll across switches, with different-sized images', () => {
     cy.viewport(1400, 900);
-    cy.mount(<Harness />);
+    cy.mount(<Harness initialPosA={{ x: 0.25, y: 0.25 }} initialPosB={{ x: 0.78, y: 0.78 }} />);
     cy.get('canvas').should('exist');
-    cy.wait(500);
+    cy.wait(600);
 
-    container().should($c => expect($c[0].scrollHeight, 'tab A has scroll room').to.be.greaterThan($c[0].clientHeight + 100));
+    container().should($c => expect($c[0].scrollHeight, 'scroll room exists').to.be.greaterThan($c[0].clientHeight + 100));
 
     container().then($a => {
-      const aTop = $a[0].scrollTop;
-      expect(aTop, 'tab A restored to its saved near-bottom position').to.be.greaterThan($a[0].scrollHeight * 0.4);
+      const aTop = top($a);
 
       cy.get('[data-cy=to-b]').click();
       cy.wait(settle);
+      container().then($b => {
+        const bTop = top($b);
+        expect(bTop, 'B sits well below A').to.be.greaterThan(aTop + 150);
 
+        cy.get('[data-cy=to-a]').click();
+        cy.wait(settle);
+        container().then($a2 => expect(top($a2), 'A restored after visiting B').to.be.closeTo(aTop, 40));
+
+        cy.get('[data-cy=to-b]').click();
+        cy.wait(settle);
+        container().then($b2 => expect(top($b2), 'B restored after visiting A').to.be.closeTo(bTop, 40));
+      });
+    });
+  });
+
+  it('persists a real user scroll (onScrollChange not over-suppressed)', () => {
+    cy.viewport(1400, 900);
+    cy.mount(<Harness initialPosA={{ x: 0.5, y: 0.2 }} initialPosB={{ x: 0.5, y: 0.5 }} />);
+    cy.get('canvas').should('exist');
+    cy.wait(600);
+
+    container().then($pre => container().scrollTo(0, Math.round($pre[0].scrollHeight * 0.45), { ensureScrollable: false }));
+    cy.wait(settle);
+    container().then($a => {
+      const scrolled = top($a);
+      const seedTop = 0.2 * $a[0].scrollHeight - $a[0].clientHeight / 2;
+      expect(scrolled, 'user scrolled below the 0.2 seed').to.be.greaterThan(seedTop + 300);
+
+      cy.get('[data-cy=to-b]').click();
+      cy.wait(600);
       cy.get('[data-cy=to-a]').click();
-      cy.wait(settle);
+      cy.wait(600);
       container().then($a2 => {
-        expect($a2[0].scrollTop, 'tab A scroll restored after fit-to-container tab').to.be.closeTo(aTop, 40);
+        expect(top($a2), 'user scroll persisted, not reverted to the seed').to.be.greaterThan(seedTop + 300);
+        expect(top($a2), 'user scroll roughly restored').to.be.closeTo(scrolled, 150);
       });
     });
   });

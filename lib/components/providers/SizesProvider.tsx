@@ -28,9 +28,11 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
   // Seeded from the consumer-persisted `scrollPosition` so a (re)mount restores the saved view.
   const viewCenterRef = useRef<{ x: number; y: number } | null>(scrollPosition ?? null);
-  // Last `scrollPosition` seen, to detect when the consumer swaps it for a different one
-  // (e.g. switching tabs on a single mounted instance) versus a plain re-render.
-  const prevScrollPositionRef = useRef(scrollPosition);
+  // Set around our own programmatic scrolls so the `scroll` event they fire is not echoed back
+  // through `onScrollChange`. Without this, restoring against a still-loading image (the canvas
+  // briefly has the previous tab's size) would emit a position measured on the wrong canvas and
+  // overwrite the consumer's saved value, leaving the view stranded after the image settles.
+  const suppressEmitRef = useRef(false);
 
   const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.height, scale]);
 
@@ -48,12 +50,18 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     const maxX = currentContainer.scrollWidth - currentContainer.clientWidth;
     const maxY = currentContainer.scrollHeight - currentContainer.clientHeight;
 
-    const scrollTo = (center: { x: number; y: number } | null) =>
+    // Scroll without letting the resulting `scroll` event echo back as a user move. The flag is
+    // cleared on the next frame, after the scroll steps have run, so a genuine user scroll on a
+    // later frame is still reported.
+    const scrollTo = (center: { x: number; y: number } | null) => {
+      suppressEmitRef.current = true;
       currentContainer.scrollTo({
         left: center ? center.x * currentContainer.scrollWidth - currentContainer.clientWidth / 2 : maxX / 2,
         top: center ? center.y * currentContainer.scrollHeight - currentContainer.clientHeight / 2 : maxY / 2,
         behavior: 'instant',
       });
+      requestAnimationFrame(() => (suppressEmitRef.current = false));
+    };
 
     // Fraction of the scrollable area currently under the viewport center — where we actually are.
     const view = {
@@ -61,38 +69,35 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
       y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
     };
 
-    // The consumer handed us a `scrollPosition` that no longer matches where we actually are: a tab
-    // switch / mount restore on a still-mounted instance. Comparing against the live viewport (not a
-    // remembered "last emitted" value) means our own `onScrollChange` echo — which always equals the
-    // current view — is ignored, while a genuine external swap is honoured even when the move that
-    // produced it fired no scroll event (an image that fits the container has no scroll room, so a
-    // recenter is silent). Skipped while the user is panning so a lagging echo can't yank the view.
-    const EPSILON = 0.005;
-    const scrollChanged = scrollPosition !== prevScrollPositionRef.current;
-    prevScrollPositionRef.current = scrollPosition;
-    const differsFromView = !scrollPosition || Math.abs(scrollPosition.x - view.x) > EPSILON || Math.abs(scrollPosition.y - view.y) > EPSILON;
-    if (scrollChanged && differsFromView && !isMoving) {
-      viewCenterRef.current = scrollPosition ?? null;
-      scrollTo(viewCenterRef.current);
-      prevScaleRef.current = scale;
-      return;
-    }
-
     const userZoomed = prevScaleRef.current !== scale;
     const isReset = userZoomed && scale === 0;
     prevScaleRef.current = scale;
 
-    const center = viewCenterRef.current;
-    if (center && !isReset) {
-      // Keep the part of the image under the viewport center fixed. Covers a genuine zoom step
-      // (zoom around the current view), a defaultScale settle/resize, and a mount that restored
-      // a persisted `scrollPosition` — so the view never jumps back to center on a plain re-render.
-      scrollTo(center);
+    if (isReset) {
+      // Explicit zoom reset: recenter on the image.
+      viewCenterRef.current = null;
+      scrollTo(null);
       return;
     }
 
-    // First layout with no saved view, or an explicit zoom reset: recenter on the image.
-    scrollTo(null);
+    if (userZoomed) {
+      // Genuine zoom step: keep the part of the image under the viewport center fixed.
+      scrollTo(viewCenterRef.current);
+      return;
+    }
+
+    // Not a zoom — a tab switch, an image settling to a new size, or a mount. The consumer's
+    // `scrollPosition` is the source of truth (never corrupted, since our scrolls don't echo);
+    // re-apply it whenever we have drifted away from it. Compared against the live viewport so an
+    // already-correct view (including our own echo) is left alone, and skipped while the user pans
+    // so a lagging update can't fight the drag.
+    const target = scrollPosition ?? null;
+    const EPSILON = 0.02;
+    const differsFromView = !target || Math.abs(target.x - view.x) > EPSILON || Math.abs(target.y - view.y) > EPSILON;
+    if (differsFromView && !isMoving) {
+      viewCenterRef.current = target;
+      scrollTo(target);
+    }
   }, [defaultScale, scale, scrollPosition, containerRef, isMoving]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
@@ -107,8 +112,9 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
       };
       viewCenterRef.current = next;
-      // Mirror how `scale` is surfaced: hand the new view fraction to the consumer so it can be
-      // persisted and fed back through `scrollPosition` to restore the view on the next mount.
+      // Ignore the scroll our own `scrollTo` just caused; only surface genuine user scrolls so the
+      // consumer can persist them and feed them back through `scrollPosition`.
+      if (suppressEmitRef.current) return;
       onScrollChange?.(next);
     };
 
