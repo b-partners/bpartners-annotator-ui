@@ -22,6 +22,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
     getNewPolygonColor,
     pointRadius,
     closeOnNear,
+    edit,
     imagePrecisionLevel,
   } = props;
   const { imageName = '', showLineSize = false, converterApiUrl = '', showOnly = false } = polygonSizeProps || {};
@@ -47,6 +48,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
                   zoom={zoom}
                   pointRadius={pointRadius}
                   closeOnNear={closeOnNear}
+                  edit={edit}
                   imagePrecisionLevel={imagePrecisionLevel}
                 >
                   <Canvas />

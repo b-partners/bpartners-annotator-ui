@@ -9,7 +9,7 @@ describe('Test annotator canvas component', () => {
     cy.mount(<App />);
 
     cy.get('canvas').should('exist');
-    cy.get('button').should('have.length', 3);
+    cy.get('button').should('have.length', 4);
 
     cy.contains('zoom CUSTOM +').click().click().click();
     cy.contains('zoom CUSTOM -').click().click().click().click();

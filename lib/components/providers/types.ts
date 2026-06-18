@@ -21,5 +21,6 @@ export interface PolygonProviderProps extends Children {
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   pointRadius?: number;
   closeOnNear?: boolean;
+  edit?: boolean;
   imagePrecisionLevel?: number;
 }

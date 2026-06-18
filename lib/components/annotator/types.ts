@@ -32,5 +32,12 @@ export interface AnnotatorCanvasProps {
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   pointRadius?: number;
   closeOnNear?: boolean;
+  /**
+   * Restricts pointer interaction to one mode:
+   * - `true`  → only edit existing polygons (move a point, add a point on a segment).
+   * - `false` → only draw new polygons.
+   * Leave undefined to keep both interactions enabled.
+   */
+  edit?: boolean;
   imagePrecisionLevel?: number;
 }

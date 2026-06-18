@@ -1,6 +1,6 @@
 import { ScaleCallbacks } from '../../lib';
 
-export const CustomButtons = ({ scaleUp, scaleReste, scaleDown, xRef, yRef }: ScaleCallbacks) => {
+export const CustomButtons = ({ scaleUp, scaleReste, scaleDown, xRef, yRef, toggleClickAction }: ScaleCallbacks) => {
   return (
     <>
       <div data-cy='annotator-cursor-positions'>
@@ -18,6 +18,7 @@ export const CustomButtons = ({ scaleUp, scaleReste, scaleDown, xRef, yRef }: Sc
       <button onClick={scaleUp}>zoom CUSTOM +</button>
       <button onClick={scaleReste}>reset CUSTOM ✨</button>
       <button onClick={scaleDown}>zoom CUSTOM -</button>
+      <button onClick={toggleClickAction}>Toggle click action</button>
     </>
   );
 };

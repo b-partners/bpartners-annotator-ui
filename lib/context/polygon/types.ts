@@ -15,6 +15,7 @@ export interface PolygonContextType {
   getNewPolygonColor?: (polygons: Polygon[]) => PolygonColor;
   pointRadius?: number;
   closeOnNear?: boolean;
+  edit?: boolean;
   lineSizeShowOnly: boolean;
   imagePrecisionLevel?: number;
 }

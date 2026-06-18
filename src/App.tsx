@@ -48,7 +48,7 @@ function App() {
         measurementMapper={(measurement, currentPolygons = []) => {
           return { ...measurement, isInvisible: currentPolygons[0]?.id !== measurement.polygonId };
         }}
-        pointRadius={2}
+        pointRadius={4}
         closeOnNear={false}
       />
     </div>
