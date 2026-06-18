@@ -1,3 +1,12 @@
+## [0.21.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.0...v0.21.1) (2026-06-18)
+
+
+### Bug Fixes
+
+* persist scroll position across renders to keep image in place ([cc6f306](https://github.com/b-partners/bpartners-annotator-ui/commit/cc6f3065c8bf1d442f9e7952e5dc3a35f4eb2d1c))
+
+
+
 # [0.21.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.20.0...v0.21.0) (2026-06-18)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * move image with hand mouse up handler ([71ad3a1](https://github.com/b-partners/bpartners-annotator-ui/commit/71ad3a18d19b7ee336be7b442c5480cd91a15214))
-
-
-
-# [0.19.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.18.0...v0.19.0) (2026-01-29)
-
-
-### Features
-
-* add click action to move image ([6ac8252](https://github.com/b-partners/bpartners-annotator-ui/commit/6ac8252b97778efd65c536c1db7a6689ef1f2e67))
 
 
 
