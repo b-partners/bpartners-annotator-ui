@@ -31,9 +31,6 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // Last `scrollPosition` seen, to detect when the consumer swaps it for a different one
   // (e.g. switching tabs on a single mounted instance) versus a plain re-render.
   const prevScrollPositionRef = useRef(scrollPosition);
-  // Last value we surfaced through `onScrollChange`, so the prop change it triggers reads as
-  // our own echo and not as an external restore (which would fight the user mid-scroll).
-  const emittedScrollRef = useRef<{ x: number; y: number } | null>(null);
 
   const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.height, scale]);
 
@@ -58,21 +55,32 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         behavior: 'instant',
       });
 
+    // Fraction of the scrollable area currently under the viewport center — where we actually are.
+    const view = {
+      x: currentContainer.scrollWidth > 0 ? (currentContainer.scrollLeft + currentContainer.clientWidth / 2) / currentContainer.scrollWidth : 0.5,
+      y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
+    };
+
+    // The consumer handed us a `scrollPosition` that no longer matches where we actually are: a tab
+    // switch / mount restore on a still-mounted instance. Comparing against the live viewport (not a
+    // remembered "last emitted" value) means our own `onScrollChange` echo — which always equals the
+    // current view — is ignored, while a genuine external swap is honoured even when the move that
+    // produced it fired no scroll event (an image that fits the container has no scroll room, so a
+    // recenter is silent). Skipped while the user is panning so a lagging echo can't yank the view.
+    const EPSILON = 0.005;
+    const scrollChanged = scrollPosition !== prevScrollPositionRef.current;
+    prevScrollPositionRef.current = scrollPosition;
+    const differsFromView = !scrollPosition || Math.abs(scrollPosition.x - view.x) > EPSILON || Math.abs(scrollPosition.y - view.y) > EPSILON;
+    if (scrollChanged && differsFromView && !isMoving) {
+      viewCenterRef.current = scrollPosition ?? null;
+      scrollTo(viewCenterRef.current);
+      prevScaleRef.current = scale;
+      return;
+    }
+
     const userZoomed = prevScaleRef.current !== scale;
     const isReset = userZoomed && scale === 0;
     prevScaleRef.current = scale;
-
-    // The consumer handed us a different `scrollPosition` than before, and it is not the value we
-    // just emitted: a tab switch / external restore on a still-mounted instance. Re-seed the view
-    // and jump to it, beating the zoom branch below so a tab whose scale is 0 isn't mistaken for a
-    // reset. A plain re-render (same ref) and our own `onScrollChange` echo both fall through.
-    const restoredExternally = scrollPosition !== prevScrollPositionRef.current && scrollPosition !== emittedScrollRef.current;
-    prevScrollPositionRef.current = scrollPosition;
-    if (restoredExternally) {
-      viewCenterRef.current = scrollPosition ?? null;
-      scrollTo(viewCenterRef.current);
-      return;
-    }
 
     const center = viewCenterRef.current;
     if (center && !isReset) {
@@ -85,7 +93,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
 
     // First layout with no saved view, or an explicit zoom reset: recenter on the image.
     scrollTo(null);
-  }, [defaultScale, scale, scrollPosition, containerRef]);
+  }, [defaultScale, scale, scrollPosition, containerRef, isMoving]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.
@@ -99,9 +107,6 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
       };
       viewCenterRef.current = next;
-      // Remember what we hand out so the `scrollPosition` prop change it triggers reads as our own
-      // echo (see the restore effect) rather than an external tab switch.
-      emittedScrollRef.current = next;
       // Mirror how `scale` is surfaced: hand the new view fraction to the consumer so it can be
       // persisted and fed back through `scrollPosition` to restore the view on the next mount.
       onScrollChange?.(next);
