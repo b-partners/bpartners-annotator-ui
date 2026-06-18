@@ -14,6 +14,13 @@ export interface SizesProviderProps extends Children {
   // Notified whenever the zoom delta changes (zoom in/out/reset), so the consumer can
   // persist it (URL, localStorage, …) and keep two instances independent.
   onScaleChange?: (scale: number) => void;
+  // Saved viewport-center position as a 0..1 fraction of the scrollable area. When provided
+  // the view is restored to it on (re)mount instead of recentering on the image, mirroring
+  // how `scale` is persisted. Scale-independent so it survives the canvas being resized by zoom.
+  scrollPosition?: Point;
+  // Notified whenever the user scrolls, with the new viewport-center fraction, so the consumer
+  // can persist it alongside `scale` and restore it via `scrollPosition`.
+  onScrollChange?: (position: Point) => void;
 }
 export interface PolygonProviderProps extends Children {
   showLineSize: boolean;
