@@ -1,3 +1,12 @@
+# [0.20.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.7...v0.20.0) (2026-06-18)
+
+
+### Features
+
+* responsive polygon points ([1629505](https://github.com/b-partners/bpartners-annotator-ui/commit/1629505a191a799acf06b7360082f476e10fbf3c))
+
+
+
 ## [0.19.7](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.6...v0.19.7) (2026-06-12)
 
 
@@ -76,15 +85,6 @@
 ### Features
 
 * add show only line size props ([cf5cb47](https://github.com/b-partners/bpartners-annotator-ui/commit/cf5cb476fdc6d9df03bae5df9aa25bf527be4f11))
-
-
-
-# [0.17.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.16.0...v0.17.0) (2025-10-15)
-
-
-### Features
-
-* close polygon on near to the first point ([5e91ef7](https://github.com/b-partners/bpartners-annotator-ui/commit/5e91ef7968c8e4b7a2a5b518e043e3af25213d57))
 
 
 
