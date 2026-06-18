@@ -26,8 +26,14 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   const prevScaleRef = useRef(scale);
   // Content fraction (0..1) currently under the viewport center, kept up to date on scroll so
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
-  // Seeded from the consumer-persisted `scrollPosition` so a remount restores the saved view.
+  // Seeded from the consumer-persisted `scrollPosition` so a (re)mount restores the saved view.
   const viewCenterRef = useRef<{ x: number; y: number } | null>(scrollPosition ?? null);
+  // Last `scrollPosition` seen, to detect when the consumer swaps it for a different one
+  // (e.g. switching tabs on a single mounted instance) versus a plain re-render.
+  const prevScrollPositionRef = useRef(scrollPosition);
+  // Last value we surfaced through `onScrollChange`, so the prop change it triggers reads as
+  // our own echo and not as an external restore (which would fight the user mid-scroll).
+  const emittedScrollRef = useRef<{ x: number; y: number } | null>(null);
 
   const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.height, scale]);
 
@@ -45,27 +51,41 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     const maxX = currentContainer.scrollWidth - currentContainer.clientWidth;
     const maxY = currentContainer.scrollHeight - currentContainer.clientHeight;
 
+    const scrollTo = (center: { x: number; y: number } | null) =>
+      currentContainer.scrollTo({
+        left: center ? center.x * currentContainer.scrollWidth - currentContainer.clientWidth / 2 : maxX / 2,
+        top: center ? center.y * currentContainer.scrollHeight - currentContainer.clientHeight / 2 : maxY / 2,
+        behavior: 'instant',
+      });
+
     const userZoomed = prevScaleRef.current !== scale;
     const isReset = userZoomed && scale === 0;
     prevScaleRef.current = scale;
 
-    const center = viewCenterRef.current;
+    // The consumer handed us a different `scrollPosition` than before, and it is not the value we
+    // just emitted: a tab switch / external restore on a still-mounted instance. Re-seed the view
+    // and jump to it, beating the zoom branch below so a tab whose scale is 0 isn't mistaken for a
+    // reset. A plain re-render (same ref) and our own `onScrollChange` echo both fall through.
+    const restoredExternally = scrollPosition !== prevScrollPositionRef.current && scrollPosition !== emittedScrollRef.current;
+    prevScrollPositionRef.current = scrollPosition;
+    if (restoredExternally) {
+      viewCenterRef.current = scrollPosition ?? null;
+      scrollTo(viewCenterRef.current);
+      return;
+    }
 
+    const center = viewCenterRef.current;
     if (center && !isReset) {
       // Keep the part of the image under the viewport center fixed. Covers a genuine zoom step
-      // (zoom around the current view), a defaultScale settle/resize, and a remount that restored
+      // (zoom around the current view), a defaultScale settle/resize, and a mount that restored
       // a persisted `scrollPosition` — so the view never jumps back to center on a plain re-render.
-      currentContainer.scrollTo({
-        left: center.x * currentContainer.scrollWidth - currentContainer.clientWidth / 2,
-        top: center.y * currentContainer.scrollHeight - currentContainer.clientHeight / 2,
-        behavior: 'instant',
-      });
+      scrollTo(center);
       return;
     }
 
     // First layout with no saved view, or an explicit zoom reset: recenter on the image.
-    currentContainer.scrollTo({ left: maxX / 2, top: maxY / 2, behavior: 'instant' });
-  }, [defaultScale, scale, containerRef]);
+    scrollTo(null);
+  }, [defaultScale, scale, scrollPosition, containerRef]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.
@@ -79,6 +99,9 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
       };
       viewCenterRef.current = next;
+      // Remember what we hand out so the `scrollPosition` prop change it triggers reads as our own
+      // echo (see the restore effect) rather than an external tab switch.
+      emittedScrollRef.current = next;
       // Mirror how `scale` is surfaced: hand the new view fraction to the consumer so it can be
       // persisted and fed back through `scrollPosition` to restore the view on the next mount.
       onScrollChange?.(next);
