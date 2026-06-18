@@ -1,3 +1,12 @@
+# [0.21.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.20.0...v0.21.0) (2026-06-18)
+
+
+### Features
+
+* add desynchronization ([0dab4b3](https://github.com/b-partners/bpartners-annotator-ui/commit/0dab4b3f0160a57a2216f6ca8bb8ac8b036c2713))
+
+
+
 # [0.20.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.7...v0.20.0) (2026-06-18)
 
 
@@ -76,15 +85,6 @@
 ### Features
 
 * add click action to move image ([6ac8252](https://github.com/b-partners/bpartners-annotator-ui/commit/6ac8252b97778efd65c536c1db7a6689ef1f2e67))
-
-
-
-# [0.18.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.17.0...v0.18.0) (2025-11-25)
-
-
-### Features
-
-* add show only line size props ([cf5cb47](https://github.com/b-partners/bpartners-annotator-ui/commit/cf5cb476fdc6d9df03bae5df9aa25bf527be4f11))
 
 
 
