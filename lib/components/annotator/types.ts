@@ -53,4 +53,18 @@ export interface AnnotatorCanvasProps {
    * (localStorage, URL, …) so it survives a remount.
    */
   onScaleChange?: (scale: number) => void;
+  /**
+   * Saved viewport-center position as a `{ x, y }` fraction (0..1) of the scrollable area.
+   * Provide the value last reported by `onScrollChange` to restore the scroll position on
+   * (re)mount instead of recentering on the image. Stored as a fraction so it stays correct
+   * even though zooming resizes the canvas. Pair it with `scale`/`onScaleChange`: persisting
+   * the zoom without the scroll leaves the image at the wrong position after a render.
+   */
+  scrollPosition?: Point;
+  /**
+   * Called with the new viewport-center fraction whenever the user scrolls. Persist it
+   * (localStorage, URL, …) and feed it back through `scrollPosition` to keep the view stable
+   * across remounts.
+   */
+  onScrollChange?: (position: Point) => void;
 }

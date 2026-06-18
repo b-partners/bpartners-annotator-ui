@@ -4,7 +4,7 @@ import { SizesContext, useElementContext, useScale } from '../..';
 import { IMAGE_MARGIN } from '../../constant';
 
 export const SizesProvider: FC<SizesProviderProps> = props => {
-  const { children, scale: controlledScale, onScaleChange } = props;
+  const { children, scale: controlledScale, onScaleChange, scrollPosition, onScrollChange } = props;
   const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
 
@@ -26,7 +26,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   const prevScaleRef = useRef(scale);
   // Content fraction (0..1) currently under the viewport center, kept up to date on scroll so
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
-  const viewCenterRef = useRef<{ x: number; y: number } | null>(null);
+  // Seeded from the consumer-persisted `scrollPosition` so a remount restores the saved view.
+  const viewCenterRef = useRef<{ x: number; y: number } | null>(scrollPosition ?? null);
 
   const canvasHeight = useMemo(() => Math.round((image.height + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.height, scale]);
 
@@ -45,21 +46,24 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     const maxY = currentContainer.scrollHeight - currentContainer.clientHeight;
 
     const userZoomed = prevScaleRef.current !== scale;
+    const isReset = userZoomed && scale === 0;
     prevScaleRef.current = scale;
 
-    if (userZoomed && scale !== 0) {
-      // On a genuine zoom step, keep the part of the image under the viewport center fixed so the
-      // zoom happens around the current view rather than jumping to the image center.
-      const center = viewCenterRef.current;
+    const center = viewCenterRef.current;
+
+    if (center && !isReset) {
+      // Keep the part of the image under the viewport center fixed. Covers a genuine zoom step
+      // (zoom around the current view), a defaultScale settle/resize, and a remount that restored
+      // a persisted `scrollPosition` — so the view never jumps back to center on a plain re-render.
       currentContainer.scrollTo({
-        left: center ? center.x * currentContainer.scrollWidth - currentContainer.clientWidth / 2 : maxX / 2,
-        top: center ? center.y * currentContainer.scrollHeight - currentContainer.clientHeight / 2 : maxY / 2,
+        left: center.x * currentContainer.scrollWidth - currentContainer.clientWidth / 2,
+        top: center.y * currentContainer.scrollHeight - currentContainer.clientHeight / 2,
         behavior: 'instant',
       });
       return;
     }
 
-    // Reset zoom or mount/defaultScale settling: recenter on the image.
+    // First layout with no saved view, or an explicit zoom reset: recenter on the image.
     currentContainer.scrollTo({ left: maxX / 2, top: maxY / 2, behavior: 'instant' });
   }, [defaultScale, scale, containerRef]);
 
@@ -70,15 +74,19 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     if (!currentContainer) return () => {};
 
     const onScroll = () => {
-      viewCenterRef.current = {
+      const next = {
         x: currentContainer.scrollWidth > 0 ? (currentContainer.scrollLeft + currentContainer.clientWidth / 2) / currentContainer.scrollWidth : 0.5,
         y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
       };
+      viewCenterRef.current = next;
+      // Mirror how `scale` is surfaced: hand the new view fraction to the consumer so it can be
+      // persisted and fed back through `scrollPosition` to restore the view on the next mount.
+      onScrollChange?.(next);
     };
 
     currentContainer.addEventListener('scroll', onScroll);
     return () => currentContainer.removeEventListener('scroll', onScroll);
-  }, [containerRef]);
+  }, [containerRef, onScrollChange]);
 
   return (
     <SizesContext.Provider
