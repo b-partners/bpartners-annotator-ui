@@ -5,7 +5,6 @@ import {
   Measurement,
   Point,
   ScaleHandler,
-  UrlParams,
   getContrastColor,
   useCursorPolygon,
   useDrawStaticImage,
@@ -19,7 +18,7 @@ import style from './style.module.css';
 import './cursor-style.css';
 
 export const Canvas = () => {
-  const { canvasHeight: height, canvasWidth: width, scale, isMoving } = useSizesContext();
+  const { canvasHeight: height, canvasWidth: width, scale, scaleRef, isMoving } = useSizesContext();
   const { markerPosition, polygons, zoom, imagePrecisionLevel = 5 } = usePolygonContext();
   const imageCanvasRef = useDrawStaticImage();
   const { cursorCanvasRef, polygonCanvasRef } = useCursorPolygon();
@@ -32,7 +31,7 @@ export const Canvas = () => {
 
   useEffect(() => {
     if (cursorCanvasRef.current) {
-      const sc = new ScaleHandler(cursorCanvasRef.current, image);
+      const sc = new ScaleHandler(cursorCanvasRef.current, image, scaleRef);
       setInfo({
         physicalMeasurements: measurements.map(measurement => {
           const position = sc.getPhysicalPositionByPoint(measurement.position);
@@ -79,7 +78,7 @@ export const Canvas = () => {
                 backgroundColor: currentPolygon?.strokeColor,
                 top,
                 left,
-                fontSize: `${+(UrlParams.get('scale') ?? '1') * (zoom || 20 - (imagePrecisionLevel - 5))}px`,
+                fontSize: `${scale * (zoom || 20 - (imagePrecisionLevel - 5))}px`,
                 fontWeight: 'bold',
               }}
             >

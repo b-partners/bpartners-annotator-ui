@@ -42,7 +42,7 @@ Releases are **automated from conventional commits**. The CI `publish-package.ym
 
 ```
 ElementProvider   (containerRef + HTMLImageElement)
-  └ SizesProvider     (canvas dimensions, scale, isMoving; writes scale to URL)
+  └ SizesProvider     (canvas dimensions, scale, isMoving; controlled/uncontrolled zoom)
       └ PositionsProvider  (xRef/yRef for the cursor-position readout)
           └ PolygonProvider  (polygons, setPolygons, drawing refs, all feature flags)
               └ Canvas + TopBar
@@ -65,9 +65,11 @@ DOM/canvas drawing and coordinate math are isolated in plain classes under `lib/
 
 `ScaleHandler` converts between them. When adding canvas behavior, do the geometry in a handler class, not inline in a component.
 
-### Scale shared via the URL
+### Scale is per-instance (context, not the URL)
 
-Current zoom scale is stored as a `?scale=` **URL query param** (`UrlParams` in `lib/utilities/url-params.ts`), written by `SizesProvider` and read back by drawing/measurement code. This is a deliberate global side-channel — be aware that scale is *not* purely React state.
+Zoom scale lives in `SizesProvider` and is exposed two ways: as `scale` (the live `defaultScale + delta`) for render/deps, and as `scaleRef` (a `MutableRefObject<number>`) carrying the same value live. The drawing/coordinate handlers (`ScaleHandler` → `ImageInfoHandler`) take `scaleRef` in their constructors and read `scaleRef.current` at draw/event time, so scale is **per-instance** — two `AnnotatorCanvas` on one screen zoom independently.
+
+Zoom can be **controlled**: pass `scale` (the zoom delta on top of the computed fit scale) and `onScaleChange` to `AnnotatorCanvas`. Without `scale` it's uncontrolled (internal state). Persistence is the consumer's job — there is no longer any URL side-channel. (`UrlParams` in `lib/utilities/url-params.ts` remains exported but unused.)
 
 ### Measurement (real-world dimensions) flow
 

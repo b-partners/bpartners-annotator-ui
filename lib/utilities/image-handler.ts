@@ -1,17 +1,19 @@
-import { UrlParams } from '.';
-import { SCALE_VALUE_QUERY_NAME } from '../constant';
-
 export class ImageInfoHandler {
   private image: HTMLImageElement;
   private canvas: HTMLCanvasElement;
+  // Per-instance scale source (defaultScale + zoom delta). A ref so handlers read the
+  // live value at draw/event time without being recreated, while staying isolated to
+  // this AnnotatorCanvas instance (no shared global URL state).
+  private scaleRef: { current: number };
 
-  constructor(image: HTMLImageElement, canvas: HTMLCanvasElement) {
+  constructor(image: HTMLImageElement, canvas: HTMLCanvasElement, scaleRef: { current: number }) {
     this.image = image;
     this.canvas = canvas;
+    this.scaleRef = scaleRef;
   }
 
   getScale() {
-    return +(UrlParams.get(SCALE_VALUE_QUERY_NAME) || '1');
+    return this.scaleRef.current || 1;
   }
 
   getScaledSize() {

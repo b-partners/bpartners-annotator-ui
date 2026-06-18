@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, MutableRefObject, SetStateAction } from 'react';
 
 export type ScaleLimit = { max: number; min: number };
 
@@ -13,4 +13,7 @@ export interface SizesContextType {
   scaleLimit: ScaleLimit;
   isMoving: boolean;
   toggleIsMoving: () => void;
+  // Live total scale (defaultScale + zoom delta) for this instance. Passed to the drawing
+  // handlers so coordinate math is per-instance instead of read from a shared URL param.
+  scaleRef: MutableRefObject<number>;
 }

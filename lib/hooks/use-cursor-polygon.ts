@@ -8,13 +8,13 @@ export const useCursorPolygon = () => {
   const polygonCanvasRef = useRef<HTMLCanvasElement>(null);
   const { setPolygons, getNewPolygonColor, isDrawing, polygons, polygon, allowAnnotation, pointRadius, closeOnNear, edit } = usePolygonContext();
   const { image, containerRef } = useElementContext();
-  const { isMoving } = useSizesContext();
+  const { isMoving, scaleRef } = useSizesContext();
 
   useEffect(() => {
     if (cursorCanvasRef.current && polygonCanvasRef.current) {
       const cursorCanvas = cursorCanvasRef.current;
       const polygonCanvas = polygonCanvasRef.current;
-      const scaleHandler = new ScaleHandler(cursorCanvas, image);
+      const scaleHandler = new ScaleHandler(cursorCanvas, image, scaleRef);
       const canvasCursorHandler = new CanvasHandler(cursorCanvas, scaleHandler, pointRadius);
       const canvasPolygonHandler = new CanvasHandler(polygonCanvas, scaleHandler, pointRadius);
 
