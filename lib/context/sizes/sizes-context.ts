@@ -12,4 +12,5 @@ export const SizesContext = createContext<SizesContextType>({
   toggleIsMoving: () => {},
   scaleLimit: { max: 3, min: 0 },
   isMoving: false,
+  scaleRef: { current: 1 },
 });

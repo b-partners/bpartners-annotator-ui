@@ -40,4 +40,17 @@ export interface AnnotatorCanvasProps {
    */
   edit?: boolean;
   imagePrecisionLevel?: number;
+  /**
+   * Controlled zoom delta, added on top of the internally computed fit-to-container scale
+   * (0 means "just fit the image"). Provide this to own the zoom state from outside — e.g.
+   * to keep two `AnnotatorCanvas` instances on the same screen zoomed independently.
+   * When omitted the component manages its own zoom internally (uncontrolled).
+   */
+  scale?: number;
+  /**
+   * Called with the new zoom delta whenever the user zooms in/out or resets. Pair it with
+   * `scale` for a controlled component, or use it on its own to persist the zoom level
+   * (localStorage, URL, …) so it survives a remount.
+   */
+  onScaleChange?: (scale: number) => void;
 }

@@ -5,9 +5,9 @@ export class ScaleHandler {
   private canvas: HTMLCanvasElement;
   private imageInfoHandler: ImageInfoHandler;
 
-  constructor(canvas: HTMLCanvasElement, image: HTMLImageElement) {
+  constructor(canvas: HTMLCanvasElement, image: HTMLImageElement, scaleRef: { current: number }) {
     this.canvas = canvas;
-    this.imageInfoHandler = new ImageInfoHandler(image, canvas);
+    this.imageInfoHandler = new ImageInfoHandler(image, canvas, scaleRef);
   }
 
   /**
