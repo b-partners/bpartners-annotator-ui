@@ -4,6 +4,7 @@ export * from './image-handler';
 export * from './scale-handler';
 export * from './types';
 export * from './url-params';
+export * from './local-storage-view';
 export * from './event-handler';
 export * from './canvas-tools';
 export * from './mappers';

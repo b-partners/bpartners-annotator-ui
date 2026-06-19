@@ -28,13 +28,14 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
     onScaleChange,
     scrollPosition,
     onScrollChange,
+    storageKey,
   } = props;
   const { imageName = '', showLineSize = false, converterApiUrl = '', showOnly = false } = polygonSizeProps || {};
   const { image, isImageLoading } = useImageCreation(props.image, imageName);
   return (
     <ElementProvider containerRef={containerRef} image={image}>
       {image.src.length > 0 ? (
-        <SizesProvider scale={scale} onScaleChange={onScaleChange} scrollPosition={scrollPosition} onScrollChange={onScrollChange}>
+        <SizesProvider scale={scale} onScaleChange={onScaleChange} scrollPosition={scrollPosition} onScrollChange={onScrollChange} storageKey={storageKey}>
           <PositionsProvider>
             <div style={{ width }}>
               <TopBar buttonsComponent={buttonsComponent} />

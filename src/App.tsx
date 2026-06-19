@@ -50,6 +50,7 @@ function App() {
         }}
         pointRadius={4}
         closeOnNear={false}
+        storageKey='annotator-playground-view'
       />
     </div>
   );
