@@ -1,3 +1,12 @@
+## [0.21.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.1...v0.21.2) (2026-06-19)
+
+
+### Bug Fixes
+
+* scale and scroll storage ([ce039ec](https://github.com/b-partners/bpartners-annotator-ui/commit/ce039ec8bb44d01e49028a0396fc93a46746caf2))
+
+
+
 ## [0.21.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.0...v0.21.1) (2026-06-18)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * measurements size ([fc8fbd8](https://github.com/b-partners/bpartners-annotator-ui/commit/fc8fbd897004110aaf78b82709033792a3b1a177))
-
-
-
-## [0.19.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.0...v0.19.1) (2026-01-29)
-
-
-### Bug Fixes
-
-* move image with hand mouse up handler ([71ad3a1](https://github.com/b-partners/bpartners-annotator-ui/commit/71ad3a18d19b7ee336be7b442c5480cd91a15214))
 
 
 
