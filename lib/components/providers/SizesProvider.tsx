@@ -2,21 +2,33 @@ import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } fr
 import { SizesProviderProps } from '.';
 import { SizesContext, useElementContext, useScale } from '../..';
 import { IMAGE_MARGIN } from '../../constant';
+import { Point } from '../../types';
+import { LocalStorageView } from '../../utilities';
 
 export const SizesProvider: FC<SizesProviderProps> = props => {
-  const { children, scale: controlledScale, onScaleChange, scrollPosition, onScrollChange } = props;
+  const { children, scale: controlledScale, onScaleChange, scrollPosition: controlledScroll, onScrollChange, storageKey } = props;
   const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
 
-  // Controlled when the consumer passes `scale`; otherwise the provider keeps its own
-  // zoom delta in state. Persistence (surviving a remount) is the consumer's job.
+  // Saved zoom + scroll, read once from localStorage when a `storageKey` is given. This is the
+  // durable persistence layer that lets the view survive a remount/tab switch on its own — the
+  // consumer no longer has to thread `scale`/`scrollPosition` state back through props.
+  const persisted = useMemo(() => (storageKey ? LocalStorageView.read(storageKey) : {}), [storageKey]);
+
+  // Latest durable scroll target: an explicit controlled prop wins, else the localStorage value
+  // (read fresh, so an image settling later restores the newest saved spot, not a stale ref).
+  const readScrollTarget = (): Point | null => controlledScroll ?? (storageKey ? (LocalStorageView.read(storageKey).scrollPosition ?? null) : null);
+
+  // Controlled when the consumer passes `scale`; otherwise the provider keeps its own zoom delta
+  // in state, seeded from the persisted value so the saved zoom is restored on (re)mount.
   const isControlled = controlledScale !== undefined;
-  const [internalScale, setInternalScale] = useState(0);
+  const [internalScale, setInternalScale] = useState(persisted.scale ?? 0);
   const scale = isControlled ? controlledScale : internalScale;
 
   const setScale: Dispatch<SetStateAction<number>> = updater => {
     const next = typeof updater === 'function' ? (updater as (prev: number) => number)(scale) : updater;
     if (!isControlled) setInternalScale(next);
+    if (storageKey) LocalStorageView.merge(storageKey, { scale: next });
     onScaleChange?.(next);
   };
 
@@ -26,8 +38,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   const prevScaleRef = useRef(scale);
   // Content fraction (0..1) currently under the viewport center, kept up to date on scroll so
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
-  // Seeded from the consumer-persisted `scrollPosition` so a (re)mount restores the saved view.
-  const viewCenterRef = useRef<{ x: number; y: number } | null>(scrollPosition ?? null);
+  // Seeded from the persisted (or controlled) scroll so a (re)mount restores the saved view.
+  const viewCenterRef = useRef<Point | null>(controlledScroll ?? persisted.scrollPosition ?? null);
   // Set around our own programmatic scrolls so the `scroll` event they fire is not echoed back
   // through `onScrollChange`. Without this, restoring against a still-loading image (the canvas
   // briefly has the previous tab's size) would emit a position measured on the wrong canvas and
@@ -86,19 +98,22 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
       return;
     }
 
-    // Not a zoom — a tab switch, an image settling to a new size, or a mount. The consumer's
-    // `scrollPosition` is the source of truth (never corrupted, since our scrolls don't echo);
-    // re-apply it whenever we have drifted away from it. Compared against the live viewport so an
-    // already-correct view (including our own echo) is left alone, and skipped while the user pans
-    // so a lagging update can't fight the drag.
-    const target = scrollPosition ?? null;
+    // Not a zoom — a tab switch, an image settling to a new size, or a mount. The persisted
+    // scroll (localStorage, or the controlled prop) is the source of truth — never corrupted,
+    // since our own scrolls don't echo into it — so re-apply it whenever we have drifted away.
+    // Compared against the live viewport so an already-correct view (including our own echo) is
+    // left alone, and skipped while the user pans so a lagging update can't fight the drag.
+    const target = readScrollTarget();
     const EPSILON = 0.02;
     const differsFromView = !target || Math.abs(target.x - view.x) > EPSILON || Math.abs(target.y - view.y) > EPSILON;
     if (differsFromView && !isMoving) {
       viewCenterRef.current = target;
       scrollTo(target);
     }
-  }, [defaultScale, scale, scrollPosition, containerRef, isMoving]);
+    // `readScrollTarget` reads localStorage fresh on every run; deps cover the meaningful restore
+    // triggers (mount, zoom, image settle via defaultScale, controlled-prop change, pan end).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, isMoving]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.
@@ -112,15 +127,16 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
       };
       viewCenterRef.current = next;
-      // Ignore the scroll our own `scrollTo` just caused; only surface genuine user scrolls so the
-      // consumer can persist them and feed them back through `scrollPosition`.
+      // Ignore the scroll our own `scrollTo` just caused; only persist/surface genuine user
+      // scrolls so a restore against a still-loading canvas can't overwrite the saved spot.
       if (suppressEmitRef.current) return;
+      if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: next });
       onScrollChange?.(next);
     };
 
     currentContainer.addEventListener('scroll', onScroll);
     return () => currentContainer.removeEventListener('scroll', onScroll);
-  }, [containerRef, onScrollChange]);
+  }, [containerRef, onScrollChange, storageKey]);
 
   return (
     <SizesContext.Provider

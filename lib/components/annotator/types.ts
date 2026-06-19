@@ -67,4 +67,12 @@ export interface AnnotatorCanvasProps {
    * across remounts.
    */
   onScrollChange?: (position: Point) => void;
+  /**
+   * localStorage key under which this instance persists its own zoom delta and scroll position.
+   * When set, the component restores the saved view on (re)mount and writes it back on every
+   * zoom/scroll — you get persistence across remounts without wiring up `scale`/`scrollPosition`
+   * state yourself. Give each independent instance a distinct key. The explicit `scale` /
+   * `scrollPosition` props still take precedence when provided (controlled mode).
+   */
+  storageKey?: string;
 }

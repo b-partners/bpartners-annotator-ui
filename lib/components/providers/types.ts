@@ -21,6 +21,10 @@ export interface SizesProviderProps extends Children {
   // Notified whenever the user scrolls, with the new viewport-center fraction, so the consumer
   // can persist it alongside `scale` and restore it via `scrollPosition`.
   onScrollChange?: (position: Point) => void;
+  // localStorage key under which this instance persists its own zoom + scroll. When set the
+  // provider restores the saved view on (re)mount and writes it back on zoom/scroll, so the
+  // consumer gets persistence for free (no `scale`/`scrollPosition` state to thread).
+  storageKey?: string;
 }
 export interface PolygonProviderProps extends Children {
   showLineSize: boolean;
