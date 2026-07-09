@@ -14,14 +14,31 @@ export const useScale = () => {
     min: 0,
   });
 
+  // Keep the container size live. Measuring only once on mount left the fit scale (and the
+  // centering that depends on it) stale whenever the container resized — a window resize, a
+  // sidebar toggle, or any layout shift — leaving the image drifted off-center. A ResizeObserver
+  // re-measures on every container size change; the equality guard avoids redundant re-renders.
   useEffect(() => {
-    if (containerRef.current) {
-      const { offsetHeight, offsetWidth } = containerRef.current;
-      setContainerSize({
-        containerHeight: offsetHeight,
-        containerWidth: offsetWidth,
-      });
+    const currentContainer = containerRef.current;
+    if (!currentContainer) return () => {};
+
+    const measure = () => {
+      const { offsetHeight, offsetWidth } = currentContainer;
+      setContainerSize(prev =>
+        prev.containerHeight === offsetHeight && prev.containerWidth === offsetWidth ? prev : { containerHeight: offsetHeight, containerWidth: offsetWidth }
+      );
+    };
+
+    measure();
+
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
     }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(currentContainer);
+    return () => observer.disconnect();
   }, [containerRef]);
 
   useEffect(() => {
