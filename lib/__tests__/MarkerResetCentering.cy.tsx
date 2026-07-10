@@ -86,4 +86,22 @@ describe('marker focus happens on the first zoom, not on load', () => {
     cy.wait(700);
     expectCentered('after reset');
   });
+
+  it('re-focuses the marker on the first zoom after a reset', () => {
+    cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
+    cy.get('canvas').should('exist');
+    cy.wait(900);
+    zoomIn();
+    cy.wait(400);
+    cy.contains('button', 'reset').click();
+    cy.wait(700);
+    // Zooming again from the reset (untouched) view focuses the marker just like on load.
+    zoomIn();
+    cy.wait(400);
+    container().then($c => {
+      const { fx, fy } = centerFraction($c);
+      expect(fx, 'moved toward the marker horizontally after reset').to.be.greaterThan(0.55);
+      expect(fy, 'moved toward the marker vertically after reset').to.be.greaterThan(0.55);
+    });
+  });
 });

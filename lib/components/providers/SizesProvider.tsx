@@ -99,8 +99,11 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     prevScaleRef.current = scale;
 
     if (isReset) {
-      // Explicit zoom reset: recenter on the image.
+      // Explicit zoom reset: recenter on the image and treat the view as fresh again, so the
+      // next zoom re-focuses the marker (or the center when there is none) just like on load.
       viewCenterRef.current = null;
+      didFirstZoomRef.current = false;
+      userMovedRef.current = false;
       scrollTo(null);
       return;
     }
