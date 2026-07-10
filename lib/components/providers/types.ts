@@ -25,6 +25,9 @@ export interface SizesProviderProps extends Children {
   // provider restores the saved view on (re)mount and writes it back on zoom/scroll, so the
   // consumer gets persistence for free (no `scale`/`scrollPosition` state to thread).
   storageKey?: string;
+  // Location pointer (logical/image-pixel coordinates). When provided and the view is fresh
+  // (uncontrolled, nothing persisted), the first render opens zoomed 3x in on this point.
+  markerPosition?: Point;
 }
 export interface PolygonProviderProps extends Children {
   showLineSize: boolean;

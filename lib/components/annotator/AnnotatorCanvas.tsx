@@ -35,7 +35,14 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
   return (
     <ElementProvider containerRef={containerRef} image={image}>
       {image.src.length > 0 ? (
-        <SizesProvider scale={scale} onScaleChange={onScaleChange} scrollPosition={scrollPosition} onScrollChange={onScrollChange} storageKey={storageKey}>
+        <SizesProvider
+          scale={scale}
+          onScaleChange={onScaleChange}
+          scrollPosition={scrollPosition}
+          onScrollChange={onScrollChange}
+          storageKey={storageKey}
+          markerPosition={markerPosition}
+        >
           <PositionsProvider>
             <div style={{ width }}>
               <TopBar buttonsComponent={buttonsComponent} />
