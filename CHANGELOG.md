@@ -1,3 +1,12 @@
+## [0.21.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.2...v0.21.3) (2026-07-10)
+
+
+### Bug Fixes
+
+* zoom ([9cc9823](https://github.com/b-partners/bpartners-annotator-ui/commit/9cc9823592289738f9c117452233b8f9fc062eb7))
+
+
+
 ## [0.21.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.1...v0.21.2) (2026-06-19)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * measurement visibility  ([7c9c435](https://github.com/b-partners/bpartners-annotator-ui/commit/7c9c435e9fd8d0c524bb24410ecc740178e4489e))
-
-
-
-## [0.19.2](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.1...v0.19.2) (2026-02-03)
-
-
-### Bug Fixes
-
-* measurements size ([fc8fbd8](https://github.com/b-partners/bpartners-annotator-ui/commit/fc8fbd897004110aaf78b82709033792a3b1a177))
 
 
 
