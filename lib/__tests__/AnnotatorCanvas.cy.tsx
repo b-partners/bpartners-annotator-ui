@@ -18,7 +18,15 @@ describe('Test annotator canvas component', () => {
 
   it('Test draw polygon', () => {
     cy.viewport(1920, 1080);
+    // App passes a `markerPosition`, so it opens auto-zoomed 3x on the marker. This test asserts
+    // the physical→logical coordinate mapping at fit scale, so start from a clean, reset view:
+    // clear the persisted zoom/scroll and reset back to fit after the marker zoom has settled.
+    cy.clearLocalStorage();
     cy.mount(<App />);
+    cy.get('canvas').should('exist');
+    cy.wait(700);
+    cy.contains('reset CUSTOM').click();
+    cy.wait(300);
     cy.dataCy('annotator-cursor-positions').contains('x : 0');
     cy.dataCy('annotator-cursor-positions').contains('y : 0');
 

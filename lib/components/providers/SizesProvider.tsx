@@ -6,7 +6,7 @@ import { Point } from '../../types';
 import { LocalStorageView } from '../../utilities';
 
 export const SizesProvider: FC<SizesProviderProps> = props => {
-  const { children, scale: controlledScale, onScaleChange, scrollPosition: controlledScroll, onScrollChange, storageKey } = props;
+  const { children, scale: controlledScale, onScaleChange, scrollPosition: controlledScroll, onScrollChange, storageKey, markerPosition } = props;
   const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
 
@@ -59,8 +59,15 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     const currentContainer = containerRef.current;
     if (!currentContainer) return;
 
-    const maxX = currentContainer.scrollWidth - currentContainer.clientWidth;
-    const maxY = currentContainer.scrollHeight - currentContainer.clientHeight;
+    // Authoritative content size: the canvas dimensions React knows this render — the same value
+    // the canvas element is sized to. We deliberately do NOT read `scrollWidth/scrollHeight`: the
+    // absolutely-positioned marker/measurement overlays lag a render behind a resize and transiently
+    // inflate the container's scroll area, so a recenter computed against `scrollWidth` would scroll
+    // too far and then strand off-center once the overlay catches up and the scroll clamps.
+    const contentWidth = Math.max(canvasWidth, containerWidth);
+    const contentHeight = Math.max(canvasHeight, containerHeight);
+    const maxX = contentWidth - currentContainer.clientWidth;
+    const maxY = contentHeight - currentContainer.clientHeight;
 
     // Scroll without letting the resulting `scroll` event echo back as a user move. The flag is
     // cleared on the next frame, after the scroll steps have run, so a genuine user scroll on a
@@ -68,8 +75,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     const scrollTo = (center: { x: number; y: number } | null) => {
       suppressEmitRef.current = true;
       currentContainer.scrollTo({
-        left: center ? center.x * currentContainer.scrollWidth - currentContainer.clientWidth / 2 : maxX / 2,
-        top: center ? center.y * currentContainer.scrollHeight - currentContainer.clientHeight / 2 : maxY / 2,
+        left: center ? center.x * contentWidth - currentContainer.clientWidth / 2 : maxX / 2,
+        top: center ? center.y * contentHeight - currentContainer.clientHeight / 2 : maxY / 2,
         behavior: 'instant',
       });
       requestAnimationFrame(() => (suppressEmitRef.current = false));
@@ -77,8 +84,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
 
     // Fraction of the scrollable area currently under the viewport center — where we actually are.
     const view = {
-      x: currentContainer.scrollWidth > 0 ? (currentContainer.scrollLeft + currentContainer.clientWidth / 2) / currentContainer.scrollWidth : 0.5,
-      y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
+      x: contentWidth > 0 ? (currentContainer.scrollLeft + currentContainer.clientWidth / 2) / contentWidth : 0.5,
+      y: contentHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / contentHeight : 0.5,
     };
 
     const userZoomed = prevScaleRef.current !== scale;
@@ -137,6 +144,32 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     currentContainer.addEventListener('scroll', onScroll);
     return () => currentContainer.removeEventListener('scroll', onScroll);
   }, [containerRef, onScrollChange, storageKey]);
+
+  // First-load focus on the location pointer: when a `markerPosition` is given and the view is
+  // fresh — uncontrolled zoom, no controlled/persisted scroll or zoom — open zoomed 3x in on the
+  // marker instead of the full fit view. Runs once, after the container is measured so
+  // `defaultScale` is the settled fit scale (not its initial placeholder).
+  const didMarkerZoomRef = useRef(false);
+  useEffect(() => {
+    if (didMarkerZoomRef.current || !markerPosition) return;
+    // Respect any consumer-owned or persisted view; only auto-focus a genuinely fresh one.
+    if (isControlled || controlledScroll || persisted.scale !== undefined || persisted.scrollPosition) return;
+    // Wait until the container is measured so `defaultScale`/`scaleLimit` are the real fit values.
+    if (containerHeight === 0 || containerWidth === 0) return;
+    didMarkerZoomRef.current = true;
+
+    // Marker center as a scale-independent fraction of the scrollable area. The image is drawn
+    // centered in a canvas padded by IMAGE_MARGIN, so its top-left sits at IMAGE_MARGIN/2 image
+    // units; the scale cancels between the physical marker position and the canvas size. Seeding
+    // viewCenterRef makes the scale change below scroll this point to the viewport center.
+    viewCenterRef.current = {
+      x: (markerPosition.x + IMAGE_MARGIN / 2) / (image.width + IMAGE_MARGIN),
+      y: (markerPosition.y + IMAGE_MARGIN / 2) / (image.height + IMAGE_MARGIN),
+    };
+    // Zoom to 3x the fit scale (a delta added on top of defaultScale), clamped to the max zoom.
+    setScale(Math.min(defaultScale * 2, scaleLimit.max - defaultScale));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [markerPosition, containerHeight, containerWidth, defaultScale]);
 
   return (
     <SizesContext.Provider
