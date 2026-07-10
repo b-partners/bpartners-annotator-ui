@@ -13,15 +13,7 @@ const Harness = ({ marker, storageKey }: { marker?: Point; storageKey?: string }
     return () => clearTimeout(t);
   }, [marker]);
   return (
-    <AnnotatorCanvas
-      height='70vh'
-      width='60vw'
-      setPolygons={setPolygons}
-      polygonList={polygons}
-      image={image}
-      markerPosition={m}
-      storageKey={storageKey}
-    />
+    <AnnotatorCanvas height='70vh' width='60vw' setPolygons={setPolygons} polygonList={polygons} image={image} markerPosition={m} storageKey={storageKey} />
   );
 };
 
