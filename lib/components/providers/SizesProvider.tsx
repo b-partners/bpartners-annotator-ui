@@ -56,6 +56,14 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
 
   const canvasWidth = useMemo(() => Math.round((image.width + IMAGE_MARGIN) * (defaultScale + scale)), [defaultScale, image.width, scale]);
 
+  // Authoritative content size (the canvas dimensions, floored at the viewport), kept on a ref so
+  // the scroll listener measures the view fraction against the SAME basis the zoom effect restores
+  // against. Reading the DOM `scrollWidth/Height` there instead would drift: the absolutely-
+  // positioned marker/measurement overlays inflate the scroll area, so a fraction recorded against
+  // `scrollWidth` is too small and the next zoom under-scrolls, sliding the view toward the corner.
+  const contentSizeRef = useRef({ width: 0, height: 0 });
+  contentSizeRef.current = { width: Math.max(canvasWidth, containerWidth), height: Math.max(canvasHeight, containerHeight) };
+
   // Live total scale, kept on a ref so the drawing/event handlers read the current value
   // without being torn down and rebuilt on every zoom step. Per-instance: no shared URL state.
   const scaleRef = useRef(defaultScale + scale);
@@ -153,9 +161,10 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     if (!currentContainer) return () => {};
 
     const onScroll = () => {
+      const { width, height } = contentSizeRef.current;
       const next = {
-        x: currentContainer.scrollWidth > 0 ? (currentContainer.scrollLeft + currentContainer.clientWidth / 2) / currentContainer.scrollWidth : 0.5,
-        y: currentContainer.scrollHeight > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / currentContainer.scrollHeight : 0.5,
+        x: width > 0 ? (currentContainer.scrollLeft + currentContainer.clientWidth / 2) / width : 0.5,
+        y: height > 0 ? (currentContainer.scrollTop + currentContainer.clientHeight / 2) / height : 0.5,
       };
       viewCenterRef.current = next;
       // Ignore the scroll our own `scrollTo` just caused; only persist/surface genuine user

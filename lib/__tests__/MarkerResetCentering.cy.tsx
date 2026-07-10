@@ -33,6 +33,16 @@ const expectCentered = (label: string) =>
 
 const zoomIn = () => cy.contains('button', 'zoom +').click();
 
+// Where the image (canvas) center sits inside the viewport, as a fraction of the viewport width —
+// the truthful measure of centering, independent of how far an overlay inflates the scroll area.
+const imageCenterX = ($c: JQuery<HTMLElement>) => {
+  const el = $c[0];
+  const canvas = el.querySelector('canvas') as HTMLElement;
+  const cr = el.getBoundingClientRect();
+  const gr = canvas.getBoundingClientRect();
+  return (gr.left + gr.width / 2 - cr.left) / cr.width;
+};
+
 describe('marker focus happens on the first zoom, not on load', () => {
   beforeEach(() => {
     cy.viewport(1400, 900);
@@ -103,5 +113,24 @@ describe('marker focus happens on the first zoom, not on load', () => {
       expect(fx, 'moved toward the marker horizontally after reset').to.be.greaterThan(0.55);
       expect(fy, 'moved toward the marker vertically after reset').to.be.greaterThan(0.55);
     });
+  });
+
+  it('keeps the image centered on zoom even when an overlay inflates the scroll area', () => {
+    cy.mount(<Harness />);
+    cy.get('canvas').should('exist');
+    cy.wait(700);
+    // Marker/measurement overlays are absolutely positioned and can push the container's scroll
+    // area far past the image. The view fraction must be measured against the canvas, not that
+    // inflated scroll area, or the next zoom under-scrolls and slides the image toward the corner.
+    container().then($c => {
+      const spacer = document.createElement('div');
+      spacer.style.cssText = 'position:absolute;left:6000px;top:0;width:1px;height:1px;';
+      $c[0].appendChild(spacer);
+      $c[0].dispatchEvent(new Event('scroll'));
+    });
+    cy.wait(100);
+    zoomIn();
+    cy.wait(400);
+    container().then($c => expect(imageCenterX($c), 'image stays centered despite inflated scrollWidth').to.be.closeTo(0.5, 0.1));
   });
 });
