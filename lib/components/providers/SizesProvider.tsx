@@ -36,6 +36,12 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // Tracks the last zoom delta so we can tell a genuine user zoom (keep the current view)
   // apart from a remount or defaultScale settling (recenter on the image).
   const prevScaleRef = useRef(scale);
+  // True once the user has genuinely panned the view (a real scroll, not one of our own
+  // programmatic recenters). Used to decide whether the first zoom may focus the marker.
+  const userMovedRef = useRef(false);
+  // Whether a genuine user zoom has already happened. The very first zoom, on an un-panned
+  // fresh view, focuses the location pointer (or the image center when there is none).
+  const didFirstZoomRef = useRef(false);
   // Content fraction (0..1) currently under the viewport center, kept up to date on scroll so
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
   // Seeded from the persisted (or controlled) scroll so a (re)mount restores the saved view.
@@ -100,6 +106,21 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     }
 
     if (userZoomed) {
+      // On the very first zoom of an untouched, fresh view, focus the location pointer: seed
+      // the view center with the marker so the zoom brings it under the viewport center. With
+      // no marker (or once the user has panned / a saved view exists), fall through to keeping
+      // the current center — the image center on a fresh view.
+      const freshView = !userMovedRef.current && !controlledScroll && !persisted.scrollPosition;
+      if (!didFirstZoomRef.current && freshView && markerPosition) {
+        // Marker center as a scale-independent fraction of the scrollable area. The image is
+        // drawn centered in a canvas padded by IMAGE_MARGIN, so its top-left sits at
+        // IMAGE_MARGIN/2 image units; the scale cancels between marker position and canvas size.
+        viewCenterRef.current = {
+          x: (markerPosition.x + IMAGE_MARGIN / 2) / (image.width + IMAGE_MARGIN),
+          y: (markerPosition.y + IMAGE_MARGIN / 2) / (image.height + IMAGE_MARGIN),
+        };
+      }
+      didFirstZoomRef.current = true;
       // Genuine zoom step: keep the part of the image under the viewport center fixed.
       scrollTo(viewCenterRef.current);
       return;
@@ -137,6 +158,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
       // Ignore the scroll our own `scrollTo` just caused; only persist/surface genuine user
       // scrolls so a restore against a still-loading canvas can't overwrite the saved spot.
       if (suppressEmitRef.current) return;
+      // A real user pan: from now on the first zoom keeps the current view instead of the marker.
+      userMovedRef.current = true;
       if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: next });
       onScrollChange?.(next);
     };
@@ -144,32 +167,6 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     currentContainer.addEventListener('scroll', onScroll);
     return () => currentContainer.removeEventListener('scroll', onScroll);
   }, [containerRef, onScrollChange, storageKey]);
-
-  // First-load focus on the location pointer: when a `markerPosition` is given and the view is
-  // fresh — uncontrolled zoom, no controlled/persisted scroll or zoom — open zoomed 3x in on the
-  // marker instead of the full fit view. Runs once, after the container is measured so
-  // `defaultScale` is the settled fit scale (not its initial placeholder).
-  const didMarkerZoomRef = useRef(false);
-  useEffect(() => {
-    if (didMarkerZoomRef.current || !markerPosition) return;
-    // Respect any consumer-owned or persisted view; only auto-focus a genuinely fresh one.
-    if (isControlled || controlledScroll || persisted.scale !== undefined || persisted.scrollPosition) return;
-    // Wait until the container is measured so `defaultScale`/`scaleLimit` are the real fit values.
-    if (containerHeight === 0 || containerWidth === 0) return;
-    didMarkerZoomRef.current = true;
-
-    // Marker center as a scale-independent fraction of the scrollable area. The image is drawn
-    // centered in a canvas padded by IMAGE_MARGIN, so its top-left sits at IMAGE_MARGIN/2 image
-    // units; the scale cancels between the physical marker position and the canvas size. Seeding
-    // viewCenterRef makes the scale change below scroll this point to the viewport center.
-    viewCenterRef.current = {
-      x: (markerPosition.x + IMAGE_MARGIN / 2) / (image.width + IMAGE_MARGIN),
-      y: (markerPosition.y + IMAGE_MARGIN / 2) / (image.height + IMAGE_MARGIN),
-    };
-    // Zoom to 3x the fit scale (a delta added on top of defaultScale), clamped to the max zoom.
-    setScale(Math.min(defaultScale * 2, scaleLimit.max - defaultScale));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [markerPosition, containerHeight, containerWidth, defaultScale]);
 
   return (
     <SizesContext.Provider
