@@ -33,6 +33,13 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   };
 
   const [isMoving, setIsMoving] = useState(false);
+  // Mirror of `isMoving` on a ref so the restore effect can read the current mode as a guard
+  // (skip a restore mid-pan) WITHOUT listing `isMoving` in its deps. Otherwise toggling move↔edit
+  // re-runs the effect, which falls through to the restore branch and scrolls back to the stale
+  // persisted target — undoing a marker-focus zoom (that scroll was suppressed, so it never
+  // updated the saved target). A mode switch must never move the image.
+  const isMovingRef = useRef(isMoving);
+  isMovingRef.current = isMoving;
   // Bumped by resetView() so an explicit reset always re-runs the effect below — even when the
   // zoom delta is already 0, where setScale(0) changes no state and would otherwise skip it.
   const [resetNonce, setResetNonce] = useState(0);
@@ -162,14 +169,16 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     const target = readScrollTarget();
     const EPSILON = 0.02;
     const differsFromView = !target || Math.abs(target.x - view.x) > EPSILON || Math.abs(target.y - view.y) > EPSILON;
-    if (differsFromView && !isMoving) {
+    if (differsFromView && !isMovingRef.current) {
       viewCenterRef.current = target;
       scrollTo(target);
     }
     // `readScrollTarget` reads localStorage fresh on every run; deps cover the meaningful restore
-    // triggers (mount, zoom, image settle via defaultScale, controlled-prop change, pan end).
+    // triggers (mount, zoom, image settle via defaultScale, controlled-prop change). `isMoving` is
+    // deliberately NOT a dep — it's read via `isMovingRef` as a guard only, so toggling move↔edit
+    // doesn't re-run this effect and restore to a stale target after a marker-focus zoom.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, isMoving, resetNonce]);
+  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, resetNonce]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.

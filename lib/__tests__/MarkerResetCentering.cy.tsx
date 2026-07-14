@@ -115,6 +115,27 @@ describe('marker focus happens on the first zoom, not on load', () => {
     });
   });
 
+  it('keeps the marker-focused view put when toggling from move to edit mode', () => {
+    cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
+    cy.get('canvas').should('exist');
+    cy.wait(900);
+    zoomIn();
+    cy.wait(400);
+    // Capture where the marker zoom left the view.
+    let before: { fx: number; fy: number };
+    container().then($c => (before = centerFraction($c)));
+    // Enter move mode, then back to edit mode. Neither toggle may move the image.
+    cy.contains('button', 'move').click();
+    cy.wait(200);
+    cy.contains('button', 'annotate').click();
+    cy.wait(400);
+    container().then($c => {
+      const { fx, fy } = centerFraction($c);
+      expect(fx, 'view unchanged horizontally after mode toggle').to.be.closeTo(before.fx, 0.03);
+      expect(fy, 'view unchanged vertically after mode toggle').to.be.closeTo(before.fy, 0.03);
+    });
+  });
+
   it('keeps the image centered on zoom even when an overlay inflates the scroll area', () => {
     cy.mount(<Harness />);
     cy.get('canvas').should('exist');
