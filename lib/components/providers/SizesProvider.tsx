@@ -59,11 +59,8 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // apart from a remount or defaultScale settling (recenter on the image).
   const prevScaleRef = useRef(scale);
   // True once the user has genuinely panned the view (a real scroll, not one of our own
-  // programmatic recenters). Used to decide whether the first zoom may focus the marker.
+  // programmatic recenters). While false, every zoom keeps focusing the marker.
   const userMovedRef = useRef(false);
-  // Whether a genuine user zoom has already happened. The very first zoom, on an un-panned
-  // fresh view, focuses the location pointer (or the image center when there is none).
-  const didFirstZoomRef = useRef(false);
   // Content fraction (0..1) currently under the viewport center, kept up to date on scroll so
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
   // Seeded from the persisted (or controlled) scroll so a (re)mount restores the saved view.
@@ -134,19 +131,21 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
       // Explicit zoom reset: recenter on the image and treat the view as fresh again, so the
       // next zoom re-focuses the marker (or the center when there is none) just like on load.
       viewCenterRef.current = null;
-      didFirstZoomRef.current = false;
       userMovedRef.current = false;
       scrollTo(null);
       return;
     }
 
     if (userZoomed) {
-      // On the very first zoom of an untouched, fresh view, focus the location pointer: seed
-      // the view center with the marker so the zoom brings it under the viewport center. With
-      // no marker (or once the user has panned / a saved view exists), fall through to keeping
-      // the current center — the image center on a fresh view.
+      // On every zoom of an untouched, fresh view, focus the location pointer: re-seed the view
+      // center with the marker so the zoom brings it under the viewport center. Re-seeding on
+      // EACH zoom (not just the first) is what actually centers an edge marker: a single low
+      // zoom step can't scroll far enough (the target clamps at the edge), and the clamped
+      // scroll then overwrites viewCenterRef — so without re-seeding the marker never converges.
+      // With no marker (or once the user has panned / a saved view exists), fall through to
+      // keeping the current center — the image center on a fresh view.
       const freshView = !userMovedRef.current && !controlledScroll && !persisted.scrollPosition;
-      if (!didFirstZoomRef.current && freshView && markerPosition) {
+      if (freshView && markerPosition) {
         // Marker center as a scale-independent fraction of the scrollable area. The image is
         // drawn centered in a canvas padded by IMAGE_MARGIN, so its top-left sits at
         // IMAGE_MARGIN/2 image units; the scale cancels between marker position and canvas size.
@@ -155,7 +154,6 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
           y: (markerPosition.y + IMAGE_MARGIN / 2) / (image.height + IMAGE_MARGIN),
         };
       }
-      didFirstZoomRef.current = true;
       // Genuine zoom step: keep the part of the image under the viewport center fixed.
       scrollTo(viewCenterRef.current);
       return;

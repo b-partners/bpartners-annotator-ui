@@ -115,6 +115,31 @@ describe('marker focus happens on the first zoom, not on load', () => {
     });
   });
 
+  it('converges an edge marker to the viewport center as the user keeps zooming', () => {
+    cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
+    cy.get('canvas').should('exist');
+    cy.wait(900);
+    // A single low zoom step can't bring an edge marker under the viewport center (the scroll
+    // clamps at the edge); repeated zooms must keep re-aiming at the marker so it converges.
+    for (let i = 0; i < 8; i++) {
+      zoomIn();
+      cy.wait(150);
+    }
+    cy.wait(300);
+    // The marker's actual on-screen position (the rendered pin, not a scroll fraction) must land
+    // at the center of the viewport once there's enough zoom for the scroll to reach it.
+    container().then($c => {
+      const cr = $c[0].getBoundingClientRect();
+      cy.get('[data-cy=annotator-marker]').then($m => {
+        const mr = $m[0].getBoundingClientRect();
+        const mx = (mr.left + mr.width / 2 - cr.left) / cr.width;
+        const my = (mr.top + mr.height / 2 - cr.top) / cr.height;
+        expect(mx, 'marker pin centered horizontally in the viewport').to.be.closeTo(0.5, 0.1);
+        expect(my, 'marker pin centered vertically in the viewport').to.be.closeTo(0.5, 0.1);
+      });
+    });
+  });
+
   it('keeps the marker-focused view put when toggling from move to edit mode', () => {
     cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
     cy.get('canvas').should('exist');
