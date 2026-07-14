@@ -33,6 +33,21 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   };
 
   const [isMoving, setIsMoving] = useState(false);
+  // Bumped by resetView() so an explicit reset always re-runs the effect below — even when the
+  // zoom delta is already 0, where setScale(0) changes no state and would otherwise skip it.
+  const [resetNonce, setResetNonce] = useState(0);
+  const prevResetNonceRef = useRef(resetNonce);
+
+  // Clear the zoom and recenter on the image. We only zero the zoom and bump the nonce here; the
+  // effect does the actual recenter so it goes through the same authoritative-size, suppressed
+  // scroll path as every other view change — never a raw scrollWidth read (the overlays inflate it)
+  // and never an un-suppressed scroll that would be echoed back as a user move and stop the next
+  // zoom from re-focusing the marker.
+  const resetView = () => {
+    setScale(0);
+    setResetNonce(n => n + 1);
+  };
+
   // Tracks the last zoom delta so we can tell a genuine user zoom (keep the current view)
   // apart from a remount or defaultScale settling (recenter on the image).
   const prevScaleRef = useRef(scale);
@@ -103,8 +118,10 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     };
 
     const userZoomed = prevScaleRef.current !== scale;
-    const isReset = userZoomed && scale === 0;
+    const resetRequested = prevResetNonceRef.current !== resetNonce;
+    const isReset = resetRequested || (userZoomed && scale === 0);
     prevScaleRef.current = scale;
+    prevResetNonceRef.current = resetNonce;
 
     if (isReset) {
       // Explicit zoom reset: recenter on the image and treat the view as fresh again, so the
@@ -152,7 +169,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     // `readScrollTarget` reads localStorage fresh on every run; deps cover the meaningful restore
     // triggers (mount, zoom, image settle via defaultScale, controlled-prop change, pan end).
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, isMoving]);
+  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, isMoving, resetNonce]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.
@@ -193,6 +210,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
         scaleLimit,
         isMoving,
         toggleIsMoving: () => setIsMoving(p => !p),
+        resetView,
         scaleRef,
       }}
     >
