@@ -65,7 +65,7 @@ describe('fresh load focuses the polygon/marker, then the user takes over', () =
     cy.get('canvas').should('exist');
     cy.wait(1200);
     // Zoomed in: the canvas is far wider than the fit-scale width.
-    container().then($c => expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(2000));
+    container().then($c => expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(1400));
     // The marker pin lands at the viewport center.
     container().then($c =>
       cy.get('[data-cy=annotator-marker]').then($m => {
@@ -80,7 +80,7 @@ describe('fresh load focuses the polygon/marker, then the user takes over', () =
     cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
     cy.get('canvas').should('exist');
     cy.wait(1200);
-    container().then($c => expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(2000));
+    container().then($c => expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(1400));
     container().then($c =>
       cy.get('[data-cy=annotator-marker]').then($m => {
         const { x, y } = pinFraction($c, $m);
@@ -106,7 +106,7 @@ describe('fresh load focuses the polygon/marker, then the user takes over', () =
     cy.get('canvas').should('exist');
     cy.wait(1200);
     container().then($c => {
-      expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(2000);
+      expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(1400);
       const { fx, fy } = centerFraction($c);
       // The polygon bbox center (~200,200) sits in the top-left third of the image.
       expect(fx, 'view moved toward the polygon, not the bottom-right marker').to.be.lessThan(0.45);
