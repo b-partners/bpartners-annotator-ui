@@ -10,6 +10,7 @@ export const SizesContext = createContext<SizesContextType>({
   defaultScale: 0,
   setScale: () => {},
   toggleIsMoving: () => {},
+  resetView: () => {},
   scaleLimit: { max: 3, min: 0 },
   isMoving: false,
   scaleRef: { current: 1 },

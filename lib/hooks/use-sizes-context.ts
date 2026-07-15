@@ -2,8 +2,8 @@ import { useContext } from 'react';
 import { SizesContext, useElementContext } from '..';
 
 export const useSizesContext = () => {
-  const { setScale, canvasHeight, canvasWidth, scaleLimit, ...others } = useContext(SizesContext);
-  const { image, containerRef } = useElementContext();
+  const { setScale, resetView, canvasHeight, canvasWidth, scaleLimit, ...others } = useContext(SizesContext);
+  const { image } = useElementContext();
 
   const ch = Math.max(canvasHeight, others.containerHeight);
   const cw = Math.max(canvasWidth, others.containerWidth);
@@ -20,24 +20,13 @@ export const useSizesContext = () => {
     }
   };
 
-  const scaleReset = () => {
-    setScale(0);
-
-    // Always recenter the image, even when there's no zoom to reset (scale already 0,
-    // so the SizesProvider effect won't fire).
-    const currentContainer = containerRef.current;
-    if (currentContainer) {
-      const maxX = currentContainer.scrollWidth - currentContainer.clientWidth;
-      const maxY = currentContainer.scrollHeight - currentContainer.clientHeight;
-      currentContainer.scrollTo({ left: maxX / 2, top: maxY / 2, behavior: 'instant' });
-    }
-  };
-
   return {
     ...others,
     scaleUp,
     scaleDown,
-    scaleReste: scaleReset,
+    // Recenters through the SizesProvider effect (authoritative content size, suppressed scroll),
+    // so it stays overlay-proof and re-focuses the marker on the next zoom — even at scale 0.
+    scaleReste: resetView,
     canvasHeight: ch,
     canvasWidth: cw,
     imageWidth: image.width * others.scale,

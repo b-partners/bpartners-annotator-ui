@@ -26,8 +26,12 @@ export interface SizesProviderProps extends Children {
   // consumer gets persistence for free (no `scale`/`scrollPosition` state to thread).
   storageKey?: string;
   // Location pointer (logical/image-pixel coordinates). When provided and the view is fresh
-  // (uncontrolled, nothing persisted), the first render opens zoomed 3x in on this point.
+  // (nothing persisted), the view opens zoomed fully in and centered on this point — unless a
+  // polygon is present, which takes precedence as the focus target.
   markerPosition?: Point;
+  // Committed polygons (logical coordinates). Their combined bounding-box center is the primary
+  // focus target on a fresh load and on every zoom while the view is still auto-managed.
+  polygons?: Polygon[];
 }
 export interface PolygonProviderProps extends Children {
   showLineSize: boolean;

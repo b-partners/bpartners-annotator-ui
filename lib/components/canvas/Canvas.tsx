@@ -90,6 +90,7 @@ export const Canvas = () => {
       })}
       {physicalMarker && (
         <span
+          data-cy='annotator-marker'
           className={style.marker}
           style={{
             top: physicalMarker.y,

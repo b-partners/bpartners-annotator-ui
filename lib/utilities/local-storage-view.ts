@@ -5,6 +5,10 @@ export interface PersistedView {
   scale: number;
   // Viewport-center as a 0..1 fraction of the scrollable area (scale-independent).
   scrollPosition: Point | null;
+  // Whether the user has performed their "first move" (a genuine pan/scroll). While false the
+  // view is still auto-managed: every zoom re-focuses the polygon/marker. Once true, zooming
+  // keeps the current center. Persisted so the mode survives a remount/tab switch.
+  firstMove: boolean;
 }
 
 const isPoint = (value: unknown): value is Point => !!value && typeof (value as Point).x === 'number' && typeof (value as Point).y === 'number';
@@ -22,6 +26,7 @@ export class LocalStorageView {
       return {
         scale: typeof parsed.scale === 'number' ? parsed.scale : undefined,
         scrollPosition: isPoint(parsed.scrollPosition) ? parsed.scrollPosition : undefined,
+        firstMove: typeof parsed.firstMove === 'boolean' ? parsed.firstMove : undefined,
       };
     } catch {
       return {};
