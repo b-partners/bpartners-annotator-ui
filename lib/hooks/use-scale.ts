@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useElementContext } from '.';
-import { IMAGE_PADDING } from '../constant';
+import { IMAGE_PADDING, MAX_ZOOM_DELTA } from '../constant';
 
 export const useScale = () => {
   const { image, containerRef } = useElementContext();
@@ -55,7 +55,7 @@ export const useScale = () => {
 
     setDefaultScale(widthScale > heightScale ? heightScale : widthScale);
     setScaleLimit({
-      max: defaultScale + 2.6,
+      max: defaultScale + MAX_ZOOM_DELTA,
       min: defaultScale - 0.2,
     });
   }, [containerSize, image, defaultScale]);

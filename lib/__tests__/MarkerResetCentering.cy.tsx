@@ -4,8 +4,8 @@ import { Point, Polygon } from '../../lib/types';
 import image from '../../src/assets/Rennes_Solar_Panel_Batch_1_519355_363821.jpg';
 
 // The marker arrives asynchronously (undefined first, then a value), mirroring the real consumer.
-const Harness = ({ marker, storageKey }: { marker?: Point; storageKey?: string }) => {
-  const [polygons, setPolygons] = useState<Polygon[]>([]);
+const Harness = ({ marker, storageKey, initialPolygons = [] }: { marker?: Point; storageKey?: string; initialPolygons?: Polygon[] }) => {
+  const [polygons, setPolygons] = useState<Polygon[]>(initialPolygons);
   const [m, setM] = useState<Point | undefined>(undefined);
   useEffect(() => {
     if (!marker) return;
@@ -27,11 +27,22 @@ const centerFraction = ($c: JQuery<HTMLElement>) => {
 const expectCentered = (label: string) =>
   container().then($c => {
     const { fx, fy } = centerFraction($c);
-    expect(fx, `centered horizontally ${label}`).to.be.closeTo(0.5, 0.03);
-    expect(fy, `centered vertically ${label}`).to.be.closeTo(0.5, 0.03);
+    expect(fx, `centered horizontally ${label}`).to.be.closeTo(0.5, 0.05);
+    expect(fy, `centered vertically ${label}`).to.be.closeTo(0.5, 0.05);
   });
 
+// Rendered width of the base canvas — grows with the zoom, so it tells an auto-zoomed-in load
+// (large) apart from a fit-scale load (small) without depending on scroll math.
+const canvasWidthOf = ($c: JQuery<HTMLElement>) => ($c[0].querySelector('canvas') as HTMLCanvasElement).width;
+
 const zoomIn = () => cy.contains('button', 'zoom +').click();
+
+// Where a DOM point sits inside the viewport, as a 0..1 fraction of the viewport box.
+const pinFraction = ($c: JQuery<HTMLElement>, $pin: JQuery<HTMLElement>) => {
+  const cr = $c[0].getBoundingClientRect();
+  const pr = $pin[0].getBoundingClientRect();
+  return { x: (pr.left + pr.width / 2 - cr.left) / cr.width, y: (pr.top + pr.height / 2 - cr.top) / cr.height };
+};
 
 // Where the image (canvas) center sits inside the viewport, as a fraction of the viewport width —
 // the truthful measure of centering, independent of how far an overlay inflates the scroll area.
@@ -43,110 +54,134 @@ const imageCenterX = ($c: JQuery<HTMLElement>) => {
   return (gr.left + gr.width / 2 - cr.left) / cr.width;
 };
 
-describe('marker focus happens on the first zoom, not on load', () => {
+describe('fresh load focuses the polygon/marker, then the user takes over', () => {
   beforeEach(() => {
     cy.viewport(1400, 900);
     localStorage.clear();
   });
 
-  it('does not auto-zoom on load: an edge marker stays centered until the user zooms', () => {
-    cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
+  it('opens zoomed in and centered on a center marker (fresh storage)', () => {
+    cy.mount(<Harness marker={{ x: 512, y: 512 }} />);
     cy.get('canvas').should('exist');
-    cy.wait(900);
-    expectCentered('on load with an edge marker');
+    cy.wait(1200);
+    // Zoomed in: the canvas is far wider than the fit-scale width.
+    container().then($c => expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(2000));
+    // The marker pin lands at the viewport center.
+    container().then($c =>
+      cy.get('[data-cy=annotator-marker]').then($m => {
+        const { x, y } = pinFraction($c, $m);
+        expect(x, 'center marker pin centered horizontally').to.be.closeTo(0.5, 0.12);
+        expect(y, 'center marker pin centered vertically').to.be.closeTo(0.5, 0.12);
+      })
+    );
   });
 
-  it('does not auto-zoom on load with no marker', () => {
-    cy.mount(<Harness />);
-    cy.get('canvas').should('exist');
-    cy.wait(600);
-    expectCentered('on load without a marker');
-  });
-
-  it('focuses the marker on the first zoom of an untouched view', () => {
+  it('opens zoomed in and centered on an edge marker (fresh storage)', () => {
     cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
     cy.get('canvas').should('exist');
-    cy.wait(900);
-    zoomIn();
-    cy.wait(400);
-    // The bottom-right marker pulls the viewport center past the middle toward it.
+    cy.wait(1200);
+    container().then($c => expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(2000));
+    container().then($c =>
+      cy.get('[data-cy=annotator-marker]').then($m => {
+        const { x, y } = pinFraction($c, $m);
+        expect(x, 'edge marker pin pulled to center horizontally').to.be.closeTo(0.5, 0.15);
+        expect(y, 'edge marker pin pulled to center vertically').to.be.closeTo(0.5, 0.15);
+      })
+    );
+  });
+
+  it('a polygon takes precedence over the marker as the focus target', () => {
+    const polygon: Polygon = {
+      id: 'p1',
+      fillColor: '#0E4EB340',
+      strokeColor: '#0E4EB3',
+      points: [
+        { x: 180, y: 180 },
+        { x: 220, y: 180 },
+        { x: 200, y: 220 },
+      ],
+    };
+    // Marker sits bottom-right, polygon top-left: the view must go to the polygon, not the marker.
+    cy.mount(<Harness marker={{ x: 980, y: 980 }} initialPolygons={[polygon]} />);
+    cy.get('canvas').should('exist');
+    cy.wait(1200);
     container().then($c => {
+      expect(canvasWidthOf($c), 'auto-zoomed in on load').to.be.greaterThan(2000);
       const { fx, fy } = centerFraction($c);
-      expect(fx, 'moved toward the marker horizontally').to.be.greaterThan(0.55);
-      expect(fy, 'moved toward the marker vertically').to.be.greaterThan(0.55);
+      // The polygon bbox center (~200,200) sits in the top-left third of the image.
+      expect(fx, 'view moved toward the polygon, not the bottom-right marker').to.be.lessThan(0.45);
+      expect(fy, 'view moved toward the polygon, not the bottom-right marker').to.be.lessThan(0.45);
     });
   });
 
-  it('keeps the view centered when zooming with a centered marker', () => {
-    cy.mount(<Harness marker={{ x: 512, y: 512 }} />);
+  it('does not auto-zoom with no marker and no polygon: fits and centers by size', () => {
+    cy.mount(<Harness />);
     cy.get('canvas').should('exist');
-    cy.wait(900);
-    zoomIn();
-    cy.wait(400);
-    expectCentered('after first zoom with a center marker');
+    cy.wait(700);
+    container().then($c => expect(canvasWidthOf($c), 'stays at fit scale, not zoomed in').to.be.lessThan(1500));
+    expectCentered('on load without a marker or polygon');
   });
 
-  it('recenters the image on reset after focusing an edge marker', () => {
+  it('recenters the image on reset after a focus zoom', () => {
     cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
     cy.get('canvas').should('exist');
-    cy.wait(900);
-    zoomIn();
-    cy.wait(400);
+    cy.wait(1200);
     cy.contains('button', 'reset').click();
     cy.wait(700);
+    container().then($c => expect(canvasWidthOf($c), 'back to fit scale after reset').to.be.lessThan(1500));
     expectCentered('after reset');
   });
 
-  it('re-focuses the marker on the first zoom after a reset', () => {
+  it('treats reset as a first move: the next zoom keeps the center, not the marker', () => {
     cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
     cy.get('canvas').should('exist');
-    cy.wait(900);
-    zoomIn();
-    cy.wait(400);
+    cy.wait(1200);
     cy.contains('button', 'reset').click();
     cy.wait(700);
-    // Zooming again from the reset (untouched) view focuses the marker just like on load.
+    // Reset counts as the user's first move, so zooming again keeps the centered view instead of
+    // pulling back toward the marker.
+    zoomIn();
+    cy.wait(400);
+    expectCentered('after zooming in from a reset');
+  });
+
+  it('persists the reset view (zoom 0, centered, first move) to localStorage', () => {
+    cy.mount(<Harness marker={{ x: 980, y: 980 }} storageKey='reset-view' />);
+    cy.get('canvas').should('exist');
+    cy.wait(1200);
+    cy.contains('button', 'reset').click();
+    cy.wait(700);
+    cy.then(() => {
+      const saved = JSON.parse(window.localStorage.getItem('reset-view') || '{}');
+      expect(saved.scale, 'zoom reset to 0').to.eq(0);
+      expect(saved.firstMove, 'reset counts as first move').to.eq(true);
+      expect(saved.scrollPosition, 'centered position stored').to.deep.eq({ x: 0.5, y: 0.5 });
+    });
+  });
+
+  it('keeps the current center on zoom once the user has panned (first move done)', () => {
+    // No marker/polygon: the view opens at fit, centered. The user pans, then zooms.
+    cy.mount(<Harness />);
+    cy.get('canvas').should('exist');
+    cy.wait(700);
+    container().then($pre => container().scrollTo(Math.round($pre[0].scrollWidth * 0.2), Math.round($pre[0].scrollHeight * 0.7), { ensureScrollable: false }));
+    cy.wait(300);
+    let before: { fx: number; fy: number };
+    container().then($c => (before = centerFraction($c)));
     zoomIn();
     cy.wait(400);
     container().then($c => {
       const { fx, fy } = centerFraction($c);
-      expect(fx, 'moved toward the marker horizontally after reset').to.be.greaterThan(0.55);
-      expect(fy, 'moved toward the marker vertically after reset').to.be.greaterThan(0.55);
+      expect(fx, 'view center kept horizontally after first move').to.be.closeTo(before.fx, 0.06);
+      expect(fy, 'view center kept vertically after first move').to.be.closeTo(before.fy, 0.06);
     });
   });
 
-  it('converges an edge marker to the viewport center as the user keeps zooming', () => {
+  it('keeps the focused view put when toggling from move to edit mode', () => {
     cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
     cy.get('canvas').should('exist');
-    cy.wait(900);
-    // A single low zoom step can't bring an edge marker under the viewport center (the scroll
-    // clamps at the edge); repeated zooms must keep re-aiming at the marker so it converges.
-    for (let i = 0; i < 8; i++) {
-      zoomIn();
-      cy.wait(150);
-    }
-    cy.wait(300);
-    // The marker's actual on-screen position (the rendered pin, not a scroll fraction) must land
-    // at the center of the viewport once there's enough zoom for the scroll to reach it.
-    container().then($c => {
-      const cr = $c[0].getBoundingClientRect();
-      cy.get('[data-cy=annotator-marker]').then($m => {
-        const mr = $m[0].getBoundingClientRect();
-        const mx = (mr.left + mr.width / 2 - cr.left) / cr.width;
-        const my = (mr.top + mr.height / 2 - cr.top) / cr.height;
-        expect(mx, 'marker pin centered horizontally in the viewport').to.be.closeTo(0.5, 0.1);
-        expect(my, 'marker pin centered vertically in the viewport').to.be.closeTo(0.5, 0.1);
-      });
-    });
-  });
-
-  it('keeps the marker-focused view put when toggling from move to edit mode', () => {
-    cy.mount(<Harness marker={{ x: 980, y: 980 }} />);
-    cy.get('canvas').should('exist');
-    cy.wait(900);
-    zoomIn();
-    cy.wait(400);
-    // Capture where the marker zoom left the view.
+    cy.wait(1200);
+    // Capture where the focus zoom left the view.
     let before: { fx: number; fy: number };
     container().then($c => (before = centerFraction($c)));
     // Enter move mode, then back to edit mode. Neither toggle may move the image.

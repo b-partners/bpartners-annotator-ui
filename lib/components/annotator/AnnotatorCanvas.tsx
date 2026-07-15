@@ -42,6 +42,7 @@ export const AnnotatorCanvas: FC<AnnotatorCanvasProps> = props => {
           onScrollChange={onScrollChange}
           storageKey={storageKey}
           markerPosition={markerPosition}
+          polygons={polygonList}
         >
           <PositionsProvider>
             <div style={{ width }}>

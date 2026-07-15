@@ -1,18 +1,46 @@
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { SizesProviderProps } from '.';
 import { SizesContext, useElementContext, useScale } from '../..';
-import { IMAGE_MARGIN } from '../../constant';
-import { Point } from '../../types';
+import { DEFAULT_ZOOM_DELTA, IMAGE_MARGIN } from '../../constant';
+import { Point, Polygon } from '../../types';
 import { LocalStorageView } from '../../utilities';
 
+// Combined bounding-box center of every polygon, in logical (image-pixel) coordinates. Null when
+// there is no polygon to focus. Used as the primary focus target (over the marker) on a fresh
+// load and on every zoom while the view is still auto-managed.
+const polygonsBoundingCenter = (polygons: Polygon[]): Point | null => {
+  const points = polygons.flatMap(polygon => polygon.points);
+  if (points.length === 0) return null;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const { x, y } of points) {
+    if (x < minX) minX = x;
+    if (y < minY) minY = y;
+    if (x > maxX) maxX = x;
+    if (y > maxY) maxY = y;
+  }
+  return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+};
+
 export const SizesProvider: FC<SizesProviderProps> = props => {
-  const { children, scale: controlledScale, onScaleChange, scrollPosition: controlledScroll, onScrollChange, storageKey, markerPosition } = props;
+  const {
+    children,
+    scale: controlledScale,
+    onScaleChange,
+    scrollPosition: controlledScroll,
+    onScrollChange,
+    storageKey,
+    markerPosition,
+    polygons = [],
+  } = props;
   const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
 
-  // Saved zoom + scroll, read once from localStorage when a `storageKey` is given. This is the
-  // durable persistence layer that lets the view survive a remount/tab switch on its own — the
-  // consumer no longer has to thread `scale`/`scrollPosition` state back through props.
+  // Saved zoom + scroll + first-move flag, read once from localStorage when a `storageKey` is
+  // given. This is the durable persistence layer that lets the view survive a remount/tab switch
+  // on its own — the consumer no longer has to thread `scale`/`scrollPosition` state through props.
   const persisted = useMemo(() => (storageKey ? LocalStorageView.read(storageKey) : {}), [storageKey]);
 
   // Latest durable scroll target: an explicit controlled prop wins, else the localStorage value
@@ -32,12 +60,20 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     onScaleChange?.(next);
   };
 
+  // Whether the stored view is still at its default — nothing meaningful was ever persisted for
+  // this instance. Requirement 1 (open zoomed-in and centered on the polygon/marker) only applies
+  // to such a fresh view; once any zoom/scroll has been saved, the stored values drive the view.
+  const storageDefault = useMemo(
+    () => !controlledScroll && !persisted.scrollPosition && !persisted.firstMove && (persisted.scale === undefined || persisted.scale === 0),
+    [controlledScroll, persisted]
+  );
+
   const [isMoving, setIsMoving] = useState(false);
   // Mirror of `isMoving` on a ref so the restore effect can read the current mode as a guard
   // (skip a restore mid-pan) WITHOUT listing `isMoving` in its deps. Otherwise toggling move↔edit
   // re-runs the effect, which falls through to the restore branch and scrolls back to the stale
-  // persisted target — undoing a marker-focus zoom (that scroll was suppressed, so it never
-  // updated the saved target). A mode switch must never move the image.
+  // persisted target — undoing a focus zoom (that scroll was suppressed, so it never updated the
+  // saved target). A mode switch must never move the image.
   const isMovingRef = useRef(isMoving);
   isMovingRef.current = isMoving;
   // Bumped by resetView() so an explicit reset always re-runs the effect below — even when the
@@ -46,21 +82,26 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   const prevResetNonceRef = useRef(resetNonce);
 
   // Clear the zoom and recenter on the image. We only zero the zoom and bump the nonce here; the
-  // effect does the actual recenter so it goes through the same authoritative-size, suppressed
-  // scroll path as every other view change — never a raw scrollWidth read (the overlays inflate it)
-  // and never an un-suppressed scroll that would be echoed back as a user move and stop the next
-  // zoom from re-focusing the marker.
+  // effect does the actual recenter (and persists the reset, centered view — treating reset as a
+  // first move) so it goes through the same authoritative-size, suppressed scroll path as every
+  // other view change — never a raw scrollWidth read (the overlays inflate it) and never an
+  // un-suppressed scroll that would be echoed back as a user move.
   const resetView = () => {
     setScale(0);
     setResetNonce(n => n + 1);
   };
 
-  // Tracks the last zoom delta so we can tell a genuine user zoom (keep the current view)
-  // apart from a remount or defaultScale settling (recenter on the image).
+  // Tracks the last zoom delta so we can tell a genuine user zoom (keep/refocus the view)
+  // apart from a remount or defaultScale settling (restore the stored view).
   const prevScaleRef = useRef(scale);
-  // True once the user has genuinely panned the view (a real scroll, not one of our own
-  // programmatic recenters). While false, every zoom keeps focusing the marker.
-  const userMovedRef = useRef(false);
+  // The "first move" flag: true once the user has genuinely panned the view (a real scroll, not
+  // one of our own programmatic recenters). While false the view is auto-managed — every zoom
+  // re-focuses the polygon/marker (requirement 2); once true, a zoom keeps the current center
+  // (requirement 3). Seeded from — and written back to — localStorage so it survives a remount.
+  const firstMoveRef = useRef(persisted.firstMove ?? false);
+  // Latches once the fresh-load focus zoom (requirement 1) has fired, so it happens exactly once
+  // and never re-triggers after the user has taken over.
+  const autoZoomedRef = useRef(false);
   // Content fraction (0..1) currently under the viewport center, kept up to date on scroll so
   // a zoom can keep that same part of the image centered instead of jumping to the image center.
   // Seeded from the persisted (or controlled) scroll so a (re)mount restores the saved view.
@@ -87,6 +128,19 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // without being torn down and rebuilt on every zoom step. Per-instance: no shared URL state.
   const scaleRef = useRef(defaultScale + scale);
   scaleRef.current = defaultScale + scale;
+
+  // Focus target as a scale-independent fraction of the scrollable area: the polygon bbox center
+  // when there is a polygon, else the marker, else null. The image is drawn centered in a canvas
+  // padded by IMAGE_MARGIN, so a logical point p maps to (p + IMAGE_MARGIN/2) / (imageSize + MARGIN)
+  // — the scale cancels between the point and the canvas size.
+  const focusFraction = (): Point | null => {
+    const center = polygonsBoundingCenter(polygons) ?? markerPosition ?? null;
+    if (!center) return null;
+    return {
+      x: (center.x + IMAGE_MARGIN / 2) / (image.width + IMAGE_MARGIN),
+      y: (center.y + IMAGE_MARGIN / 2) / (image.height + IMAGE_MARGIN),
+    };
+  };
 
   useEffect(() => {
     const currentContainer = containerRef.current;
@@ -123,60 +177,82 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
 
     const userZoomed = prevScaleRef.current !== scale;
     const resetRequested = prevResetNonceRef.current !== resetNonce;
-    const isReset = resetRequested || (userZoomed && scale === 0);
     prevScaleRef.current = scale;
     prevResetNonceRef.current = resetNonce;
 
-    if (isReset) {
-      // Explicit zoom reset: recenter on the image and treat the view as fresh again, so the
-      // next zoom re-focuses the marker (or the center when there is none) just like on load.
-      viewCenterRef.current = null;
-      userMovedRef.current = false;
+    // Explicit zoom reset: back to fit (delta 0) and recentered on the image. Treated as the
+    // user's "first move" — the reset zoom (0) and the centered view are persisted so a remount
+    // restores exactly this, and the next zoom keeps the center instead of re-focusing the
+    // polygon/marker. Centering by size always lands the viewport center at the 0.5/0.5 fraction.
+    if (resetRequested || (userZoomed && scale === 0)) {
+      const centered = { x: 0.5, y: 0.5 };
+      firstMoveRef.current = true;
+      viewCenterRef.current = centered;
+      if (storageKey) LocalStorageView.merge(storageKey, { scale: 0, scrollPosition: centered, firstMove: true });
       scrollTo(null);
       return;
     }
 
-    if (userZoomed) {
-      // On every zoom of an untouched, fresh view, focus the location pointer: re-seed the view
-      // center with the marker so the zoom brings it under the viewport center. Re-seeding on
-      // EACH zoom (not just the first) is what actually centers an edge marker: a single low
-      // zoom step can't scroll far enough (the target clamps at the edge), and the clamped
-      // scroll then overwrites viewCenterRef — so without re-seeding the marker never converges.
-      // With no marker (or once the user has panned / a saved view exists), fall through to
-      // keeping the current center — the image center on a fresh view.
-      const freshView = !userMovedRef.current && !controlledScroll && !persisted.scrollPosition;
-      if (freshView && markerPosition) {
-        // Marker center as a scale-independent fraction of the scrollable area. The image is
-        // drawn centered in a canvas padded by IMAGE_MARGIN, so its top-left sits at
-        // IMAGE_MARGIN/2 image units; the scale cancels between marker position and canvas size.
-        viewCenterRef.current = {
-          x: (markerPosition.x + IMAGE_MARGIN / 2) / (image.width + IMAGE_MARGIN),
-          y: (markerPosition.y + IMAGE_MARGIN / 2) / (image.height + IMAGE_MARGIN),
-        };
+    // (1) Fresh storage: on the first load, focus the polygon (else the marker) by opening zoomed
+    //     fully in and centered on it. With no such target, leave the zoom at fit and just center
+    //     the image by its size. Fires once (autoZoomedRef), and only before any user zoom/pan —
+    //     `polygons` is intentionally not an effect dep, so drawing a polygon never triggers this.
+    if (storageDefault && !isControlled && !autoZoomedRef.current && !firstMoveRef.current && !userZoomed) {
+      const focus = focusFraction();
+      if (focus) {
+        autoZoomedRef.current = true;
+        viewCenterRef.current = focus;
+        // Persist the focus so a later image-settle (or a remount) restores this centered spot.
+        if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: focus });
+        scrollTo(focus);
+        // Zoom in to the default level. This re-runs the effect at the new scale, which re-centers
+        // on the focus via the userZoomed branch below now that the canvas has grown.
+        setScale(DEFAULT_ZOOM_DELTA);
+        return;
       }
-      // Genuine zoom step: keep the part of the image under the viewport center fixed.
-      scrollTo(viewCenterRef.current);
+      // No focus target (yet): center by size and leave the zoom alone. Not latched — a marker
+      // arriving asynchronously later re-runs this effect and gets its focus zoom then.
+      scrollTo(null);
       return;
     }
 
-    // Not a zoom — a tab switch, an image settling to a new size, or a mount. The persisted
-    // scroll (localStorage, or the controlled prop) is the source of truth — never corrupted,
-    // since our own scrolls don't echo into it — so re-apply it whenever we have drifted away.
-    // Compared against the live viewport so an already-correct view (including our own echo) is
-    // left alone, and skipped while the user pans so a lagging update can't fight the drag.
-    const target = readScrollTarget();
+    // (2)/(3) A genuine user zoom step. While the view is still auto-managed (firstMove false),
+    //     re-focus the polygon/marker on EVERY step (2) — re-seeding each time is what centers an
+    //     edge target, since one low zoom can't scroll far enough and the clamped scroll would
+    //     otherwise overwrite the aim. Once the user has moved (firstMove true), keep the part of
+    //     the image under the viewport center fixed (3).
+    if (userZoomed) {
+      if (!firstMoveRef.current) {
+        const focus = focusFraction();
+        if (focus) viewCenterRef.current = focus;
+        scrollTo(focus ?? viewCenterRef.current);
+      } else {
+        scrollTo(viewCenterRef.current);
+      }
+      return;
+    }
+
+    // (4) Not a zoom — a mount/pre-render, a tab switch, or the image settling to a new size.
+    //     Restore the stored view (controlled prop or localStorage). While the view is still
+    //     auto-managed (firstMove false) and nothing is stored, fall back to the focus target so a
+    //     later image-settle keeps the polygon/marker centered instead of snapping back to the
+    //     image center; with no focus this centers by size. Compared against the live viewport so
+    //     an already-correct view (including our own echo) is left alone, and skipped while the
+    //     user pans so a lagging update can't fight the drag.
+    const target = readScrollTarget() ?? (firstMoveRef.current ? null : focusFraction());
     const EPSILON = 0.02;
     const differsFromView = !target || Math.abs(target.x - view.x) > EPSILON || Math.abs(target.y - view.y) > EPSILON;
     if (differsFromView && !isMovingRef.current) {
       viewCenterRef.current = target;
       scrollTo(target);
     }
-    // `readScrollTarget` reads localStorage fresh on every run; deps cover the meaningful restore
-    // triggers (mount, zoom, image settle via defaultScale, controlled-prop change). `isMoving` is
-    // deliberately NOT a dep — it's read via `isMovingRef` as a guard only, so toggling move↔edit
-    // doesn't re-run this effect and restore to a stale target after a marker-focus zoom.
+    // `readScrollTarget`/`focusFraction` read localStorage & the latest props on every run; deps
+    // cover the meaningful triggers (mount, zoom, image settle via defaultScale, container resize,
+    // an async marker, controlled-prop change). `isMoving` is deliberately NOT a dep — it's read
+    // via `isMovingRef` as a guard only, so toggling move↔edit doesn't re-run this effect and
+    // restore to a stale target after a focus zoom.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, resetNonce]);
+  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, resetNonce, markerPosition, containerWidth, containerHeight]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.
@@ -194,9 +270,10 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
       // Ignore the scroll our own `scrollTo` just caused; only persist/surface genuine user
       // scrolls so a restore against a still-loading canvas can't overwrite the saved spot.
       if (suppressEmitRef.current) return;
-      // A real user pan: from now on the first zoom keeps the current view instead of the marker.
-      userMovedRef.current = true;
-      if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: next });
+      // A real user pan — the "first move": from now on a zoom keeps the current view instead of
+      // re-focusing the polygon/marker. Persisted alongside the scroll so it survives a remount.
+      firstMoveRef.current = true;
+      if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: next, firstMove: true });
       onScrollChange?.(next);
     };
 
