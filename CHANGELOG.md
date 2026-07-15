@@ -1,3 +1,12 @@
+# [0.22.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.3...v0.22.0) (2026-07-15)
+
+
+### Features
+
+* auto zoom marker position ([0f27f21](https://github.com/b-partners/bpartners-annotator-ui/commit/0f27f215fc64b3fa0f89c66aa78d6889a912f9da))
+
+
+
 ## [0.21.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.2...v0.21.3) (2026-07-10)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * always set polygon state after mouse up in edit mode ([2daa37a](https://github.com/b-partners/bpartners-annotator-ui/commit/2daa37a95776f29356b9b3253ed954f9775ef84c))
-
-
-
-## [0.19.3](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.2...v0.19.3) (2026-02-24)
-
-
-### Bug Fixes
-
-* measurement visibility  ([7c9c435](https://github.com/b-partners/bpartners-annotator-ui/commit/7c9c435e9fd8d0c524bb24410ecc740178e4489e))
 
 
 
