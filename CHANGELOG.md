@@ -1,3 +1,12 @@
+## [0.22.1](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.22.0...v0.22.1) (2026-07-17)
+
+
+### Bug Fixes
+
+* auto-focus zoom uses a fixed ratio to fit scale, not a fixed delta ([f894334](https://github.com/b-partners/bpartners-annotator-ui/commit/f89433439331409c08a56aeac2202e27df0d21f3))
+
+
+
 # [0.22.0](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.21.3...v0.22.0) (2026-07-15)
 
 
@@ -76,15 +85,6 @@
 ### Bug Fixes
 
 * cursor and zoom ([2d320d4](https://github.com/b-partners/bpartners-annotator-ui/commit/2d320d484a454e55ff0b3b4797e78aaaac58b8f8))
-
-
-
-## [0.19.4](https://github.com/b-partners/bpartners-annotator-ui/compare/v0.19.3...v0.19.4) (2026-04-17)
-
-
-### Bug Fixes
-
-* always set polygon state after mouse up in edit mode ([2daa37a](https://github.com/b-partners/bpartners-annotator-ui/commit/2daa37a95776f29356b9b3253ed954f9775ef84c))
 
 
 
