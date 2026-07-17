@@ -98,7 +98,11 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // one of our own programmatic recenters). While false the view is auto-managed — every zoom
   // re-focuses the polygon/marker (requirement 2); once true, a zoom keeps the current center
   // (requirement 3). Seeded from — and written back to — localStorage so it survives a remount.
-  const firstMoveRef = useRef(persisted.firstMove ?? false);
+  // Falls back to `!storageDefault`: if localStorage already holds a zoom/position for this
+  // instance, the fresh-load focus calc is done — use the stored view as-is and never recompute
+  // the focus (a later zoom keeps the stored center instead of re-centering on the polygon/marker).
+  // The focus calc therefore runs only at the very beginning, when nothing is stored yet.
+  const firstMoveRef = useRef(persisted.firstMove ?? !storageDefault);
   // Latches once the fresh-load focus zoom (requirement 1) has fired, so it happens exactly once
   // and never re-triggers after the user has taken over.
   const autoZoomedRef = useRef(false);
@@ -202,8 +206,10 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
       if (focus) {
         autoZoomedRef.current = true;
         viewCenterRef.current = focus;
-        // Persist the focus so a later image-settle (or a remount) restores this centered spot.
-        if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: focus });
+        // Persist the calculated autofocus zoom AND position together, in one write, so a later
+        // image-settle (or a remount) restores this centered, zoomed-in spot as a single unit —
+        // rather than relying on setScale's implicit scale write to land the zoom separately.
+        if (storageKey) LocalStorageView.merge(storageKey, { scale: DEFAULT_ZOOM_DELTA, scrollPosition: focus });
         scrollTo(focus);
         // Zoom in to the default level. This re-runs the effect at the new scale, which re-centers
         // on the focus via the userZoomed branch below now that the canvas has grown.
