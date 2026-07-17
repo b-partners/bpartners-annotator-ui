@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { SizesProviderProps } from '.';
 import { SizesContext, useElementContext, useScale } from '../..';
-import { DEFAULT_ZOOM_FACTOR, IMAGE_MARGIN } from '../../constant';
+import { DEFAULT_ZOOM_DELTA, IMAGE_MARGIN } from '../../constant';
 import { Point, Polygon } from '../../types';
 import { LocalStorageView } from '../../utilities';
 
@@ -35,7 +35,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     markerPosition,
     polygons = [],
   } = props;
-  const { containerHeight, containerWidth, defaultScale, isDefaultScaleReady, scaleLimit } = useScale();
+  const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
 
   // Saved zoom + scroll + first-move flag, read once from localStorage when a `storageKey` is
@@ -199,22 +199,15 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     //     `polygons` is intentionally not an effect dep, so drawing a polygon never triggers this.
     if (storageDefault && !isControlled && !autoZoomedRef.current && !firstMoveRef.current && !userZoomed) {
       const focus = focusFraction();
-      // Only fire the focus zoom once the fit scale has settled: the delta below is proportional to
-      // `defaultScale`, so computing it from the placeholder (before the container is measured) would
-      // over/under-zoom, and it latches (autoZoomedRef) so it can't self-correct on a later run.
-      if (focus && isDefaultScaleReady) {
+      if (focus) {
         autoZoomedRef.current = true;
         viewCenterRef.current = focus;
         // Persist the focus so a later image-settle (or a remount) restores this centered spot.
         if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: focus });
         scrollTo(focus);
-        // Zoom in to the default level. The delta is proportional to the fit scale so the relative
-        // magnification (DEFAULT_ZOOM_FACTOR) is the same for any image size — a fixed additive delta
-        // would over-zoom large images (tiny fit scale) and under-zoom small ones. Clamped to the
-        // zoom ceiling. This re-runs the effect at the new scale, which re-centers on the focus via
-        // the userZoomed branch below now that the canvas has grown.
-        const focusDelta = Math.min(defaultScale * (DEFAULT_ZOOM_FACTOR - 1), scaleLimit.max - defaultScale);
-        setScale(focusDelta);
+        // Zoom in to the default level. This re-runs the effect at the new scale, which re-centers
+        // on the focus via the userZoomed branch below now that the canvas has grown.
+        setScale(DEFAULT_ZOOM_DELTA);
         return;
       }
       // No focus target (yet): center by size and leave the zoom alone. Not latched — a marker
@@ -259,7 +252,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     // via `isMovingRef` as a guard only, so toggling move↔edit doesn't re-run this effect and
     // restore to a stale target after a focus zoom.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultScale, isDefaultScaleReady, scale, controlledScroll, storageKey, containerRef, resetNonce, markerPosition, containerWidth, containerHeight]);
+  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, resetNonce, markerPosition, containerWidth, containerHeight]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.
