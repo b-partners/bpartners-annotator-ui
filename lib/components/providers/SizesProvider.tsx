@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from 'react';
 import { SizesProviderProps } from '.';
 import { SizesContext, useElementContext, useScale } from '../..';
-import { DEFAULT_ZOOM_FACTOR, IMAGE_MARGIN } from '../../constant';
+import { DEFAULT_ZOOM_DELTA, IMAGE_MARGIN } from '../../constant';
 import { Point, Polygon } from '../../types';
 import { LocalStorageView } from '../../utilities';
 
@@ -35,7 +35,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     markerPosition,
     polygons = [],
   } = props;
-  const { containerHeight, containerWidth, defaultScale, isDefaultScaleReady, scaleLimit } = useScale();
+  const { containerHeight, containerWidth, defaultScale, scaleLimit } = useScale();
   const { image, containerRef } = useElementContext();
 
   // Saved zoom + scroll + first-move flag, read once from localStorage when a `storageKey` is
@@ -98,7 +98,11 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
   // one of our own programmatic recenters). While false the view is auto-managed — every zoom
   // re-focuses the polygon/marker (requirement 2); once true, a zoom keeps the current center
   // (requirement 3). Seeded from — and written back to — localStorage so it survives a remount.
-  const firstMoveRef = useRef(persisted.firstMove ?? false);
+  // Falls back to `!storageDefault`: if localStorage already holds a zoom/position for this
+  // instance, the fresh-load focus calc is done — use the stored view as-is and never recompute
+  // the focus (a later zoom keeps the stored center instead of re-centering on the polygon/marker).
+  // The focus calc therefore runs only at the very beginning, when nothing is stored yet.
+  const firstMoveRef = useRef(persisted.firstMove ?? !storageDefault);
   // Latches once the fresh-load focus zoom (requirement 1) has fired, so it happens exactly once
   // and never re-triggers after the user has taken over.
   const autoZoomedRef = useRef(false);
@@ -199,22 +203,17 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     //     `polygons` is intentionally not an effect dep, so drawing a polygon never triggers this.
     if (storageDefault && !isControlled && !autoZoomedRef.current && !firstMoveRef.current && !userZoomed) {
       const focus = focusFraction();
-      // Only fire the focus zoom once the fit scale has settled: the delta below is proportional to
-      // `defaultScale`, so computing it from the placeholder (before the container is measured) would
-      // over/under-zoom, and it latches (autoZoomedRef) so it can't self-correct on a later run.
-      if (focus && isDefaultScaleReady) {
+      if (focus) {
         autoZoomedRef.current = true;
         viewCenterRef.current = focus;
-        // Persist the focus so a later image-settle (or a remount) restores this centered spot.
-        if (storageKey) LocalStorageView.merge(storageKey, { scrollPosition: focus });
+        // Persist the calculated autofocus zoom AND position together, in one write, so a later
+        // image-settle (or a remount) restores this centered, zoomed-in spot as a single unit —
+        // rather than relying on setScale's implicit scale write to land the zoom separately.
+        if (storageKey) LocalStorageView.merge(storageKey, { scale: DEFAULT_ZOOM_DELTA, scrollPosition: focus });
         scrollTo(focus);
-        // Zoom in to the default level. The delta is proportional to the fit scale so the relative
-        // magnification (DEFAULT_ZOOM_FACTOR) is the same for any image size — a fixed additive delta
-        // would over-zoom large images (tiny fit scale) and under-zoom small ones. Clamped to the
-        // zoom ceiling. This re-runs the effect at the new scale, which re-centers on the focus via
-        // the userZoomed branch below now that the canvas has grown.
-        const focusDelta = Math.min(defaultScale * (DEFAULT_ZOOM_FACTOR - 1), scaleLimit.max - defaultScale);
-        setScale(focusDelta);
+        // Zoom in to the default level. This re-runs the effect at the new scale, which re-centers
+        // on the focus via the userZoomed branch below now that the canvas has grown.
+        setScale(DEFAULT_ZOOM_DELTA);
         return;
       }
       // No focus target (yet): center by size and leave the zoom alone. Not latched — a marker
@@ -259,7 +258,7 @@ export const SizesProvider: FC<SizesProviderProps> = props => {
     // via `isMovingRef` as a guard only, so toggling move↔edit doesn't re-run this effect and
     // restore to a stale target after a focus zoom.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [defaultScale, isDefaultScaleReady, scale, controlledScroll, storageKey, containerRef, resetNonce, markerPosition, containerWidth, containerHeight]);
+  }, [defaultScale, scale, controlledScroll, storageKey, containerRef, resetNonce, markerPosition, containerWidth, containerHeight]);
 
   // Track the part of the image under the viewport center so a subsequent zoom can keep it
   // fixed. Kept in a ref (not the URL) so it stays isolated to this instance.

@@ -5,11 +5,6 @@ import { IMAGE_PADDING, MAX_ZOOM_DELTA } from '../constant';
 export const useScale = () => {
   const { image, containerRef } = useElementContext();
   const [defaultScale, setDefaultScale] = useState(1);
-  // False until the fit scale has been computed from a measured container at least once. Consumers
-  // that derive a zoom from `defaultScale` (e.g. the fresh-load focus zoom in SizesProvider) must
-  // wait for this — before it, `defaultScale` is still the placeholder `1`, not the real fit scale,
-  // so a proportional zoom would be computed from the wrong base and over/under-zoom.
-  const [isDefaultScaleReady, setIsDefaultScaleReady] = useState(false);
   const [containerSize, setContainerSize] = useState({
     containerWidth: 0,
     containerHeight: 0,
@@ -59,9 +54,6 @@ export const useScale = () => {
     const heightScale = +(containerHeight / ihp).toFixed(2);
 
     setDefaultScale(widthScale > heightScale ? heightScale : widthScale);
-    // Set in the same effect as `defaultScale` so both land in the same render — a consumer gated on
-    // `isDefaultScaleReady` then always reads the settled fit scale, never the placeholder.
-    setIsDefaultScaleReady(true);
     setScaleLimit({
       max: defaultScale + MAX_ZOOM_DELTA,
       min: defaultScale - 0.2,
@@ -71,7 +63,6 @@ export const useScale = () => {
   return {
     ...containerSize,
     defaultScale,
-    isDefaultScaleReady,
     scaleLimit,
   };
 };
